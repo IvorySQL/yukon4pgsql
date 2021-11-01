@@ -1,0 +1,146 @@
+2021-06-16  Sandro Santilli <strk@kbt.io>
+
+	* topology/test/regress/getringedges_expected: Fix expected result,
+	broken in last commit
+
+2021-06-16  Sandro Santilli <strk@kbt.io>
+
+	* NEWS, topology/postgis_topology.c,
+	topology/test/regress/getringedges.sql,
+	topology/test/regress/getringedges_expected: Fix missing user errors
+	from GetRingEdges References #4929 in 3.1 branch (3.1.3dev)
+
+2021-06-14  Regina Obe <lr@pcorp.us>
+
+	* NEWS, libpgcommon/lwgeom_pg.c: Fix PG14 compile
+	FuncnameGetCandidates closes #4927 for PostGIS 3.1.3
+
+2021-05-20  Paul Ramsey <pramsey@cleverelephant.ca>
+
+	* NEWS, postgis/gserialized_supportfn.c: Add Pg14 build support to
+	3.1 branch. References #4845
+
+2021-05-19  Paul Ramsey <pramsey@cleverelephant.ca>
+
+	* NEWS, liblwgeom/lwgeom_transform.c, libpgcommon/lwgeom_cache.c,
+	libpgcommon/lwgeom_cache.h, libpgcommon/lwgeom_pg.c,
+	libpgcommon/lwgeom_pg.h, libpgcommon/lwgeom_transform.c,
+	libpgcommon/lwgeom_transform.h, postgis/geography_centroid.c,
+	postgis/geography_inout.c, postgis/geography_measurement.c,
+	postgis/gserialized_estimate.c, postgis/gserialized_spgist_2d.c,
+	postgis/gserialized_spgist_3d.c, postgis/gserialized_spgist_nd.c,
+	postgis/gserialized_supportfn.c, postgis/gserialized_typmod.c,
+	postgis/lwgeom_in_gml.c, postgis/lwgeom_inout.c,
+	postgis/lwgeom_out_geobuf.c, postgis/lwgeom_out_geojson.c,
+	postgis/lwgeom_out_mvt.c, postgis/lwgeom_transform.c,
+	postgis/postgis_module.c: Lengthen proj cache lifetime to the life
+	of the backend, and move memory context appropriately to match.
+	Simplify the retrieval of global constants somewhat to not require
+	FunctionCallInfo anymore. Closes #4890
+
+2021-05-18  Regina Obe <lr@pcorp.us>
+
+	* regress/core/regress_proj_adhoc.sql,
+	regress/core/regress_proj_adhoc_expected,
+	regress/core/regress_proj_basic.sql,
+	regress/core/regress_proj_basic_expected, regress/core/tests.mk.in: 
+	Break proj tests out more split basic and add more basic tests
+
+2021-05-17  Regina Obe <lr@pcorp.us>
+
+	* regress/core/regress_proj_4890.sql: Drop things created for the
+	test
+
+2021-05-17  Regina Obe <lr@pcorp.us>
+
+	* regress/core/regress_proj_4890.sql,
+	regress/core/regress_proj_4890_expected,
+	regress/core/{regress_proj.sql => regress_proj_basic.sql},
+	regress/core/{regress_proj_expected =>
+	regress_proj_basic_expected},
+	regress/core/regress_proj_cache_overflow.sql,
+	regress/core/regress_proj_cache_overflow_expected,
+	regress/core/tests.mk.in: Break proj tests into two and add an
+	additional to test improvements references #4890
+
+2021-04-10  Regina Obe <lr@pcorp.us>
+
+	* NEWS, extensions/postgis_tiger_geocoder/Makefile.in,
+	extras/tiger_geocoder/tiger_loader_2020.sql: Support for tiger 2020.
+	Closes #4838 for PostGIS 3.1.2
+
+2021-03-11  Regina Obe <lr@pcorp.us>
+
+	* NEWS, raster/rt_pg/rtpg_band_properties.c,
+	raster/rt_pg/rtpostgis.sql.in, raster/test/regress/rt_asraster.sql,
+	raster/test/regress/rt_bandmetadata.sql,
+	raster/test/regress/rt_bandmetadata_expected,
+	raster/test/regress/rt_clip.sql,
+	raster/test/regress/rt_intersection.sql,
+	raster/test/regress/rt_mapalgebra_expected,
+	raster/test/regress/rt_mapalgebra_expr.sql,
+	raster/test/regress/rt_mapalgebraexpr_2raster.sql,
+	raster/test/regress/rt_mapalgebraexpr_2raster_expected,
+	raster/test/regress/rt_mapalgebrafct_2raster.sql,
+	raster/test/regress/rt_mapalgebrafct_2raster_expected: Change raster
+	to use returns table instead of out for multi row returns Changes to
+	raster regress to use lateral instead of select and other fixes to
+	regress on PostgreSQL 14.  Paul Ramsey, Regina Obe Closes #4876 for
+	PostGIS 3.1.2 Closes
+	https://git.osgeo.org/gitea/postgis/postgis/pulls/53
+
+2021-03-11  Regina Obe <lr@pcorp.us>
+
+	* NEWS, postgis/lwgeom_in_gml.c, postgis/lwgeom_in_kml.c: Move
+	postgres.h include to top to fix mingw64 issues as suggested by Tom
+	Lane.  Closes #4877 for PostGIS 3.1
+
+2021-03-03  Sandro Santilli <strk@kbt.io>
+
+	* topology/sql/populate.sql.in,
+	topology/test/regress/addedge_expected: References #4837 for PostGIS
+	3.1
+
+2021-03-09  Regina Obe <lr@pcorp.us>
+
+	* regress/core/fixedoverlay_expected: get rid of extra line break -
+	closes #4873
+
+2021-03-09  Regina Obe <lr@pcorp.us>
+
+	* regress/core/fixedoverlay.sql, regress/core/fixedoverlay_expected: 
+	Back port fixed-overlay test changes from 3.2 (master) closes #4873
+
+2021-03-05  Sandro Santilli <strk@kbt.io>
+
+	* NEWS, topology/test/regress/geometry_cast.sql,
+	topology/test/regress/geometry_cast_expected,
+	topology/test/tests.mk, topology/topology.sql.in: Fix SRID in
+	Geometry(TopoGeometry) for empty TopoGeometry objects Includes testcase and NEWS item References #4871 in 3.1 branch
+	(3.1.2dev)
+
+2021-03-01  Paul Ramsey <pramsey@cleverelephant.ca>
+
+	* regress/core/tickets.sql, regress/core/tickets_expected: Address
+	differing error messages from Proj 8 and <8. References #4860
+
+2021-02-26  Paul Ramsey <pramsey@cleverelephant.ca>
+
+	* NEWS: News item for #4863
+
+2021-02-26  Paul Ramsey <pramsey@cleverelephant.ca>
+
+	* liblwgeom/lwgeom.c, regress/core/tickets.sql,
+	regress/core/tickets_expected: Ensure bboxes are refreshed after
+	cooridinate transforms in scale/affine. References #4863
+
+2021-02-26  Paul Ramsey <pramsey@cleverelephant.ca>
+
+	* liblwgeom/cunit/cu_geos.c: Make cunit makevalid test stronger
+	relative to different GEOS versions (normalize)
+
+2021-02-18  Paul Ramsey <pramsey@cleverelephant.ca>
+
+	* Add tests to support earlier projection axis issues, references
+	#4844
+

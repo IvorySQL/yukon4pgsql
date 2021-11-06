@@ -74,7 +74,8 @@ static char *lwgeomTypeName[] =
 	"MultiSurface",
 	"PolyhedralSurface",
 	"Triangle",
-	"Tin"
+	"Tin",
+	"Ellipse"
 };
 
 /*
@@ -215,7 +216,7 @@ lwdebug(int level, const char *fmt, ...)
 const char*
 lwtype_name(uint8_t type)
 {
-	if ( type > 15 )
+	if ( type > 16 )
 	{
 		/* assert(0); */
 		return "Invalid type";
@@ -369,6 +370,8 @@ struct geomtype_struct
 
 struct geomtype_struct geomtype_struct_array[] =
 {
+	{ "ELLIPSE", ELLIPSETYPE, 0, 0 },
+
 	{ "GEOMETRYCOLLECTIONZM", COLLECTIONTYPE, 1, 1 },
 	{ "GEOMETRYCOLLECTIONZ", COLLECTIONTYPE, 1, 0 },
 	{ "GEOMETRYCOLLECTIONM", COLLECTIONTYPE, 0, 1 },

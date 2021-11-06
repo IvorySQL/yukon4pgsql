@@ -1175,6 +1175,9 @@ void lwgeom_free(LWGEOM *lwgeom)
 	case TINTYPE:
 		lwtin_free((LWTIN *)lwgeom);
 		break;
+	case ELLIPSETYPE:
+		//todo memory need to free
+		break;
 	case CURVEPOLYTYPE:
 	case COMPOUNDTYPE:
 	case MULTICURVETYPE:
@@ -1215,6 +1218,10 @@ int lwgeom_needs_bbox(const LWGEOM *geom)
 			return LW_FALSE;
 		else
 			return LW_TRUE;
+	}
+	if ( geom->type == ELLIPSETYPE)
+	{
+		return LW_FALSE;
 	}
 	else
 	{

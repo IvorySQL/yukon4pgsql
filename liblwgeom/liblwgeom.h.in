@@ -128,8 +128,8 @@ const char* lwgeom_version(void);
 #define POLYHEDRALSURFACETYPE   13
 #define TRIANGLETYPE            14
 #define TINTYPE                 15
-
-#define NUMTYPES                16
+#define ELLIPSETYPE				16
+#define NUMTYPES                17
 
 /**
 * Flags applied in EWKB to indicate Z/M dimensions and
@@ -429,6 +429,12 @@ typedef struct
 }
 POINT4D;
 
+typedef struct
+{
+    double x, y, a, b, startangle, angle;
+}
+ELLIPSE;
+
 /******************************************************************
 *  POINTARRAY
 *  Point array abstracts a lot of the complexity of points and point lists.
@@ -679,6 +685,18 @@ typedef struct
 	uint32_t maxgeoms; /* how many geometries we have space for in **geoms */
 }
 LWTIN;
+
+/* TINTYPE */
+typedef struct
+{
+	GBOX *bbox;
+	ELLIPSE *data;
+	int32_t srid;
+	lwflags_t flags;
+	uint8_t type; /* ELLIPSETYPE */
+	char pad[1]; /* Padding to 24 bytes (unused) */
+}
+LWELLIPSE;
 
 /* Casts LWGEOM->LW* (return NULL if cast is illegal) */
 extern LWMPOLY *lwgeom_as_lwmpoly(const LWGEOM *lwgeom);

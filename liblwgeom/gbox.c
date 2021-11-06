@@ -754,6 +754,8 @@ int lwgeom_calculate_gbox_cartesian(const LWGEOM *lwgeom, GBOX *gbox)
 		return lwpoly_calculate_gbox_cartesian((LWPOLY *)lwgeom, gbox);
 	case TRIANGLETYPE:
 		return lwtriangle_calculate_gbox_cartesian((LWTRIANGLE *)lwgeom, gbox);
+	case ELLIPSETYPE:
+		return lwtriangle_calculate_gbox_cartesian((LWTRIANGLE *)lwgeom, gbox);
 	case COMPOUNDTYPE:
 	case CURVEPOLYTYPE:
 	case MULTIPOINTTYPE:

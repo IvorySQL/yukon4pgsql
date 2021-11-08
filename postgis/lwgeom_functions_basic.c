@@ -3174,3 +3174,12 @@ Datum LWGEOM_FilterByM(PG_FUNCTION_ARGS)
 	lwgeom_free(lwgeom_out);
 	PG_RETURN_POINTER(geom_out);
 }
+
+
+PG_FUNCTION_INFO_V1(LWGEOM_SupportPO);
+Datum LWGEOM_SupportPO(PG_FUNCTION_ARGS)
+{
+	char *t=palloc0(100);
+	memcpy(t,"ELLIPSE",sizeof("ELLIPSE"));
+	PG_RETURN_CSTRING(t);
+}

@@ -3319,6 +3319,12 @@ CREATE OR REPLACE FUNCTION ST_FilterByM(geometry, double precision, double preci
 	LANGUAGE 'c' IMMUTABLE PARALLEL SAFE
 	_COST_LOW;
 
+CREATE OR REPLACE FUNCTION SupportPOList()
+	RETURNS cstring
+	AS 'MODULE_PATHNAME', 'LWGEOM_SupportPO'
+	LANGUAGE 'c' IMMUTABLE PARALLEL SAFE
+	_COST_LOW;
+
 -- Availability: 2.5.0
 CREATE OR REPLACE FUNCTION ST_ChaikinSmoothing(geometry, integer default 1, boolean default false)
 	RETURNS geometry

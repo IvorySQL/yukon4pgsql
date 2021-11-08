@@ -1470,6 +1470,26 @@ lwtriangle_from_gserialized2_buffer(uint8_t *data_ptr, lwflags_t lwflags, size_t
 	return triangle;
 }
 
+static LWELLIPSE *
+lwellipse_from_gserialized2_buffer(uint8_t *data_ptr, lwflags_t lwflags, size_t *size, int32_t srid)
+{
+	uint8_t *start_ptr = data_ptr;
+	LWELLIPSE *ellipse;
+
+	assert(data_ptr);
+
+	ellipse = (LWELLIPSE *)lwalloc(sizeof(LWELLIPSE));
+	ellipse->srid = srid; /* Default */
+	ellipse->bbox = NULL;
+	ellipse->type = ELLIPSETYPE;
+	ellipse->flags = lwflags;
+
+	data_ptr += 4;                                 /* Skip past the type. */
+	//
+	ellipse->data = data_ptr;
+	return ellipse;
+}
+
 static LWCIRCSTRING *
 lwcircstring_from_gserialized2_buffer(uint8_t *data_ptr, lwflags_t lwflags, size_t *size, int32_t srid)
 {
@@ -1594,6 +1614,8 @@ lwgeom_from_gserialized2_buffer(uint8_t *data_ptr, lwflags_t lwflags, size_t *g_
 		return (LWGEOM *)lwpoly_from_gserialized2_buffer(data_ptr, lwflags, g_size, srid);
 	case TRIANGLETYPE:
 		return (LWGEOM *)lwtriangle_from_gserialized2_buffer(data_ptr, lwflags, g_size, srid);
+	case ELLIPSETYPE:
+		return (LWGEOM *)lwellipse_from_gserialized2_buffer(data_ptr, lwflags, g_size, srid);
 	case MULTIPOINTTYPE:
 	case MULTILINETYPE:
 	case MULTIPOLYGONTYPE:

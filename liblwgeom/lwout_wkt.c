@@ -605,6 +605,24 @@ static void lwpsurface_to_wkt_sb(const LWPSURFACE *psurf, stringbuffer_t *sb, in
 	stringbuffer_append_len(sb, ")", 1);
 }
 
+static void lwellipse_to_wkt_sb(const LWELLIPSE *pt, stringbuffer_t *sb, int precision, uint8_t variant)
+{
+	//stringbuffer_append_double
+	stringbuffer_append_len(sb, "ELLIPSE(", 8);
+	stringbuffer_append_double(sb, pt->data->x, precision);
+	stringbuffer_append_len(sb, ",", 1);
+	stringbuffer_append_double(sb, pt->data->y, precision);
+	stringbuffer_append_len(sb, ",", 1);
+	stringbuffer_append_double(sb, pt->data->a, precision);
+	stringbuffer_append_len(sb, ",", 1);
+	stringbuffer_append_double(sb, pt->data->b, precision);
+	stringbuffer_append_len(sb, ",", 1);
+	stringbuffer_append_double(sb, pt->data->startangle, precision);
+	stringbuffer_append_len(sb, ",", 1);
+	stringbuffer_append_double(sb, pt->data->angle, precision);
+	stringbuffer_append_len(sb, ")", 1);
+
+}
 
 /*
 * Generic GEOMETRY
@@ -634,6 +652,9 @@ static void lwgeom_to_wkt_sb(const LWGEOM *geom, stringbuffer_t *sb, int precisi
 		break;
 	case MULTIPOLYGONTYPE:
 		lwmpoly_to_wkt_sb((LWMPOLY*)geom, sb, precision, variant);
+		break;
+	case ELLIPSETYPE:
+		lwellipse_to_wkt_sb((LWELLIPSE*)geom, sb, precision, variant);
 		break;
 	case COLLECTIONTYPE:
 		lwcollection_to_wkt_sb((LWCOLLECTION*)geom, sb, precision, variant);

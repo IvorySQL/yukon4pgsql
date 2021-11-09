@@ -699,18 +699,12 @@ static uint8_t* lwellipse_to_wkb_buf(const LWELLIPSE *pt, uint8_t *buf, uint8_t 
 	// /* Set the coordinates */
 	// buf = ptarray_to_wkb_buf(pt->point, buf, variant | WKB_NO_NPOINTS);
 	// LWDEBUGF(4, "Pointarray set, buf = %p", buf);
-	memcpy(buf,&(pt->data->x),sizeof(double));
-	buf+=sizeof(double);
-	memcpy(buf,&(pt->data->y),sizeof(double));
-	buf+=sizeof(double);
-	memcpy(buf,&(pt->data->a),sizeof(double));
-	buf+=sizeof(double);
-	memcpy(buf,&(pt->data->b),sizeof(double));
-	buf+=sizeof(double);
-	memcpy(buf,&(pt->data->startangle),sizeof(double));
-	buf+=sizeof(double);
-	memcpy(buf,&(pt->data->angle),sizeof(double));
-	buf+=sizeof(double);
+	buf = double_to_wkb_buf(pt->data->x, buf, variant);
+	buf = double_to_wkb_buf(pt->data->y, buf, variant);
+	buf = double_to_wkb_buf(pt->data->a, buf, variant);
+	buf = double_to_wkb_buf(pt->data->b, buf, variant);
+	buf = double_to_wkb_buf(pt->data->startangle, buf, variant);
+	buf = double_to_wkb_buf(pt->data->angle, buf, variant);
 	return buf;
 }
 

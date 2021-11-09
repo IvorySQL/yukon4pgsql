@@ -1876,6 +1876,8 @@ double lwgeom_area(const LWGEOM *geom)
 		return lwcurvepoly_area((LWCURVEPOLY*)geom);
 	else if (type ==  TRIANGLETYPE )
 		return lwtriangle_area((LWTRIANGLE*)geom);
+	else if (type == ELLIPSETYPE)
+		return lwellipse_area((LWELLIPSE*)geom);
 	else if ( lwgeom_is_collection(geom) )
 	{
 		double area = 0.0;

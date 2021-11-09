@@ -256,6 +256,7 @@ int p2d_same(const POINT2D *p1, const POINT2D *p2);
 double lwpoly_area(const LWPOLY *poly);
 double lwcurvepoly_area(const LWCURVEPOLY *curvepoly);
 double lwtriangle_area(const LWTRIANGLE *triangle);
+double lwellipse_area(const LWELLIPSE *ellipse);
 
 /**
 * Pull a #GBOX from the header of a #GSERIALIZED, if one is available. If

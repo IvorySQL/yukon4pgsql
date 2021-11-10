@@ -1176,7 +1176,7 @@ void lwgeom_free(LWGEOM *lwgeom)
 		lwtin_free((LWTIN *)lwgeom);
 		break;
 	case ELLIPSETYPE:
-		//todo memory need to free
+		lwellipse_free((LWELLIPSE*)lwgeom);
 		break;
 	case CURVEPOLYTYPE:
 	case COMPOUNDTYPE:

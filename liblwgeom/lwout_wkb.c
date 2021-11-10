@@ -684,8 +684,8 @@ static size_t lwellipse_to_wkb_size(const LWELLIPSE *e, uint8_t variant)
 	if ( lwgeom_wkb_needs_srid((LWGEOM*)e, variant) )
 		size += WKB_INT_SIZE;
 	
-	// 6 double
-	size += 6 * sizeof(double);
+	
+	size += sizeof(ELLIPSE);
 
 	return size;
 }
@@ -713,6 +713,7 @@ static uint8_t* lwellipse_to_wkb_buf(const LWELLIPSE *e, uint8_t *buf, uint8_t v
 	buf = double_to_wkb_buf(e->data->a, buf, variant);
 	buf = double_to_wkb_buf(e->data->b, buf, variant);
 	buf = double_to_wkb_buf(e->data->startangle, buf, variant);
+	buf = double_to_wkb_buf(e->data->endangle, buf, variant);
 	buf = double_to_wkb_buf(e->data->angle, buf, variant);
 	return buf;
 }

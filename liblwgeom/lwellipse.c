@@ -12,3 +12,14 @@ lwellipse_area(const LWELLIPSE *ellipse)
 {
 	return PI * ellipse->data->a * ellipse->data->b;
 }
+void 
+lwellipse_free(LWELLIPSE *e)
+{
+	if (!e) return;
+
+	if (e->bbox)
+		lwfree(e->bbox);
+	if (e->data)
+		lwfree(e->data);
+	lwfree(e);
+}

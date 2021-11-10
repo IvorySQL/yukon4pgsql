@@ -1268,6 +1268,7 @@ extern void lwtin_free(LWTIN *tin);
 extern void lwcollection_free(LWCOLLECTION *col);
 extern void lwcircstring_free(LWCIRCSTRING *curve);
 extern void lwgeom_free(LWGEOM *geom);
+extern void lwellipse_free(LWELLIPSE* e);
 
 /*
 * The *_release family of functions frees the LWGEOM structures

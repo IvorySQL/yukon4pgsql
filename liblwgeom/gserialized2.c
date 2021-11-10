@@ -793,7 +793,7 @@ gserialized2_from_any_size(const LWGEOM *geom)
 	case CIRCSTRINGTYPE:
 		return gserialized2_from_lwcircstring_size((LWCIRCSTRING *)geom);
 	case ELLIPSETYPE:
-		return gserialized2_from_lwellipse_size((LWCIRCSTRING *)geom);
+		return gserialized2_from_lwellipse_size((LWELLIPSE *)geom);
 	case CURVEPOLYTYPE:
 	case COMPOUNDTYPE:
 	case MULTIPOINTTYPE:
@@ -1135,7 +1135,7 @@ gserialized2_from_lwgeom_any(const LWGEOM *geom, uint8_t *buf)
 	case CIRCSTRINGTYPE:
 		return gserialized2_from_lwcircstring((LWCIRCSTRING *)geom, buf);
 	case ELLIPSETYPE:
-		return gserialized2_from_lwellipse((LWCIRCSTRING *)geom, buf);
+		return gserialized2_from_lwellipse((LWELLIPSE *)geom, buf);
 	case CURVEPOLYTYPE:
 	case COMPOUNDTYPE:
 	case MULTIPOINTTYPE:
@@ -1464,7 +1464,7 @@ lwellipse_from_gserialized2_buffer(uint8_t *data_ptr, lwflags_t lwflags, size_t 
 
 	data_ptr += 4;                                 /* Skip past the type. */
 	//
-	ellipse->data = data_ptr;
+	ellipse->data = (ELLIPSE*)data_ptr;
 	return ellipse;
 }
 

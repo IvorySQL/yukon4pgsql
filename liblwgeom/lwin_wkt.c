@@ -817,7 +817,7 @@ LWGEOM* wkt_parser_ellipse(double x, double y, double a, double b, double starta
 	ellipse->flags = 0;
 	ellipse->srid = 0;
 	ellipse->type = ELLIPSETYPE;
-	return ellipse;
+	return (LWGEOM*)ellipse;
 }
 
 LWGEOM* wkt_parser_collection_finalize(int lwtype, LWGEOM *geom, char *dimensionality)

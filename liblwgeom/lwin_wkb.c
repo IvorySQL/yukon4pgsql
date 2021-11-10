@@ -931,6 +931,11 @@ lwellipse_from_wkb_state(wkb_parse_state *s)
 {
 	LWELLIPSE *res;
 
+	/* Does the data we want to read exist? */
+	wkb_parse_state_check(s, sizeof(ELLIPSE));
+	if (s->error)
+		return NULL;
+
 	res = lwalloc(sizeof(LWELLIPSE));
 	if (res == NULL)
 	{

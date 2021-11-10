@@ -938,10 +938,16 @@ lwellipse_from_wkb_state(wkb_parse_state *s)
 	}
 	res->type = ELLIPSETYPE;
 	res->srid = s->srid;
-	res->bbox = NULL;
-	//这里的数据可能需要复制，不能直接传递指针
+	res->bbox = NULL;	
 	res->data = lwalloc(6*sizeof(double));
-	memcpy(res->data , s->wkb+5 , 6*sizeof(double));
+	if(s->has_srid)
+	{
+		memcpy(res->data , s->wkb+9 , 6*sizeof(double));
+	}
+	else
+	{
+		memcpy(res->data , s->wkb+5 , 6*sizeof(double));
+	}
 	res->flags = 0;
 	return res;
 }

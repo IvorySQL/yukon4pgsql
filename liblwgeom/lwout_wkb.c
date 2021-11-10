@@ -675,36 +675,45 @@ static uint8_t* lwcollection_to_wkb_buf(const LWCOLLECTION *col, uint8_t *buf, u
 /*
 * ELLIPSE
 */
-static size_t lwellipse_to_wkb_size(const LWELLIPSE *tri, uint8_t variant)
+static size_t lwellipse_to_wkb_size(const LWELLIPSE *e, uint8_t variant)
 {
 	/* endian flag + type number */
 	size_t size = WKB_BYTE_SIZE + WKB_INT_SIZE;
 
+	/* Extended WKB needs space for optional SRID integer */
+	if ( lwgeom_wkb_needs_srid((LWGEOM*)e, variant) )
+		size += WKB_INT_SIZE;
+	
 	// 6 double
 	size += 6 * sizeof(double);
 
 	return size;
 }
 
-static uint8_t* lwellipse_to_wkb_buf(const LWELLIPSE *pt, uint8_t *buf, uint8_t variant)
+static uint8_t* lwellipse_to_wkb_buf(const LWELLIPSE *e, uint8_t *buf, uint8_t variant)
 {
 	/* Set the endian flag */
 	LWDEBUGF(4, "Entering function, buf = %p", buf);
 	buf = endian_to_wkb_buf(buf, variant);
 	LWDEBUGF(4, "Endian set, buf = %p", buf);
 	/* Set the geometry type */
-	buf = integer_to_wkb_buf(lwgeom_wkb_type((LWGEOM*)pt, variant), buf, variant);
+	buf = integer_to_wkb_buf(lwgeom_wkb_type((LWGEOM*)e, variant), buf, variant);
 	LWDEBUGF(4, "Type set, buf = %p", buf);
 	
-	// /* Set the coordinates */
-	// buf = ptarray_to_wkb_buf(pt->point, buf, variant | WKB_NO_NPOINTS);
-	// LWDEBUGF(4, "Pointarray set, buf = %p", buf);
-	buf = double_to_wkb_buf(pt->data->x, buf, variant);
-	buf = double_to_wkb_buf(pt->data->y, buf, variant);
-	buf = double_to_wkb_buf(pt->data->a, buf, variant);
-	buf = double_to_wkb_buf(pt->data->b, buf, variant);
-	buf = double_to_wkb_buf(pt->data->startangle, buf, variant);
-	buf = double_to_wkb_buf(pt->data->angle, buf, variant);
+	/* Set the optional SRID for extended variant */
+	if ( lwgeom_wkb_needs_srid((LWGEOM*)e, variant) )
+	{
+		buf = integer_to_wkb_buf(e->srid, buf, variant);
+		LWDEBUGF(4, "SRID set, buf = %p", buf);
+	}
+
+	/* copy data */
+	buf = double_to_wkb_buf(e->data->x, buf, variant);
+	buf = double_to_wkb_buf(e->data->y, buf, variant);
+	buf = double_to_wkb_buf(e->data->a, buf, variant);
+	buf = double_to_wkb_buf(e->data->b, buf, variant);
+	buf = double_to_wkb_buf(e->data->startangle, buf, variant);
+	buf = double_to_wkb_buf(e->data->angle, buf, variant);
 	return buf;
 }
 

@@ -10,7 +10,13 @@
 double
 lwellipse_area(const LWELLIPSE *ellipse)
 {
-	return PI * ellipse->data->a * ellipse->data->b;
+	if(ellipse->data->startangle==0 && ellipse->data->endangle==360)
+	{
+		return PI * ellipse->data->a * ellipse->data->b;
+	}
+
+	return -1;
+	
 }
 void 
 lwellipse_free(LWELLIPSE *e)

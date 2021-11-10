@@ -619,6 +619,8 @@ static void lwellipse_to_wkt_sb(const LWELLIPSE *pt, stringbuffer_t *sb, int pre
 	stringbuffer_append_len(sb, ",", 1);
 	stringbuffer_append_double(sb, pt->data->startangle, precision);
 	stringbuffer_append_len(sb, ",", 1);
+	stringbuffer_append_double(sb, pt->data->endangle, precision);
+	stringbuffer_append_len(sb, ",", 1);
 	stringbuffer_append_double(sb, pt->data->angle, precision);
 	stringbuffer_append_len(sb, ")", 1);
 

@@ -745,8 +745,8 @@ gserialized2_from_lwellipse_size(const LWELLIPSE *curve)
 	size_t size = 4; /* Type number. */
 
 	assert(curve);
-	// 6个数字
-	size += 48;
+	// ELLIPSE 数据
+	size += sizeof(ELLIPSE);
 
 	LWDEBUGF(3, "ellipse size = %d", size);
 
@@ -1067,31 +1067,9 @@ gserialized2_from_lwellipse(const LWELLIPSE *ellipse, uint8_t *buf)
 	memcpy(loc, &type, sizeof(uint32_t));
 	loc += sizeof(uint32_t);
 
-	// write x ,y a,b,startangle,angle data
-	memcpy(loc, ellipse->data, 6 * sizeof(double));
-	loc += 6 * sizeof(double);
-
-	// if (FLAGS_GET_ZM(curve->flags) != FLAGS_GET_ZM(curve->points->flags))
-	// 	lwerror("Dimensions mismatch in lwcircstring");
-
-	// ptsize = ptarray_point_size(curve->points);
-	// loc = buf;
-
-	// /* Write in the type. */
-	// memcpy(loc, &type, sizeof(uint32_t));
-	// loc += sizeof(uint32_t);
-
-	// /* Write in the npoints. */
-	// memcpy(loc, &curve->points->npoints, sizeof(uint32_t));
-	// loc += sizeof(uint32_t);
-
-	// /* Copy in the ordinates. */
-	// if (curve->points->npoints > 0)
-	// {
-	// 	size = curve->points->npoints * ptsize;
-	// 	memcpy(loc, getPoint_internal(curve->points, 0), size);
-	// 	loc += size;
-	// }
+	// write x ,y a,b,startangle,endangle,angle data
+	memcpy(loc, ellipse->data, sizeof(ELLIPSE));
+	loc += sizeof(ELLIPSE);
 
 	return (size_t)(loc - buf);
 }

@@ -802,7 +802,7 @@ LWGEOM* wkt_parser_collection_add_geom(LWGEOM *col, LWGEOM *geom)
 	return lwcollection_as_lwgeom(lwcollection_add_lwgeom(lwgeom_as_lwcollection(col), geom));
 }
 
-LWGEOM* wkt_parser_ellipse(double x, double y, double a, double b, double startangle, double angle)
+LWGEOM* wkt_parser_ellipse(double x, double y, double a, double b, double startangle, double endangle, double angle)
 {
 	LWELLIPSE *ellipse = lwalloc(sizeof(LWELLIPSE));
 	ellipse->bbox = NULL;
@@ -812,6 +812,7 @@ LWGEOM* wkt_parser_ellipse(double x, double y, double a, double b, double starta
 	ellipse->data->a = a;
 	ellipse->data->b = b;
 	ellipse->data->startangle = startangle;
+	ellipse->data->endangle = endangle;
 	ellipse->data->angle = angle;
 	ellipse->flags = 0;
 	ellipse->srid = 0;

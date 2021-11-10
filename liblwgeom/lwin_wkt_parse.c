@@ -530,7 +530,7 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  83
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   309
+#define YYLAST   313
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  27
@@ -539,7 +539,7 @@ union yyalloc
 /* YYNRULES -- Number of rules.  */
 #define YYNRULES  138
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  279
+#define YYNSTATES  281
 
 /* YYTRANSLATE[YYX] -- Symbol number corresponding to YYX as returned
    by yylex, with out-of-bounds checking.  */
@@ -682,7 +682,8 @@ static const yytype_int16 yypact[] =
      -93,   -93,   -93,   -93,   -93,   -93,   -93,   -93,   -93,   -93,
      -93,   114,   270,   273,   -93,   -93,   274,   -93,    73,   -93,
      -93,   121,   -93,   -93,   134,   135,   -93,   -93,   129,   -93,
-     -93,   147,   161,   154,   162,   275,   164,   278,   -93
+     -93,   147,   161,   154,   162,   275,   164,   276,   271,   279,
+     -93
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -717,16 +718,17 @@ static const yytype_uint8 yydefact[] =
       92,    86,    63,    60,    79,    80,    81,    76,   104,    24,
       21,     0,     0,     0,   113,    37,     0,    58,     0,    50,
       41,     0,   137,   115,     0,     0,    73,    69,     0,   116,
-     119,     0,     0,     0,     0,     0,     0,     0,   138
+     119,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+     138
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int16 yypgoto[] =
 {
-     -93,   -93,     0,   -93,   146,   -93,   175,   -93,   -93,   -93,
-     183,   137,   -40,   -33,    82,   -34,   165,   105,   -93,   -92,
-      45,   128,   -52,   163,   -93,   179,   -93,   194,   -51,   -50,
-     -46,   149,   -93,    99,   -93,   207,   131,   -93,   -38,   -41,
+     -93,   -93,     0,   -93,   148,   -93,   177,   -93,   -93,   -93,
+     184,   138,   -40,   -33,    87,   -34,   165,   108,   -93,   -92,
+      45,   131,   -52,   166,   -93,   179,   -93,   202,   -51,   -50,
+     -46,   149,   -93,   100,   -93,   207,   136,   -93,   -38,   -41,
      -93
 };
 
@@ -774,11 +776,12 @@ static const yytype_uint16 yytable[] =
      229,   230,   181,   173,   232,   236,   185,   188,   241,   243,
      191,   194,   247,   248,   197,   167,   250,   251,   202,   167,
      255,   257,   208,   258,   260,   264,   214,   167,   265,   266,
-     167,   167,   276,   278,   203,   189,   259,   186,   215,   242,
-     195,   222,   182,   267,   198,   209,   192,   254,   225,   178
+     167,   167,   276,   278,   280,   279,   203,   189,   186,   215,
+     195,   259,   242,   267,   222,   209,   192,   198,   254,   178,
+     182,     0,     0,   225
 };
 
-static const yytype_uint16 yycheck[] =
+static const yytype_int16 yycheck[] =
 {
        0,    39,    48,    95,    45,    57,    57,    57,    60,    60,
       60,    57,    63,    63,    54,     4,    19,    63,   110,     5,
@@ -809,8 +812,9 @@ static const yytype_uint16 yycheck[] =
       15,    15,    17,    17,    15,    15,    17,    17,    15,    15,
       17,    17,    15,    15,    17,    17,    15,    15,    17,    17,
       15,    15,    17,    17,    15,    15,    17,    17,    15,    15,
-      17,    17,    17,    15,   148,   120,   214,   114,   161,   194,
-     135,   173,   108,   258,   141,   156,   127,   208,   177,   102
+      17,    17,    17,    17,    15,    24,   148,   120,   114,   161,
+     135,   214,   194,   258,   173,   156,   127,   141,   208,   102,
+     108,    -1,    -1,   177
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
@@ -844,7 +848,8 @@ static const yytype_uint8 yystos[] =
       57,    15,    44,    15,    55,    56,    57,    15,    15,    29,
       15,    15,    65,    65,    60,    15,    65,    15,    17,    41,
       15,    24,    24,    15,    15,    15,    15,    47,    17,    15,
-      15,    24,    17,    24,    17,    24,    17,    24,    15
+      15,    24,    17,    24,    17,    24,    17,    24,    17,    24,
+      15
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
@@ -882,7 +887,7 @@ static const yytype_uint8 yyr2[] =
        2,     3,     1,     4,     5,     3,     2,     4,     5,     3,
        2,     3,     1,     3,     1,     6,     7,     3,     2,     5,
        4,     5,     3,     2,     3,     1,     1,     3,     1,     4,
-       5,     3,     2,     3,     1,     2,     3,     4,    14
+       5,     3,     2,     3,     1,     2,     3,     4,    16
 };
 
 
@@ -1377,223 +1382,223 @@ yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep, YYLTYPE *yylocatio
           case 29: /* geometry_no_srid  */
 #line 196 "lwin_wkt_parse.y" /* yacc.c:1257  */
       { lwgeom_free(((*yyvaluep).geometryvalue)); }
-#line 1381 "lwin_wkt_parse.c" /* yacc.c:1257  */
+#line 1386 "lwin_wkt_parse.c" /* yacc.c:1257  */
         break;
 
     case 30: /* geometrycollection  */
 #line 197 "lwin_wkt_parse.y" /* yacc.c:1257  */
       { lwgeom_free(((*yyvaluep).geometryvalue)); }
-#line 1387 "lwin_wkt_parse.c" /* yacc.c:1257  */
+#line 1392 "lwin_wkt_parse.c" /* yacc.c:1257  */
         break;
 
     case 31: /* geometry_list  */
 #line 198 "lwin_wkt_parse.y" /* yacc.c:1257  */
       { lwgeom_free(((*yyvaluep).geometryvalue)); }
-#line 1393 "lwin_wkt_parse.c" /* yacc.c:1257  */
+#line 1398 "lwin_wkt_parse.c" /* yacc.c:1257  */
         break;
 
     case 32: /* multisurface  */
 #line 205 "lwin_wkt_parse.y" /* yacc.c:1257  */
       { lwgeom_free(((*yyvaluep).geometryvalue)); }
-#line 1399 "lwin_wkt_parse.c" /* yacc.c:1257  */
+#line 1404 "lwin_wkt_parse.c" /* yacc.c:1257  */
         break;
 
     case 33: /* surface_list  */
 #line 183 "lwin_wkt_parse.y" /* yacc.c:1257  */
       { lwgeom_free(((*yyvaluep).geometryvalue)); }
-#line 1405 "lwin_wkt_parse.c" /* yacc.c:1257  */
+#line 1410 "lwin_wkt_parse.c" /* yacc.c:1257  */
         break;
 
     case 34: /* tin  */
 #line 212 "lwin_wkt_parse.y" /* yacc.c:1257  */
       { lwgeom_free(((*yyvaluep).geometryvalue)); }
-#line 1411 "lwin_wkt_parse.c" /* yacc.c:1257  */
+#line 1416 "lwin_wkt_parse.c" /* yacc.c:1257  */
         break;
 
     case 35: /* polyhedralsurface  */
 #line 211 "lwin_wkt_parse.y" /* yacc.c:1257  */
       { lwgeom_free(((*yyvaluep).geometryvalue)); }
-#line 1417 "lwin_wkt_parse.c" /* yacc.c:1257  */
+#line 1422 "lwin_wkt_parse.c" /* yacc.c:1257  */
         break;
 
     case 36: /* multipolygon  */
 #line 204 "lwin_wkt_parse.y" /* yacc.c:1257  */
       { lwgeom_free(((*yyvaluep).geometryvalue)); }
-#line 1423 "lwin_wkt_parse.c" /* yacc.c:1257  */
+#line 1428 "lwin_wkt_parse.c" /* yacc.c:1257  */
         break;
 
     case 37: /* polygon_list  */
 #line 184 "lwin_wkt_parse.y" /* yacc.c:1257  */
       { lwgeom_free(((*yyvaluep).geometryvalue)); }
-#line 1429 "lwin_wkt_parse.c" /* yacc.c:1257  */
+#line 1434 "lwin_wkt_parse.c" /* yacc.c:1257  */
         break;
 
     case 38: /* patch_list  */
 #line 185 "lwin_wkt_parse.y" /* yacc.c:1257  */
       { lwgeom_free(((*yyvaluep).geometryvalue)); }
-#line 1435 "lwin_wkt_parse.c" /* yacc.c:1257  */
+#line 1440 "lwin_wkt_parse.c" /* yacc.c:1257  */
         break;
 
     case 39: /* polygon  */
 #line 208 "lwin_wkt_parse.y" /* yacc.c:1257  */
       { lwgeom_free(((*yyvaluep).geometryvalue)); }
-#line 1441 "lwin_wkt_parse.c" /* yacc.c:1257  */
+#line 1446 "lwin_wkt_parse.c" /* yacc.c:1257  */
         break;
 
     case 40: /* polygon_untagged  */
 #line 210 "lwin_wkt_parse.y" /* yacc.c:1257  */
       { lwgeom_free(((*yyvaluep).geometryvalue)); }
-#line 1447 "lwin_wkt_parse.c" /* yacc.c:1257  */
+#line 1452 "lwin_wkt_parse.c" /* yacc.c:1257  */
         break;
 
     case 41: /* patch  */
 #line 209 "lwin_wkt_parse.y" /* yacc.c:1257  */
       { lwgeom_free(((*yyvaluep).geometryvalue)); }
-#line 1453 "lwin_wkt_parse.c" /* yacc.c:1257  */
+#line 1458 "lwin_wkt_parse.c" /* yacc.c:1257  */
         break;
 
     case 42: /* curvepolygon  */
 #line 194 "lwin_wkt_parse.y" /* yacc.c:1257  */
       { lwgeom_free(((*yyvaluep).geometryvalue)); }
-#line 1459 "lwin_wkt_parse.c" /* yacc.c:1257  */
+#line 1464 "lwin_wkt_parse.c" /* yacc.c:1257  */
         break;
 
     case 43: /* curvering_list  */
 #line 181 "lwin_wkt_parse.y" /* yacc.c:1257  */
       { lwgeom_free(((*yyvaluep).geometryvalue)); }
-#line 1465 "lwin_wkt_parse.c" /* yacc.c:1257  */
+#line 1470 "lwin_wkt_parse.c" /* yacc.c:1257  */
         break;
 
     case 44: /* curvering  */
 #line 195 "lwin_wkt_parse.y" /* yacc.c:1257  */
       { lwgeom_free(((*yyvaluep).geometryvalue)); }
-#line 1471 "lwin_wkt_parse.c" /* yacc.c:1257  */
+#line 1476 "lwin_wkt_parse.c" /* yacc.c:1257  */
         break;
 
     case 45: /* patchring_list  */
 #line 191 "lwin_wkt_parse.y" /* yacc.c:1257  */
       { lwgeom_free(((*yyvaluep).geometryvalue)); }
-#line 1477 "lwin_wkt_parse.c" /* yacc.c:1257  */
+#line 1482 "lwin_wkt_parse.c" /* yacc.c:1257  */
         break;
 
     case 46: /* ring_list  */
 #line 190 "lwin_wkt_parse.y" /* yacc.c:1257  */
       { lwgeom_free(((*yyvaluep).geometryvalue)); }
-#line 1483 "lwin_wkt_parse.c" /* yacc.c:1257  */
+#line 1488 "lwin_wkt_parse.c" /* yacc.c:1257  */
         break;
 
     case 47: /* patchring  */
 #line 180 "lwin_wkt_parse.y" /* yacc.c:1257  */
       { ptarray_free(((*yyvaluep).ptarrayvalue)); }
-#line 1489 "lwin_wkt_parse.c" /* yacc.c:1257  */
+#line 1494 "lwin_wkt_parse.c" /* yacc.c:1257  */
         break;
 
     case 48: /* ring  */
 #line 179 "lwin_wkt_parse.y" /* yacc.c:1257  */
       { ptarray_free(((*yyvaluep).ptarrayvalue)); }
-#line 1495 "lwin_wkt_parse.c" /* yacc.c:1257  */
+#line 1500 "lwin_wkt_parse.c" /* yacc.c:1257  */
         break;
 
     case 49: /* compoundcurve  */
 #line 193 "lwin_wkt_parse.y" /* yacc.c:1257  */
       { lwgeom_free(((*yyvaluep).geometryvalue)); }
-#line 1501 "lwin_wkt_parse.c" /* yacc.c:1257  */
+#line 1506 "lwin_wkt_parse.c" /* yacc.c:1257  */
         break;
 
     case 50: /* compound_list  */
 #line 189 "lwin_wkt_parse.y" /* yacc.c:1257  */
       { lwgeom_free(((*yyvaluep).geometryvalue)); }
-#line 1507 "lwin_wkt_parse.c" /* yacc.c:1257  */
+#line 1512 "lwin_wkt_parse.c" /* yacc.c:1257  */
         break;
 
     case 51: /* multicurve  */
 #line 201 "lwin_wkt_parse.y" /* yacc.c:1257  */
       { lwgeom_free(((*yyvaluep).geometryvalue)); }
-#line 1513 "lwin_wkt_parse.c" /* yacc.c:1257  */
+#line 1518 "lwin_wkt_parse.c" /* yacc.c:1257  */
         break;
 
     case 52: /* curve_list  */
 #line 188 "lwin_wkt_parse.y" /* yacc.c:1257  */
       { lwgeom_free(((*yyvaluep).geometryvalue)); }
-#line 1519 "lwin_wkt_parse.c" /* yacc.c:1257  */
+#line 1524 "lwin_wkt_parse.c" /* yacc.c:1257  */
         break;
 
     case 53: /* multilinestring  */
 #line 202 "lwin_wkt_parse.y" /* yacc.c:1257  */
       { lwgeom_free(((*yyvaluep).geometryvalue)); }
-#line 1525 "lwin_wkt_parse.c" /* yacc.c:1257  */
+#line 1530 "lwin_wkt_parse.c" /* yacc.c:1257  */
         break;
 
     case 54: /* linestring_list  */
 #line 187 "lwin_wkt_parse.y" /* yacc.c:1257  */
       { lwgeom_free(((*yyvaluep).geometryvalue)); }
-#line 1531 "lwin_wkt_parse.c" /* yacc.c:1257  */
+#line 1536 "lwin_wkt_parse.c" /* yacc.c:1257  */
         break;
 
     case 55: /* circularstring  */
 #line 192 "lwin_wkt_parse.y" /* yacc.c:1257  */
       { lwgeom_free(((*yyvaluep).geometryvalue)); }
-#line 1537 "lwin_wkt_parse.c" /* yacc.c:1257  */
+#line 1542 "lwin_wkt_parse.c" /* yacc.c:1257  */
         break;
 
     case 56: /* linestring  */
 #line 199 "lwin_wkt_parse.y" /* yacc.c:1257  */
       { lwgeom_free(((*yyvaluep).geometryvalue)); }
-#line 1543 "lwin_wkt_parse.c" /* yacc.c:1257  */
+#line 1548 "lwin_wkt_parse.c" /* yacc.c:1257  */
         break;
 
     case 57: /* linestring_untagged  */
 #line 200 "lwin_wkt_parse.y" /* yacc.c:1257  */
       { lwgeom_free(((*yyvaluep).geometryvalue)); }
-#line 1549 "lwin_wkt_parse.c" /* yacc.c:1257  */
+#line 1554 "lwin_wkt_parse.c" /* yacc.c:1257  */
         break;
 
     case 58: /* triangle_list  */
 #line 182 "lwin_wkt_parse.y" /* yacc.c:1257  */
       { lwgeom_free(((*yyvaluep).geometryvalue)); }
-#line 1555 "lwin_wkt_parse.c" /* yacc.c:1257  */
+#line 1560 "lwin_wkt_parse.c" /* yacc.c:1257  */
         break;
 
     case 59: /* triangle  */
 #line 213 "lwin_wkt_parse.y" /* yacc.c:1257  */
       { lwgeom_free(((*yyvaluep).geometryvalue)); }
-#line 1561 "lwin_wkt_parse.c" /* yacc.c:1257  */
+#line 1566 "lwin_wkt_parse.c" /* yacc.c:1257  */
         break;
 
     case 60: /* triangle_untagged  */
 #line 214 "lwin_wkt_parse.y" /* yacc.c:1257  */
       { lwgeom_free(((*yyvaluep).geometryvalue)); }
-#line 1567 "lwin_wkt_parse.c" /* yacc.c:1257  */
+#line 1572 "lwin_wkt_parse.c" /* yacc.c:1257  */
         break;
 
     case 61: /* multipoint  */
 #line 203 "lwin_wkt_parse.y" /* yacc.c:1257  */
       { lwgeom_free(((*yyvaluep).geometryvalue)); }
-#line 1573 "lwin_wkt_parse.c" /* yacc.c:1257  */
+#line 1578 "lwin_wkt_parse.c" /* yacc.c:1257  */
         break;
 
     case 62: /* point_list  */
 #line 186 "lwin_wkt_parse.y" /* yacc.c:1257  */
       { lwgeom_free(((*yyvaluep).geometryvalue)); }
-#line 1579 "lwin_wkt_parse.c" /* yacc.c:1257  */
+#line 1584 "lwin_wkt_parse.c" /* yacc.c:1257  */
         break;
 
     case 63: /* point_untagged  */
 #line 207 "lwin_wkt_parse.y" /* yacc.c:1257  */
       { lwgeom_free(((*yyvaluep).geometryvalue)); }
-#line 1585 "lwin_wkt_parse.c" /* yacc.c:1257  */
+#line 1590 "lwin_wkt_parse.c" /* yacc.c:1257  */
         break;
 
     case 64: /* point  */
 #line 206 "lwin_wkt_parse.y" /* yacc.c:1257  */
       { lwgeom_free(((*yyvaluep).geometryvalue)); }
-#line 1591 "lwin_wkt_parse.c" /* yacc.c:1257  */
+#line 1596 "lwin_wkt_parse.c" /* yacc.c:1257  */
         break;
 
     case 65: /* ptarray  */
 #line 178 "lwin_wkt_parse.y" /* yacc.c:1257  */
       { ptarray_free(((*yyvaluep).ptarrayvalue)); }
-#line 1597 "lwin_wkt_parse.c" /* yacc.c:1257  */
+#line 1602 "lwin_wkt_parse.c" /* yacc.c:1257  */
         break;
 
 
@@ -1881,827 +1886,827 @@ yyreduce:
         case 2:
 #line 220 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { wkt_parser_geometry_new((yyvsp[0].geometryvalue), SRID_UNKNOWN); WKT_ERROR(); }
-#line 1885 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 1890 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 3:
 #line 222 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { wkt_parser_geometry_new((yyvsp[0].geometryvalue), (yyvsp[-2].integervalue)); WKT_ERROR(); }
-#line 1891 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 1896 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 4:
 #line 225 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = (yyvsp[0].geometryvalue); }
-#line 1897 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 1902 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 5:
 #line 226 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = (yyvsp[0].geometryvalue); }
-#line 1903 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 1908 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 6:
 #line 227 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = (yyvsp[0].geometryvalue); }
-#line 1909 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 1914 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 7:
 #line 228 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = (yyvsp[0].geometryvalue); }
-#line 1915 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 1920 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 8:
 #line 229 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = (yyvsp[0].geometryvalue); }
-#line 1921 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 1926 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 9:
 #line 230 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = (yyvsp[0].geometryvalue); }
-#line 1927 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 1932 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 10:
 #line 231 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = (yyvsp[0].geometryvalue); }
-#line 1933 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 1938 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 11:
 #line 232 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = (yyvsp[0].geometryvalue); }
-#line 1939 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 1944 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 12:
 #line 233 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = (yyvsp[0].geometryvalue); }
-#line 1945 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 1950 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 13:
 #line 234 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = (yyvsp[0].geometryvalue); }
-#line 1951 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 1956 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 14:
 #line 235 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = (yyvsp[0].geometryvalue); }
-#line 1957 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 1962 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 15:
 #line 236 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = (yyvsp[0].geometryvalue); }
-#line 1963 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 1968 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 16:
 #line 237 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = (yyvsp[0].geometryvalue); }
-#line 1969 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 1974 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 17:
 #line 238 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = (yyvsp[0].geometryvalue); }
-#line 1975 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 1980 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 18:
 #line 239 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = (yyvsp[0].geometryvalue); }
-#line 1981 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 1986 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 19:
 #line 240 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = (yyvsp[0].geometryvalue); }
-#line 1987 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 1992 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 20:
 #line 244 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_finalize(COLLECTIONTYPE, (yyvsp[-1].geometryvalue), NULL); WKT_ERROR(); }
-#line 1993 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 1998 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 21:
 #line 246 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_finalize(COLLECTIONTYPE, (yyvsp[-1].geometryvalue), (yyvsp[-3].stringvalue)); WKT_ERROR(); }
-#line 1999 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2004 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 22:
 #line 248 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_finalize(COLLECTIONTYPE, NULL, (yyvsp[-1].stringvalue)); WKT_ERROR(); }
-#line 2005 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2010 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 23:
 #line 250 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_finalize(COLLECTIONTYPE, NULL, NULL); WKT_ERROR(); }
-#line 2011 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2016 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 24:
 #line 254 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_add_geom((yyvsp[-2].geometryvalue),(yyvsp[0].geometryvalue)); WKT_ERROR(); }
-#line 2017 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2022 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 25:
 #line 256 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_new((yyvsp[0].geometryvalue)); WKT_ERROR(); }
-#line 2023 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2028 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 26:
 #line 260 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_finalize(MULTISURFACETYPE, (yyvsp[-1].geometryvalue), NULL); WKT_ERROR(); }
-#line 2029 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2034 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 27:
 #line 262 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_finalize(MULTISURFACETYPE, (yyvsp[-1].geometryvalue), (yyvsp[-3].stringvalue)); WKT_ERROR(); }
-#line 2035 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2040 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 28:
 #line 264 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_finalize(MULTISURFACETYPE, NULL, (yyvsp[-1].stringvalue)); WKT_ERROR(); }
-#line 2041 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2046 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 29:
 #line 266 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_finalize(MULTISURFACETYPE, NULL, NULL); WKT_ERROR(); }
-#line 2047 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2052 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 30:
 #line 270 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_add_geom((yyvsp[-2].geometryvalue),(yyvsp[0].geometryvalue)); WKT_ERROR(); }
-#line 2053 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2058 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 31:
 #line 272 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_add_geom((yyvsp[-2].geometryvalue),(yyvsp[0].geometryvalue)); WKT_ERROR(); }
-#line 2059 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2064 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 32:
 #line 274 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_add_geom((yyvsp[-2].geometryvalue),(yyvsp[0].geometryvalue)); WKT_ERROR(); }
-#line 2065 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2070 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 33:
 #line 276 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_new((yyvsp[0].geometryvalue)); WKT_ERROR(); }
-#line 2071 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2076 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 34:
 #line 278 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_new((yyvsp[0].geometryvalue)); WKT_ERROR(); }
-#line 2077 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2082 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 35:
 #line 280 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_new((yyvsp[0].geometryvalue)); WKT_ERROR(); }
-#line 2083 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2088 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 36:
 #line 284 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_finalize(TINTYPE, (yyvsp[-1].geometryvalue), NULL); WKT_ERROR(); }
-#line 2089 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2094 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 37:
 #line 286 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_finalize(TINTYPE, (yyvsp[-1].geometryvalue), (yyvsp[-3].stringvalue)); WKT_ERROR(); }
-#line 2095 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2100 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 38:
 #line 288 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_finalize(TINTYPE, NULL, (yyvsp[-1].stringvalue)); WKT_ERROR(); }
-#line 2101 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2106 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 39:
 #line 290 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_finalize(TINTYPE, NULL, NULL); WKT_ERROR(); }
-#line 2107 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2112 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 40:
 #line 294 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_finalize(POLYHEDRALSURFACETYPE, (yyvsp[-1].geometryvalue), NULL); WKT_ERROR(); }
-#line 2113 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2118 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 41:
 #line 296 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_finalize(POLYHEDRALSURFACETYPE, (yyvsp[-1].geometryvalue), (yyvsp[-3].stringvalue)); WKT_ERROR(); }
-#line 2119 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2124 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 42:
 #line 298 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_finalize(POLYHEDRALSURFACETYPE, NULL, (yyvsp[-1].stringvalue)); WKT_ERROR(); }
-#line 2125 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2130 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 43:
 #line 300 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_finalize(POLYHEDRALSURFACETYPE, NULL, NULL); WKT_ERROR(); }
-#line 2131 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2136 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 44:
 #line 304 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_finalize(MULTIPOLYGONTYPE, (yyvsp[-1].geometryvalue), NULL); WKT_ERROR(); }
-#line 2137 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2142 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 45:
 #line 306 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_finalize(MULTIPOLYGONTYPE, (yyvsp[-1].geometryvalue), (yyvsp[-3].stringvalue)); WKT_ERROR(); }
-#line 2143 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2148 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 46:
 #line 308 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_finalize(MULTIPOLYGONTYPE, NULL, (yyvsp[-1].stringvalue)); WKT_ERROR(); }
-#line 2149 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2154 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 47:
 #line 310 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_finalize(MULTIPOLYGONTYPE, NULL, NULL); WKT_ERROR(); }
-#line 2155 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2160 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 48:
 #line 314 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_add_geom((yyvsp[-2].geometryvalue),(yyvsp[0].geometryvalue)); WKT_ERROR(); }
-#line 2161 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2166 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 49:
 #line 316 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_new((yyvsp[0].geometryvalue)); WKT_ERROR(); }
-#line 2167 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2172 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 50:
 #line 320 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_add_geom((yyvsp[-2].geometryvalue),(yyvsp[0].geometryvalue)); WKT_ERROR(); }
-#line 2173 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2178 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 51:
 #line 322 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_new((yyvsp[0].geometryvalue)); WKT_ERROR(); }
-#line 2179 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2184 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 52:
 #line 326 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_polygon_finalize((yyvsp[-1].geometryvalue), NULL); WKT_ERROR(); }
-#line 2185 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2190 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 53:
 #line 328 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_polygon_finalize((yyvsp[-1].geometryvalue), (yyvsp[-3].stringvalue)); WKT_ERROR(); }
-#line 2191 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2196 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 54:
 #line 330 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_polygon_finalize(NULL, (yyvsp[-1].stringvalue)); WKT_ERROR(); }
-#line 2197 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2202 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 55:
 #line 332 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_polygon_finalize(NULL, NULL); WKT_ERROR(); }
-#line 2203 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2208 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 56:
 #line 336 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = (yyvsp[-1].geometryvalue); }
-#line 2209 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2214 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 57:
 #line 338 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_polygon_finalize(NULL, NULL); WKT_ERROR(); }
-#line 2215 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2220 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 58:
 #line 341 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = (yyvsp[-1].geometryvalue); }
-#line 2221 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2226 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 59:
 #line 345 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_curvepolygon_finalize((yyvsp[-1].geometryvalue), NULL); WKT_ERROR(); }
-#line 2227 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2232 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 60:
 #line 347 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_curvepolygon_finalize((yyvsp[-1].geometryvalue), (yyvsp[-3].stringvalue)); WKT_ERROR(); }
-#line 2233 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2238 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 61:
 #line 349 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_curvepolygon_finalize(NULL, (yyvsp[-1].stringvalue)); WKT_ERROR(); }
-#line 2239 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2244 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 62:
 #line 351 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_curvepolygon_finalize(NULL, NULL); WKT_ERROR(); }
-#line 2245 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2250 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 63:
 #line 355 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_curvepolygon_add_ring((yyvsp[-2].geometryvalue),(yyvsp[0].geometryvalue)); WKT_ERROR(); }
-#line 2251 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2256 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 64:
 #line 357 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_curvepolygon_new((yyvsp[0].geometryvalue)); WKT_ERROR(); }
-#line 2257 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2262 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 65:
 #line 360 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = (yyvsp[0].geometryvalue); }
-#line 2263 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2268 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 66:
 #line 361 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = (yyvsp[0].geometryvalue); }
-#line 2269 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2274 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 67:
 #line 362 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = (yyvsp[0].geometryvalue); }
-#line 2275 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2280 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 68:
 #line 363 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = (yyvsp[0].geometryvalue); }
-#line 2281 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2286 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 69:
 #line 367 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_polygon_add_ring((yyvsp[-2].geometryvalue),(yyvsp[0].ptarrayvalue),'Z'); WKT_ERROR(); }
-#line 2287 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2292 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 70:
 #line 369 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_polygon_new((yyvsp[0].ptarrayvalue),'Z'); WKT_ERROR(); }
-#line 2293 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2298 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 71:
 #line 373 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_polygon_add_ring((yyvsp[-2].geometryvalue),(yyvsp[0].ptarrayvalue),'2'); WKT_ERROR(); }
-#line 2299 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2304 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 72:
 #line 375 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_polygon_new((yyvsp[0].ptarrayvalue),'2'); WKT_ERROR(); }
-#line 2305 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2310 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 73:
 #line 378 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.ptarrayvalue) = (yyvsp[-1].ptarrayvalue); }
-#line 2311 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2316 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 74:
 #line 381 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.ptarrayvalue) = (yyvsp[-1].ptarrayvalue); }
-#line 2317 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2322 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 75:
 #line 385 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_finalize(COMPOUNDTYPE, (yyvsp[-1].geometryvalue), NULL); WKT_ERROR(); }
-#line 2323 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2328 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 76:
 #line 387 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_finalize(COMPOUNDTYPE, (yyvsp[-1].geometryvalue), (yyvsp[-3].stringvalue)); WKT_ERROR(); }
-#line 2329 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2334 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 77:
 #line 389 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_finalize(COMPOUNDTYPE, NULL, (yyvsp[-1].stringvalue)); WKT_ERROR(); }
-#line 2335 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2340 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 78:
 #line 391 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_finalize(COMPOUNDTYPE, NULL, NULL); WKT_ERROR(); }
-#line 2341 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2346 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 79:
 #line 395 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_compound_add_geom((yyvsp[-2].geometryvalue),(yyvsp[0].geometryvalue)); WKT_ERROR(); }
-#line 2347 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2352 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 80:
 #line 397 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_compound_add_geom((yyvsp[-2].geometryvalue),(yyvsp[0].geometryvalue)); WKT_ERROR(); }
-#line 2353 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2358 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 81:
 #line 399 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_compound_add_geom((yyvsp[-2].geometryvalue),(yyvsp[0].geometryvalue)); WKT_ERROR(); }
-#line 2359 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2364 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 82:
 #line 401 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_compound_new((yyvsp[0].geometryvalue)); WKT_ERROR(); }
-#line 2365 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2370 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 83:
 #line 403 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_compound_new((yyvsp[0].geometryvalue)); WKT_ERROR(); }
-#line 2371 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2376 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 84:
 #line 405 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_compound_new((yyvsp[0].geometryvalue)); WKT_ERROR(); }
-#line 2377 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2382 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 85:
 #line 409 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_finalize(MULTICURVETYPE, (yyvsp[-1].geometryvalue), NULL); WKT_ERROR(); }
-#line 2383 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2388 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 86:
 #line 411 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_finalize(MULTICURVETYPE, (yyvsp[-1].geometryvalue), (yyvsp[-3].stringvalue)); WKT_ERROR(); }
-#line 2389 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2394 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 87:
 #line 413 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_finalize(MULTICURVETYPE, NULL, (yyvsp[-1].stringvalue)); WKT_ERROR(); }
-#line 2395 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2400 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 88:
 #line 415 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_finalize(MULTICURVETYPE, NULL, NULL); WKT_ERROR(); }
-#line 2401 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2406 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 89:
 #line 419 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_add_geom((yyvsp[-2].geometryvalue),(yyvsp[0].geometryvalue)); WKT_ERROR(); }
-#line 2407 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2412 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 90:
 #line 421 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_add_geom((yyvsp[-2].geometryvalue),(yyvsp[0].geometryvalue)); WKT_ERROR(); }
-#line 2413 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2418 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 91:
 #line 423 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_add_geom((yyvsp[-2].geometryvalue),(yyvsp[0].geometryvalue)); WKT_ERROR(); }
-#line 2419 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2424 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 92:
 #line 425 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_add_geom((yyvsp[-2].geometryvalue),(yyvsp[0].geometryvalue)); WKT_ERROR(); }
-#line 2425 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2430 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 93:
 #line 427 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_new((yyvsp[0].geometryvalue)); WKT_ERROR(); }
-#line 2431 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2436 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 94:
 #line 429 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_new((yyvsp[0].geometryvalue)); WKT_ERROR(); }
-#line 2437 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2442 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 95:
 #line 431 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_new((yyvsp[0].geometryvalue)); WKT_ERROR(); }
-#line 2443 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2448 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 96:
 #line 433 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_new((yyvsp[0].geometryvalue)); WKT_ERROR(); }
-#line 2449 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2454 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 97:
 #line 437 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_finalize(MULTILINETYPE, (yyvsp[-1].geometryvalue), NULL); WKT_ERROR(); }
-#line 2455 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2460 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 98:
 #line 439 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_finalize(MULTILINETYPE, (yyvsp[-1].geometryvalue), (yyvsp[-3].stringvalue)); WKT_ERROR(); }
-#line 2461 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2466 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 99:
 #line 441 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_finalize(MULTILINETYPE, NULL, (yyvsp[-1].stringvalue)); WKT_ERROR(); }
-#line 2467 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2472 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 100:
 #line 443 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_finalize(MULTILINETYPE, NULL, NULL); WKT_ERROR(); }
-#line 2473 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2478 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 101:
 #line 447 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_add_geom((yyvsp[-2].geometryvalue),(yyvsp[0].geometryvalue)); WKT_ERROR(); }
-#line 2479 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2484 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 102:
 #line 449 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_new((yyvsp[0].geometryvalue)); WKT_ERROR(); }
-#line 2485 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2490 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 103:
 #line 453 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_circularstring_new((yyvsp[-1].ptarrayvalue), NULL); WKT_ERROR(); }
-#line 2491 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2496 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 104:
 #line 455 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_circularstring_new((yyvsp[-1].ptarrayvalue), (yyvsp[-3].stringvalue)); WKT_ERROR(); }
-#line 2497 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2502 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 105:
 #line 457 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_circularstring_new(NULL, (yyvsp[-1].stringvalue)); WKT_ERROR(); }
-#line 2503 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2508 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 106:
 #line 459 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_circularstring_new(NULL, NULL); WKT_ERROR(); }
-#line 2509 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2514 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 107:
 #line 463 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_linestring_new((yyvsp[-1].ptarrayvalue), NULL); WKT_ERROR(); }
-#line 2515 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2520 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 108:
 #line 465 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_linestring_new((yyvsp[-1].ptarrayvalue), (yyvsp[-3].stringvalue)); WKT_ERROR(); }
-#line 2521 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2526 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 109:
 #line 467 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_linestring_new(NULL, (yyvsp[-1].stringvalue)); WKT_ERROR(); }
-#line 2527 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2532 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 110:
 #line 469 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_linestring_new(NULL, NULL); WKT_ERROR(); }
-#line 2533 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2538 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 111:
 #line 473 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_linestring_new((yyvsp[-1].ptarrayvalue), NULL); WKT_ERROR(); }
-#line 2539 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2544 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 112:
 #line 475 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_linestring_new(NULL, NULL); WKT_ERROR(); }
-#line 2545 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2550 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 113:
 #line 479 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_add_geom((yyvsp[-2].geometryvalue),(yyvsp[0].geometryvalue)); WKT_ERROR(); }
-#line 2551 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2556 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 114:
 #line 481 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_new((yyvsp[0].geometryvalue)); WKT_ERROR(); }
-#line 2557 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2562 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 115:
 #line 485 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_triangle_new((yyvsp[-2].ptarrayvalue), NULL); WKT_ERROR(); }
-#line 2563 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2568 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 116:
 #line 487 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_triangle_new((yyvsp[-2].ptarrayvalue), (yyvsp[-5].stringvalue)); WKT_ERROR(); }
-#line 2569 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2574 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 117:
 #line 489 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_triangle_new(NULL, (yyvsp[-1].stringvalue)); WKT_ERROR(); }
-#line 2575 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2580 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 118:
 #line 491 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_triangle_new(NULL, NULL); WKT_ERROR(); }
-#line 2581 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2586 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 119:
 #line 495 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_triangle_new((yyvsp[-2].ptarrayvalue), NULL); WKT_ERROR(); }
-#line 2587 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2592 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 120:
 #line 499 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_finalize(MULTIPOINTTYPE, (yyvsp[-1].geometryvalue), NULL); WKT_ERROR(); }
-#line 2593 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2598 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 121:
 #line 501 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_finalize(MULTIPOINTTYPE, (yyvsp[-1].geometryvalue), (yyvsp[-3].stringvalue)); WKT_ERROR(); }
-#line 2599 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2604 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 122:
 #line 503 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_finalize(MULTIPOINTTYPE, NULL, (yyvsp[-1].stringvalue)); WKT_ERROR(); }
-#line 2605 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2610 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 123:
 #line 505 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_finalize(MULTIPOINTTYPE, NULL, NULL); WKT_ERROR(); }
-#line 2611 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2616 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 124:
 #line 509 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_add_geom((yyvsp[-2].geometryvalue),(yyvsp[0].geometryvalue)); WKT_ERROR(); }
-#line 2617 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2622 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 125:
 #line 511 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_collection_new((yyvsp[0].geometryvalue)); WKT_ERROR(); }
-#line 2623 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2628 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 126:
 #line 515 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_point_new(wkt_parser_ptarray_new((yyvsp[0].coordinatevalue)),NULL); WKT_ERROR(); }
-#line 2629 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2634 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 127:
 #line 517 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_point_new(wkt_parser_ptarray_new((yyvsp[-1].coordinatevalue)),NULL); WKT_ERROR(); }
-#line 2635 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2640 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 128:
 #line 519 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_point_new(NULL, NULL); WKT_ERROR(); }
-#line 2641 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2646 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 129:
 #line 523 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_point_new((yyvsp[-1].ptarrayvalue), NULL); WKT_ERROR(); }
-#line 2647 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2652 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 130:
 #line 525 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_point_new((yyvsp[-1].ptarrayvalue), (yyvsp[-3].stringvalue)); WKT_ERROR(); }
-#line 2653 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2658 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 131:
 #line 527 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_point_new(NULL, (yyvsp[-1].stringvalue)); WKT_ERROR(); }
-#line 2659 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2664 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 132:
 #line 529 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.geometryvalue) = wkt_parser_point_new(NULL,NULL); WKT_ERROR(); }
-#line 2665 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2670 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 133:
 #line 533 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.ptarrayvalue) = wkt_parser_ptarray_add_coord((yyvsp[-2].ptarrayvalue), (yyvsp[0].coordinatevalue)); WKT_ERROR(); }
-#line 2671 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2676 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 134:
 #line 535 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.ptarrayvalue) = wkt_parser_ptarray_new((yyvsp[0].coordinatevalue)); WKT_ERROR(); }
-#line 2677 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2682 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 135:
 #line 539 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.coordinatevalue) = wkt_parser_coord_2((yyvsp[-1].doublevalue), (yyvsp[0].doublevalue)); WKT_ERROR(); }
-#line 2683 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2688 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 136:
 #line 541 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.coordinatevalue) = wkt_parser_coord_3((yyvsp[-2].doublevalue), (yyvsp[-1].doublevalue), (yyvsp[0].doublevalue)); WKT_ERROR(); }
-#line 2689 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2694 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 137:
 #line 543 "lwin_wkt_parse.y" /* yacc.c:1646  */
     { (yyval.coordinatevalue) = wkt_parser_coord_4((yyvsp[-3].doublevalue), (yyvsp[-2].doublevalue), (yyvsp[-1].doublevalue), (yyvsp[0].doublevalue)); WKT_ERROR(); }
-#line 2695 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2700 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
   case 138:
 #line 546 "lwin_wkt_parse.y" /* yacc.c:1646  */
-    { (yyval.geometryvalue) = wkt_parser_ellipse((yyvsp[-11].doublevalue), (yyvsp[-9].doublevalue), (yyvsp[-7].doublevalue), (yyvsp[-5].doublevalue), (yyvsp[-3].doublevalue), (yyvsp[-1].doublevalue)); WKT_ERROR(); }
-#line 2701 "lwin_wkt_parse.c" /* yacc.c:1646  */
+    { (yyval.geometryvalue) = wkt_parser_ellipse((yyvsp[-13].doublevalue), (yyvsp[-11].doublevalue), (yyvsp[-9].doublevalue), (yyvsp[-7].doublevalue), (yyvsp[-5].doublevalue), (yyvsp[-3].doublevalue), (yyvsp[-1].doublevalue)); WKT_ERROR(); }
+#line 2706 "lwin_wkt_parse.c" /* yacc.c:1646  */
     break;
 
 
-#line 2705 "lwin_wkt_parse.c" /* yacc.c:1646  */
+#line 2710 "lwin_wkt_parse.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires

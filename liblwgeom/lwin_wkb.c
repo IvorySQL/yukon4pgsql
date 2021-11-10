@@ -939,14 +939,14 @@ lwellipse_from_wkb_state(wkb_parse_state *s)
 	res->type = ELLIPSETYPE;
 	res->srid = s->srid;
 	res->bbox = NULL;	
-	res->data = lwalloc(6*sizeof(double));
+	res->data = lwalloc(sizeof(ELLIPSE));
 	if(s->has_srid)
 	{
-		memcpy(res->data , s->wkb+9 , 6*sizeof(double));
+		memcpy(res->data, s->wkb+9, sizeof(ELLIPSE));
 	}
 	else
 	{
-		memcpy(res->data , s->wkb+5 , 6*sizeof(double));
+		memcpy(res->data, s->wkb+5, sizeof(ELLIPSE));
 	}
 	res->flags = 0;
 	return res;

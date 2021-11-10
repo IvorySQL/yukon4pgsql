@@ -431,7 +431,7 @@ POINT4D;
 
 typedef struct
 {
-    double x, y, a, b, startangle, angle;
+    double x, y, a, b, startangle,endangle, angle;
 }
 ELLIPSE;
 

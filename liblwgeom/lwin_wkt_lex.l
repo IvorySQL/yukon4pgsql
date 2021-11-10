@@ -77,6 +77,7 @@ TRIANGLE { return TRIANGLE_TOK; }
 TIN { return TIN_TOK; }
 POINT { return POINT_TOK; }
 EMPTY { return EMPTY_TOK; }
+ELLIPSE { return ELLIPSE_TOK; }
 
 Z|M|ZM {
 	LWDEBUG(5,"DIMENSIONALITY");

@@ -1975,6 +1975,12 @@ double lwgeom_length_2d(const LWGEOM *geom)
 			length += lwgeom_length_2d(col->geoms[i]);
 		return length;
 	}
+	else if(type == ELLIPSETYPE)
+	{
+		LWELLIPSE *e = (LWELLIPSE*)geom;
+		double len = 3.1415926 * (1.5 * (e->data->a + e->data->b) - sqrt(e->data->a * e->data->b));
+		return len;
+	}
 	else
 		return 0.0;
 }

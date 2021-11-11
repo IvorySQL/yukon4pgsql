@@ -207,6 +207,15 @@ static void test_wkb_out_polyhedralsurface(void)
 //	printf("\nnew: %s\nold: %s\n",s,t);
 }
 
+static void test_wkb_out_ellipse(void)
+{
+	cu_wkb("ELLIPSE(1.1, 2.2, 3.3, 4.4, 5.5, 6.6, 7.7)");
+	CU_ASSERT_STRING_EQUAL(s,"00000000123FF199999999999A400199999999999A400A666666666666401199999999999A4016000000000000401A666666666666401ECCCCCCCCCCCD");
+
+	cu_wkb("SRID=4;ELLIPSE(1.1, 2.2, 3.3, 4.4, 5.5, 6.6, 7.7)");
+	CU_ASSERT_STRING_EQUAL(s,"0020000012000000043FF199999999999A400199999999999A400A666666666666401199999999999A4016000000000000401A666666666666401ECCCCCCCCCCCD");
+}
+
 /*
 ** Used by test harness to register the tests in this file.
 */
@@ -227,4 +236,5 @@ void wkb_out_suite_setup(void)
 	PG_ADD_TEST(suite, test_wkb_out_multicurve);
 	PG_ADD_TEST(suite, test_wkb_out_multisurface);
 	PG_ADD_TEST(suite, test_wkb_out_polyhedralsurface);
+	PG_ADD_TEST(suite, test_wkb_out_ellipse);
 }

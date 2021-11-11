@@ -213,6 +213,14 @@ static void test_wkt_out_multisurface(void)
 
 }
 
+static void test_wkt_out_ellipse(void)
+{
+	CU_ASSERT_STRING_EQUAL(
+	    cu_wkt("ELLIPSE(1,2,3,4,5,6,7)",WKT_ISO),
+	    "ELLIPSE(1,2,3,4,5,6,7)"
+	);
+}
+
 /*
 ** Used by test harness to register the tests in this file.
 */
@@ -232,4 +240,5 @@ void wkt_out_suite_setup(void)
 	PG_ADD_TEST(suite, test_wkt_out_curvpolygon);
 	PG_ADD_TEST(suite, test_wkt_out_multicurve);
 	PG_ADD_TEST(suite, test_wkt_out_multisurface);
+	PG_ADD_TEST(suite, test_wkt_out_ellipse);
 }

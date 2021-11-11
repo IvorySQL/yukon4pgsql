@@ -210,6 +210,15 @@ static void test_wkb_in_multicurve(void) {}
 
 static void test_wkb_in_multisurface(void) {}
 
+static void test_wkb_in_ellipse(void)
+{
+	cu_wkb_in("ELLIPSE(0,0,4,2,0,360,0)");
+	CU_ASSERT_STRING_EQUAL(hex_a, hex_b);
+
+	cu_wkb_in("SRID=4;ELLIPSE(0,0,4,2,0,360,0)");
+	CU_ASSERT_STRING_EQUAL(hex_a, hex_b);
+}
+
 static void test_wkb_in_malformed(void)
 {
 	/* OSSFUXX */
@@ -298,6 +307,7 @@ void wkb_in_suite_setup(void)
 	PG_ADD_TEST(suite, test_wkb_in_curvpolygon);
 	PG_ADD_TEST(suite, test_wkb_in_multicurve);
 	PG_ADD_TEST(suite, test_wkb_in_multisurface);
+	PG_ADD_TEST(suite, test_wkb_in_ellipse);
 	PG_ADD_TEST(suite, test_wkb_in_malformed);
 	PG_ADD_TEST(suite, test_wkb_fuzz);
 }

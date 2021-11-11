@@ -407,6 +407,14 @@ static void test_wkt_leak(void)
 	lwfree(err);
 }
 
+static void test_wkt_in_ellipse(void)
+{
+	s = "ELLIPSE(1,2,3,4,5,6,7)";
+	r = cu_wkt_in(s, WKT_SFSQL);
+	CU_ASSERT_STRING_EQUAL(r,s);
+	lwfree(r);
+}
+
 /*
 ** Used by test harness to register the tests in this file.
 */
@@ -431,4 +439,5 @@ void wkt_in_suite_setup(void)
 	PG_ADD_TEST(suite, test_wkt_in_errlocation);
 	PG_ADD_TEST(suite, test_wkt_double);
 	PG_ADD_TEST(suite, test_wkt_leak);
+	PG_ADD_TEST(suite, test_wkt_in_ellipse);
 }

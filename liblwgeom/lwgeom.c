@@ -1221,7 +1221,7 @@ int lwgeom_needs_bbox(const LWGEOM *geom)
 	}
 	if ( geom->type == ELLIPSETYPE)
 	{
-		return LW_FALSE;
+		return LW_TRUE;
 	}
 	else
 	{

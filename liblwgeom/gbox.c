@@ -694,6 +694,27 @@ static int lwtriangle_calculate_gbox_cartesian(LWTRIANGLE *triangle, GBOX *gbox)
 	return ptarray_calculate_gbox_cartesian( triangle->points, gbox );
 }
 
+static int lwellipse_calculate_gbox_cartesian(LWELLIPSE *ellipse, GBOX *gbox)
+{
+	if ( ! ellipse ) return LW_FAILURE;
+
+	
+	gbox->xmin = ellipse->data->x - ellipse->data->a / 2;
+	gbox->xmax = ellipse->data->x + ellipse->data->a / 2;
+	gbox->ymin = ellipse->data->y - ellipse->data->b / 2;
+	gbox->ymax = ellipse->data->y + ellipse->data->b / 2;
+
+	//计算旋转后的包围盒
+	gbox->xmin = (gbox->xmin - ellipse->data->x)*cos(ellipse->data->angle) - (gbox->ymin - ellipse->data->y)*sin(ellipse->data->angle) + ellipse->data->x;
+	gbox->ymin = (gbox->xmin - ellipse->data->x)*sin(ellipse->data->angle) + (gbox->ymin - ellipse->data->y)*cos(ellipse->data->angle) + ellipse->data->y;
+	gbox->xmax = (gbox->xmax - ellipse->data->x)*cos(ellipse->data->angle) - (gbox->ymax - ellipse->data->y)*sin(ellipse->data->angle) + ellipse->data->x;
+	gbox->ymax = (gbox->xmax - ellipse->data->x)*sin(ellipse->data->angle) + (gbox->ymax - ellipse->data->y)*cos(ellipse->data->angle) + ellipse->data->y;
+	gbox->zmax = 0;
+	gbox->zmin = 0;
+	gbox->flags = 0;
+	return LW_SUCCESS;
+}
+
 static int lwpoly_calculate_gbox_cartesian(LWPOLY *poly, GBOX *gbox)
 {
 	if ( ! poly ) return LW_FAILURE;
@@ -755,7 +776,7 @@ int lwgeom_calculate_gbox_cartesian(const LWGEOM *lwgeom, GBOX *gbox)
 	case TRIANGLETYPE:
 		return lwtriangle_calculate_gbox_cartesian((LWTRIANGLE *)lwgeom, gbox);
 	case ELLIPSETYPE:
-		return lwtriangle_calculate_gbox_cartesian((LWTRIANGLE *)lwgeom, gbox);
+		return lwellipse_calculate_gbox_cartesian((LWELLIPSE *)lwgeom, gbox);
 	case COMPOUNDTYPE:
 	case CURVEPOLYTYPE:
 	case MULTIPOINTTYPE:

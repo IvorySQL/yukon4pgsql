@@ -259,6 +259,12 @@ double lwtriangle_area(const LWTRIANGLE *triangle);
 double lwellipse_area(const LWELLIPSE *ellipse);
 
 /**
+ * 参数化对象拟合函数
+ * 
+ */
+LWGEOM* lwellipse_get_spatialdata(LWELLIPSE* ellipse,unsigned int);
+
+/**
 * Pull a #GBOX from the header of a #GSERIALIZED, if one is available. If
 * it is not, return LW_FAILURE.
 */

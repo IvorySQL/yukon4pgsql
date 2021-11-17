@@ -60,6 +60,7 @@ Datum LWGEOM_length2d_linestring(PG_FUNCTION_ARGS);
 Datum LWGEOM_length_linestring(PG_FUNCTION_ARGS);
 Datum LWGEOM_perimeter2d_poly(PG_FUNCTION_ARGS);
 Datum LWGEOM_perimeter_poly(PG_FUNCTION_ARGS);
+Datum LWGEOM_spatital_data(PG_FUNCTION_ARGS);
 
 Datum LWGEOM_maxdistance2d_linestring(PG_FUNCTION_ARGS);
 Datum ST_Distance(PG_FUNCTION_ARGS);
@@ -334,6 +335,34 @@ Datum LWGEOM_perimeter_poly(PG_FUNCTION_ARGS)
 	perimeter = lwgeom_perimeter(lwgeom);
 	PG_FREE_IF_COPY(geom, 0);
 	PG_RETURN_FLOAT8(perimeter);
+}
+
+/**
+ * @brief get a spatial data from Parameterization object
+ * 
+ */
+PG_FUNCTION_INFO_V1(LWGEOM_spatital_data);
+Datum LWGEOM_spatital_data(PG_FUNCTION_ARGS)
+{
+	GSERIALIZED *geom = PG_GETARG_GSERIALIZED_P(0);
+	unsigned int segment = PG_GETARG_UINT32(1);
+	LWGEOM *lwgeom = lwgeom_from_gserialized(geom);
+	LWGEOM *reslwgeom = NULL;
+	GSERIALIZED *geom_result = NULL;
+	int type = lwgeom->type;
+	switch (type)
+	{
+	case ELLIPSETYPE:
+		reslwgeom = lwellipse_get_spatialdata((LWELLIPSE*)lwgeom, segment);
+		break;
+	
+	default:
+		break;
+	}
+	geom_result = geometry_serialize(reslwgeom);
+	lwgeom_free(lwgeom);
+	lwgeom_free(reslwgeom);
+	PG_RETURN_POINTER(geom_result);
 }
 
 /**

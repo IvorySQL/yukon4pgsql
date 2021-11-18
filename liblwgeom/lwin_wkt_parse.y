@@ -397,11 +397,15 @@ compound_list :
 		{ $$ = wkt_parser_compound_add_geom($1,$3); WKT_ERROR(); } |
 	compound_list COMMA_TOK linestring_untagged
 		{ $$ = wkt_parser_compound_add_geom($1,$3); WKT_ERROR(); } |
+	compound_list COMMA_TOK ellipse
+		{ $$ = wkt_parser_compound_add_geom($1,$3); WKT_ERROR(); } |
 	circularstring
 		{ $$ = wkt_parser_compound_new($1); WKT_ERROR(); } |
 	linestring
 		{ $$ = wkt_parser_compound_new($1); WKT_ERROR(); } |
 	linestring_untagged
+		{ $$ = wkt_parser_compound_new($1); WKT_ERROR(); } |
+	ellipse
 		{ $$ = wkt_parser_compound_new($1); WKT_ERROR(); } ;
 
 multicurve :

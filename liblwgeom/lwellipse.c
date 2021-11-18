@@ -242,6 +242,7 @@ CalcEllipseRotation(double xstart,
 		    double *startangle,
 		    double *endangle)
 {
+	double _xstart, _ystart, _xend, _yend;
 	//先将中心的平移到 0 0 点，
 	xstart -= xcenter;
 	ystart -= ycenter;
@@ -249,12 +250,12 @@ CalcEllipseRotation(double xstart,
 	yend -= ycenter;
 
 	//然后逆向旋转 rotation,最后计算起始角和终止角
-	xstart = xstart * cos(-rotation) - ystart * sin(-rotation);
-	ystart = xstart * sin(-rotation) + ystart * cos(-rotation);
+	_xstart = xstart * cos(-rotation) - ystart * sin(-rotation);
+	_ystart = xstart * sin(-rotation) + ystart * cos(-rotation);
 
-	xend = xend * cos(-rotation) - yend * sin(-rotation);
-	yend = xend * sin(-rotation) + yend * cos(-rotation);
+	_xend = xend * cos(-rotation) - yend * sin(-rotation);
+	_yend = xend * sin(-rotation) + yend * cos(-rotation);
 
-	*startangle = atan2(ystart, xstart);
-	*endangle = atan2(yend, xend);
+	*startangle = atan2(_ystart, _xstart);
+	*endangle = atan2(_yend, _xend);
 }

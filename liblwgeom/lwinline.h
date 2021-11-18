@@ -179,6 +179,12 @@ lwtriangle_is_empty(const LWTRIANGLE *triangle)
 	return !triangle->points || triangle->points->npoints < 1;
 }
 
+static inline int
+lwellipse_is_empty(const LWELLIPSE *ellipse)
+{
+	return !ellipse->data;
+}
+
 static inline int lwgeom_is_empty(const LWGEOM *geom);
 
 static inline int
@@ -219,6 +225,8 @@ lwgeom_is_empty(const LWGEOM *geom)
 	case TRIANGLETYPE:
 		return lwtriangle_is_empty((LWTRIANGLE *)geom);
 		break;
+	case ELLIPSETYPE:
+		return lwellipse_is_empty((LWELLIPSE *)geom);
 	case MULTIPOINTTYPE:
 	case MULTILINETYPE:
 	case MULTIPOLYGONTYPE:

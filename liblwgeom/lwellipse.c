@@ -44,11 +44,9 @@ bool BuildArc(POINT2D **arr,
 
 double CalcEllipseRadian(const double dPntRadian, const double dRreAxis, const double dSemiMinorAxis);
 
-
-
 /**
  * @brief 根据起始点，终止点，中心点，旋转角度计算起始角度和终止角度
- * 
+ *
  * @param xstart 起始点 x
  * @param ystart 起始点 y
  * @param xend 终止点 x
@@ -97,21 +95,20 @@ LWGEOM *
 lwellipse_get_spatialdata(LWELLIPSE *geom, unsigned int segment)
 {
 	LWLINE *lwgeom = NULL;
-	// 检查长短半轴是否合法
-	#if 0
-	if (geom->data->a <= 0 || geom->data->b <= 0)
-	{
-		return NULL;
-	}
 
 	if (segment == 0)
 	{
 		segment = 72;
 	}
 
-	double dRadian = geom->data->angle * DTOR;
-	double dRadianBegin = geom->data->startangle * DTOR;
-	double dRadianEnd = geom->data->endangle * DTOR;
+	double dRadianBegin, dRadianEnd;
+	CalcEllipseRotation(geom->data->xstart,
+			    geom->data->ystart,
+			    geom->data->xend,
+			    geom->data->yend,
+			    geom->data->xcenter,
+			    geom->data->ycenter,
+			    geom->data->rotation,&dRadianBegin,&dRadianEnd);
 	double dStep = (dRadianBegin - dRadianEnd) / segment;
 	POINT2D *poarr = NULL;
 	unsigned long len;
@@ -120,8 +117,8 @@ lwellipse_get_spatialdata(LWELLIPSE *geom, unsigned int segment)
 			    geom->data->xcenter,
 			    geom->data->ycenter,
 			    geom->data->axis,
-			    geom->data->axis / geom->data->ratio,
-			    dRadian,
+			    geom->data->axis * geom->data->ratio,
+			    geom->data->rotation,
 			    dRadianBegin,
 			    dRadianEnd,
 			    dStep);
@@ -131,7 +128,6 @@ lwellipse_get_spatialdata(LWELLIPSE *geom, unsigned int segment)
 		POINTARRAY *parr = ptarray_construct_copy_data(0, 0, len, (uint8_t *)poarr);
 		lwgeom = lwline_construct(4326, NULL, parr);
 	}
-#endif
 	return (LWGEOM *)lwgeom;
 }
 

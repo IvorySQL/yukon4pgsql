@@ -280,6 +280,40 @@ static void lwmline_to_wkt_sb(const LWMLINE *mline, stringbuffer_t *sb, int prec
 	stringbuffer_append_len(sb, ")", 1);
 }
 
+/* 
+* ELLIPSE 
+*/
+static void lwellipse_to_wkt_sb(const LWELLIPSE *pt, stringbuffer_t *sb, int precision, uint8_t variant)
+{
+	if ( ! (variant & WKT_NO_TYPE) )
+	{
+		stringbuffer_append_len(sb, "ELLIPSE", 7);
+	}
+	stringbuffer_append_len(sb, "(", 1);
+	stringbuffer_append_double(sb, pt->data->xstart, precision);
+	stringbuffer_append_len(sb, " ", 1);
+	stringbuffer_append_double(sb, pt->data->ystart, precision);
+	stringbuffer_append_len(sb, " ", 1);
+	stringbuffer_append_double(sb, pt->data->xend, precision);
+	stringbuffer_append_len(sb, " ", 1);
+	stringbuffer_append_double(sb, pt->data->yend, precision);
+	stringbuffer_append_len(sb, " ", 1);
+	stringbuffer_append_double(sb, pt->data->xcenter, precision);
+	stringbuffer_append_len(sb, " ", 1);
+	stringbuffer_append_double(sb, pt->data->ycenter, precision);
+	stringbuffer_append_len(sb, ",", 1);
+	stringbuffer_append_double(sb, pt->data->minor, precision);
+	stringbuffer_append_len(sb, ",", 1);
+	stringbuffer_append_double(sb, pt->data->clockwise, precision);
+	stringbuffer_append_len(sb, ",", 1);
+	stringbuffer_append_double(sb, pt->data->rotation, precision);
+	stringbuffer_append_len(sb, ",", 1);
+	stringbuffer_append_double(sb, pt->data->axis, precision);
+	stringbuffer_append_len(sb, ",", 1);
+	stringbuffer_append_double(sb, pt->data->ratio, precision);
+	stringbuffer_append_len(sb, ")", 1);
+}
+
 /*
 * MULTIPOLYGON
 */
@@ -346,6 +380,10 @@ static void lwcompound_to_wkt_sb(const LWCOMPOUND *comp, stringbuffer_t *sb, int
 		else if ( type == CIRCSTRINGTYPE )
 		{
 			lwcircstring_to_wkt_sb((LWCIRCSTRING*)comp->geoms[i], sb, precision, variant );
+		}
+		else if (type == ELLIPSETYPE)
+		{
+			lwellipse_to_wkt_sb((LWELLIPSE *)comp->geoms[i], sb, precision, variant);
 		}
 		else
 		{
@@ -602,34 +640,6 @@ static void lwpsurface_to_wkt_sb(const LWPSURFACE *psurf, stringbuffer_t *sb, in
 		/* We don't want type strings on our subgeoms */
 		lwpoly_to_wkt_sb(psurf->geoms[i], sb, precision, variant | WKT_NO_TYPE );
 	}
-	stringbuffer_append_len(sb, ")", 1);
-}
-
-static void lwellipse_to_wkt_sb(const LWELLIPSE *pt, stringbuffer_t *sb, int precision, uint8_t variant)
-{
-	//stringbuffer_append_double
-	stringbuffer_append_len(sb, "ELLIPSE(", 8);
-	stringbuffer_append_double(sb, pt->data->xstart, precision);
-	stringbuffer_append_len(sb, " ", 1);
-	stringbuffer_append_double(sb, pt->data->ystart, precision);
-	stringbuffer_append_len(sb, " ", 1);
-	stringbuffer_append_double(sb, pt->data->xend, precision);
-	stringbuffer_append_len(sb, " ", 1);
-	stringbuffer_append_double(sb, pt->data->yend, precision);
-	stringbuffer_append_len(sb, " ", 1);
-	stringbuffer_append_double(sb, pt->data->xcenter, precision);
-	stringbuffer_append_len(sb, " ", 1);
-	stringbuffer_append_double(sb, pt->data->ycenter, precision);
-	stringbuffer_append_len(sb, ",", 1);
-	stringbuffer_append_double(sb, pt->data->minor, precision);
-	stringbuffer_append_len(sb, ",", 1);
-	stringbuffer_append_double(sb, pt->data->clockwise, precision);
-	stringbuffer_append_len(sb, ",", 1);
-	stringbuffer_append_double(sb, pt->data->rotation, precision);
-	stringbuffer_append_len(sb, ",", 1);
-	stringbuffer_append_double(sb, pt->data->axis, precision);
-	stringbuffer_append_len(sb, ",", 1);
-	stringbuffer_append_double(sb, pt->data->ratio, precision);
 	stringbuffer_append_len(sb, ")", 1);
 }
 

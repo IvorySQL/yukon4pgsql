@@ -87,7 +87,7 @@ double lwcompound_length_2d(const LWCOMPOUND *comp)
 
 int lwcompound_add_lwgeom(LWCOMPOUND *comp, LWGEOM *geom)
 {
-	LWCOLLECTION *col = (LWCOLLECTION*)comp;
+	LWCOLLECTION *col = (LWCOLLECTION*)comp;	
 
 	/* Empty things can't continuously join up with other things */
 	if ( lwgeom_is_empty(geom) )
@@ -96,16 +96,39 @@ int lwcompound_add_lwgeom(LWCOMPOUND *comp, LWGEOM *geom)
 		return LW_FAILURE;
 	}
 
-	if( col->ngeoms > 0 )
+	if (col->ngeoms > 0)
 	{
 		POINT4D last, first;
-		/* First point of the component we are adding */
-		LWLINE *newline = (LWLINE*)geom;
-		/* Last point of the previous component */
-		LWLINE *prevline = (LWLINE*)(col->geoms[col->ngeoms-1]);
+		LWLINE *newline;
+		LWLINE *prevline;
 
-		getPoint4d_p(newline->points, 0, &first);
-		getPoint4d_p(prevline->points, prevline->points->npoints-1, &last);
+		/* First point of the component we are adding */
+		if (geom->type == ELLIPSETYPE)
+		{
+			first.x = ((LWELLIPSE *)geom)->data->xstart;
+			first.y = ((LWELLIPSE *)geom)->data->ystart;
+			first.m = 0;
+			first.z = 0;
+		}
+		else
+		{
+			newline = (LWLINE *)geom;
+			getPoint4d_p(newline->points, 0, &first);
+		}
+		/*previous poiont of the collection we have added*/
+		if (col->geoms[col->ngeoms - 1]->type == ELLIPSETYPE)
+		{
+			LWGEOM* prelwgeom = col->geoms[col->ngeoms-1];
+			last.x = ((LWELLIPSE *)prelwgeom)->data->xend;
+			last.y = ((LWELLIPSE *)prelwgeom)->data->yend;
+			last.m = 0;
+			last.z = 0;
+		}
+		else
+		{
+			prevline = (LWLINE *)(col->geoms[col->ngeoms - 1]);
+			getPoint4d_p(prevline->points, prevline->points->npoints - 1, &last);
+		}
 
 		if ( !(FP_EQUALS(first.x,last.x) && FP_EQUALS(first.y,last.y)) )
 		{

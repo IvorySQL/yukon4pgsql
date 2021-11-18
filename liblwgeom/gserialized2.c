@@ -1466,6 +1466,9 @@ lwellipse_from_gserialized2_buffer(uint8_t *data_ptr, lwflags_t lwflags, size_t 
 	//需要复制数据，否则会造成同一块空间释放两次
 	ellipse->data = lwalloc(sizeof(ELLIPSE));
 	memcpy(ellipse->data,data_ptr,sizeof(ELLIPSE));
+	data_ptr += sizeof(ELLIPSE);
+	if (size)
+		*size = data_ptr - start_ptr;
 	return ellipse;
 }
 

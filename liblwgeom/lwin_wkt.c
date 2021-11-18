@@ -744,16 +744,6 @@ LWGEOM* wkt_parser_compound_new(LWGEOM *geom)
 		return NULL;
 	}
 
-	/* if the type is ELLIPSETYPE we need to convert it to linestring */
-	/* the default segment is 72*/
-	if (geom->type == ELLIPSETYPE)
-	{
-		// free the old geom
-		LWGEOM* old = geom;
-		geom = lwellipse_get_spatialdata((LWELLIPSE *)geom, 72);
-		lwgeom_free(old);
-	}
-
 	/* Create our geometry array */
 	geoms = lwalloc(sizeof(LWGEOM*) * ngeoms);
 	geoms[0] = geom;
@@ -784,15 +774,6 @@ LWGEOM* wkt_parser_compound_add_geom(LWGEOM *col, LWGEOM *geom)
 		lwgeom_free(geom);
 		SET_PARSER_ERROR(PARSER_ERROR_MIXDIMS);
 		return NULL;
-	}
-
-	/* if the geom type is ellipse then convert it to linestring */
-	/* the default segment is 72 */
-	if (geom->type == ELLIPSETYPE)
-	{
-		LWGEOM *old = geom;
-		geom = lwellipse_get_spatialdata((LWELLIPSE *)geom, 72);
-		lwgeom_free(old);
 	}
 
 	if( LW_FAILURE == lwcompound_add_lwgeom((LWCOMPOUND*)col, geom) )

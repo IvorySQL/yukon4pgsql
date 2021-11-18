@@ -44,15 +44,35 @@ bool BuildArc(POINT2D **arr,
 
 double CalcEllipseRadian(const double dPntRadian, const double dRreAxis, const double dSemiMinorAxis);
 
+
+
+/**
+ * @brief 根据起始点，终止点，中心点，旋转角度计算起始角度和终止角度
+ * 
+ * @param xstart 起始点 x
+ * @param ystart 起始点 y
+ * @param xend 终止点 x
+ * @param yend 终止点 y
+ * @param xcenter 中心点 x
+ * @param ycenter 中心点 y
+ * @param rotation 旋转角度
+ * @param statrtandle 起始角度
+ * @param endagnle 终止角度
+ */
+void CalcEllipseRotation(double xstart,
+			 double ystart,
+			 double xend,
+			 double yend,
+			 double xcenter,
+			 double ycenter,
+			 double rotation,
+			 double *statrtandle,
+			 double *endagnle);
+
 double
 lwellipse_area(const LWELLIPSE *ellipse)
 {
-	if (ellipse->data->startangle == 0 && ellipse->data->endangle == 360)
-	{
-		return PI * ellipse->data->a * ellipse->data->b;
-	}
-
-	return -1;
+	return PI * ellipse->data->axis * ellipse->data->axis * ellipse->data->ratio;
 }
 void
 lwellipse_free(LWELLIPSE *e)
@@ -78,6 +98,7 @@ lwellipse_get_spatialdata(LWELLIPSE *geom, unsigned int segment)
 {
 	LWLINE *lwgeom = NULL;
 	// 检查长短半轴是否合法
+	#if 0
 	if (geom->data->a <= 0 || geom->data->b <= 0)
 	{
 		return NULL;
@@ -96,10 +117,10 @@ lwellipse_get_spatialdata(LWELLIPSE *geom, unsigned int segment)
 	unsigned long len;
 	bool res = BuildArc(&poarr,
 			    &len,
-			    geom->data->x,
-			    geom->data->y,
-			    geom->data->a,
-			    geom->data->b,
+			    geom->data->xcenter,
+			    geom->data->ycenter,
+			    geom->data->axis,
+			    geom->data->axis / geom->data->ratio,
 			    dRadian,
 			    dRadianBegin,
 			    dRadianEnd,
@@ -110,7 +131,8 @@ lwellipse_get_spatialdata(LWELLIPSE *geom, unsigned int segment)
 		POINTARRAY *parr = ptarray_construct_copy_data(0, 0, len, (uint8_t *)poarr);
 		lwgeom = lwline_construct(4326, NULL, parr);
 	}
-	return lwgeom;
+#endif
+	return (LWGEOM *)lwgeom;
 }
 
 bool
@@ -211,4 +233,32 @@ CalcEllipseRadian(const double dPntRadian, const double dPreAxis, const double d
 	}
 
 	return dRadianT;
+}
+
+void
+CalcEllipseRotation(double xstart,
+		    double ystart,
+		    double xend,
+		    double yend,
+		    double xcenter,
+		    double ycenter,
+		    double rotation,
+		    double *startangle,
+		    double *endangle)
+{
+	//先将中心的平移到 0 0 点，
+	xstart -= xcenter;
+	ystart -= ycenter;
+	xend -= xcenter;
+	yend -= ycenter;
+
+	//然后逆向旋转 rotation,最后计算起始角和终止角
+	xstart = xstart * cos(-rotation) - ystart * sin(-rotation);
+	ystart = xstart * sin(-rotation) + ystart * cos(-rotation);
+
+	xend = xend * cos(-rotation) - yend * sin(-rotation);
+	yend = xend * sin(-rotation) + yend * cos(-rotation);
+
+	*startangle = atan2(ystart, xstart);
+	*endangle = atan2(yend, xend);
 }

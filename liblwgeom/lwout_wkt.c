@@ -609,21 +609,28 @@ static void lwellipse_to_wkt_sb(const LWELLIPSE *pt, stringbuffer_t *sb, int pre
 {
 	//stringbuffer_append_double
 	stringbuffer_append_len(sb, "ELLIPSE(", 8);
-	stringbuffer_append_double(sb, pt->data->x, precision);
+	stringbuffer_append_double(sb, pt->data->xstart, precision);
+	stringbuffer_append_len(sb, " ", 1);
+	stringbuffer_append_double(sb, pt->data->ystart, precision);
+	stringbuffer_append_len(sb, " ", 1);
+	stringbuffer_append_double(sb, pt->data->xend, precision);
+	stringbuffer_append_len(sb, " ", 1);
+	stringbuffer_append_double(sb, pt->data->yend, precision);
+	stringbuffer_append_len(sb, " ", 1);
+	stringbuffer_append_double(sb, pt->data->xcenter, precision);
+	stringbuffer_append_len(sb, " ", 1);
+	stringbuffer_append_double(sb, pt->data->ycenter, precision);
 	stringbuffer_append_len(sb, ",", 1);
-	stringbuffer_append_double(sb, pt->data->y, precision);
+	stringbuffer_append_double(sb, pt->data->minor, precision);
 	stringbuffer_append_len(sb, ",", 1);
-	stringbuffer_append_double(sb, pt->data->a, precision);
+	stringbuffer_append_double(sb, pt->data->clockwise, precision);
 	stringbuffer_append_len(sb, ",", 1);
-	stringbuffer_append_double(sb, pt->data->b, precision);
+	stringbuffer_append_double(sb, pt->data->rotation, precision);
 	stringbuffer_append_len(sb, ",", 1);
-	stringbuffer_append_double(sb, pt->data->startangle, precision);
+	stringbuffer_append_double(sb, pt->data->axis, precision);
 	stringbuffer_append_len(sb, ",", 1);
-	stringbuffer_append_double(sb, pt->data->endangle, precision);
-	stringbuffer_append_len(sb, ",", 1);
-	stringbuffer_append_double(sb, pt->data->angle, precision);
+	stringbuffer_append_double(sb, pt->data->ratio, precision);
 	stringbuffer_append_len(sb, ")", 1);
-
 }
 
 /*

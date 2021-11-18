@@ -77,5 +77,5 @@ LWGEOM* wkt_parser_compound_add_geom(LWGEOM *col, LWGEOM *geom);
 LWGEOM* wkt_parser_collection_new(LWGEOM *geom);
 LWGEOM* wkt_parser_collection_add_geom(LWGEOM *col, LWGEOM *geom);
 LWGEOM* wkt_parser_collection_finalize(int lwtype, LWGEOM *col, char *dimensionality);
-LWGEOM* wkt_parser_ellipse(double x, double y, double a, double b, double startangle, double endangle, double angle);
+LWGEOM* wkt_parser_ellipse(double xs,double ys,double xe,double ye,double xc,double yc, double minor, double clockwise, double roattion, double axis,double ratio);
 void wkt_parser_geometry_new(LWGEOM *geom, int32_t srid);

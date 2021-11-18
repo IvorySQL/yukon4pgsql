@@ -708,13 +708,17 @@ static uint8_t* lwellipse_to_wkb_buf(const LWELLIPSE *e, uint8_t *buf, uint8_t v
 	}
 
 	/* copy data */
-	buf = double_to_wkb_buf(e->data->x, buf, variant);
-	buf = double_to_wkb_buf(e->data->y, buf, variant);
-	buf = double_to_wkb_buf(e->data->a, buf, variant);
-	buf = double_to_wkb_buf(e->data->b, buf, variant);
-	buf = double_to_wkb_buf(e->data->startangle, buf, variant);
-	buf = double_to_wkb_buf(e->data->endangle, buf, variant);
-	buf = double_to_wkb_buf(e->data->angle, buf, variant);
+	buf = double_to_wkb_buf(e->data->xstart, buf, variant);
+	buf = double_to_wkb_buf(e->data->ystart, buf, variant);
+	buf = double_to_wkb_buf(e->data->xend, buf, variant);
+	buf = double_to_wkb_buf(e->data->yend, buf, variant);
+	buf = double_to_wkb_buf(e->data->xcenter, buf, variant);
+	buf = double_to_wkb_buf(e->data->ycenter, buf, variant);
+	buf = double_to_wkb_buf(e->data->minor, buf, variant);
+	buf = double_to_wkb_buf(e->data->clockwise, buf, variant);
+	buf = double_to_wkb_buf(e->data->rotation, buf, variant);
+	buf = double_to_wkb_buf(e->data->axis, buf, variant);
+	buf = double_to_wkb_buf(e->data->ratio, buf, variant);
 	return buf;
 }
 

@@ -64,6 +64,7 @@ void CalcEllipseRotation(double xstart,
 			 double xcenter,
 			 double ycenter,
 			 double rotation,
+			 double minor,
 			 double *statrtandle,
 			 double *endagnle);
 
@@ -108,7 +109,10 @@ lwellipse_get_spatialdata(LWELLIPSE *geom, unsigned int segment)
 			    geom->data->yend,
 			    geom->data->xcenter,
 			    geom->data->ycenter,
-			    geom->data->rotation,&dRadianBegin,&dRadianEnd);
+			    geom->data->rotation,
+			    geom->data->minor,
+			    &dRadianBegin,
+			    &dRadianEnd);
 	double dStep = (dRadianBegin - dRadianEnd) / segment;
 	POINT2D *poarr = NULL;
 	unsigned long len;
@@ -239,6 +243,7 @@ CalcEllipseRotation(double xstart,
 		    double xcenter,
 		    double ycenter,
 		    double rotation,
+		    double minor,
 		    double *startangle,
 		    double *endangle)
 {
@@ -256,6 +261,14 @@ CalcEllipseRotation(double xstart,
 	_xend = xend * cos(-rotation) - yend * sin(-rotation);
 	_yend = xend * sin(-rotation) + yend * cos(-rotation);
 
-	*startangle = atan2(_ystart, _xstart);
-	*endangle = atan2(_yend, _xend);
+	if (minor)
+	{
+		*startangle = atan2(_ystart, _xstart);
+		*endangle = atan2(_yend, _xend);
+	}
+	else
+	{
+		*endangle = atan2(_ystart, _xstart);
+		*startangle = atan2(_yend, _xend);
+	}
 }

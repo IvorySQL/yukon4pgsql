@@ -1349,11 +1349,6 @@ CREATE OR REPLACE FUNCTION ST_Angle(pt1 geometry, pt2 geometry, pt3 geometry, pt
 -- MISC
 ------------------------------------------------------------------------
 
-CREATE OR REPLACE FUNCTION ST_GetSpatialData(geometry,integer)
-	RETURNS geometry
-	AS 'MODULE_PATHNAME', 'LWGEOM_spatital_data'
-	LANGUAGE 'c' IMMUTABLE STRICT;
-
 -- Availability: 2.1.0
 CREATE OR REPLACE FUNCTION ST_Force2D(geometry)
 	RETURNS geometry

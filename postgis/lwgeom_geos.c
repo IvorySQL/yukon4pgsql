@@ -44,6 +44,7 @@
 #include "lwgeom_geos_prepared.h"
 #include "lwgeom_accum.h"
 
+extern LWGEOM * lwellipse_get_spatialdata(LWELLIPSE *geom, unsigned int segment);
 
 /* Return NULL on GEOS error
  *
@@ -847,12 +848,19 @@ Datum boundary(PG_FUNCTION_ARGS)
 	}
 
 	/* GEOS doesn't do triangle type, so we special case that here */
+	/* if the type is ellipsearc ,we need to convert it to linestring */
 	if (lwgeom->type == TRIANGLETYPE)
 	{
 		lwgeom->type = LINETYPE;
 		result = geometry_serialize(lwgeom);
 		lwgeom_free(lwgeom);
 		PG_RETURN_POINTER(result);
+	}
+	else if (lwgeom->type == ELLIPSETYPE)
+	{
+		LWGEOM *old = lwgeom;
+		lwgeom = lwellipse_get_spatialdata((LWELLIPSE*)lwgeom, 72);
+		lwgeom_free(old);
 	}
 
 	initGEOS(lwpgnotice, lwgeom_geos_error);

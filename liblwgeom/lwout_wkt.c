@@ -287,7 +287,7 @@ static void lwellipse_to_wkt_sb(const LWELLIPSE *pt, stringbuffer_t *sb, int pre
 {
 	if ( ! (variant & WKT_NO_TYPE) )
 	{
-		stringbuffer_append_len(sb, "ELLIPSE", 7);
+		stringbuffer_append_len(sb, "ELLIPSEARC", 10);
 	}
 	stringbuffer_append_len(sb, "(", 1);
 	stringbuffer_append_double(sb, pt->data->xstart, precision);

@@ -617,6 +617,17 @@ lwcompound_linearize(const LWCOMPOUND *icompound, double tol,
 				ptarray_append_point(ptarray, &p, LW_TRUE);
 			}
 		}
+		else if(geom->type == ELLIPSETYPE)
+		{
+			//convert ellipsearc to linestring
+			LWGEOM *line = lwellipse_get_spatialdata((LWELLIPSE*)geom,72);
+			tmp = (LWLINE*)line;
+			for (j = 0; j < tmp->points->npoints; j++)
+			{
+				getPoint4d_p(tmp->points, j, &p);
+				ptarray_append_point(ptarray, &p, LW_TRUE);
+			}
+		}
 		else
 		{
 			lwerror("%s: Unsupported geometry type: %s", __func__, lwtype_name(geom->type));

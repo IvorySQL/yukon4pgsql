@@ -802,28 +802,21 @@ LWGEOM* wkt_parser_collection_add_geom(LWGEOM *col, LWGEOM *geom)
 	return lwcollection_as_lwgeom(lwcollection_add_lwgeom(lwgeom_as_lwcollection(col), geom));
 }
 
-LWGEOM *
-wkt_parser_ellipse(double xs,
-		   double ys,
-		   double xe,
-		   double ye,
-		   double xc,
-		   double yc,
-		   double minor,
-		   double clockwise,
-		   double roattion,
-		   double axis,
-		   double ratio)
+LWGEOM* wkt_parser_ellipse(LWGEOM* start,LWGEOM* end, LWGEOM* center, double minor, double clockwise, double roattion, double axis,double ratio)
 {
 	LWELLIPSE *ellipse = lwalloc(sizeof(LWELLIPSE));
+	POINT3DZ p;
 	ellipse->bbox = NULL;
 	ellipse->data = lwalloc(sizeof(ELLIPSE));
-	ellipse->data->xstart = xs;
-	ellipse->data->ystart = ys;
-	ellipse->data->xend = xe;
-	ellipse->data->yend = ye;
-	ellipse->data->xcenter = xc;
-	ellipse->data->ycenter = yc;
+	lwpoint_getPoint3dz_p((LWPOINT *)start, &p);
+	ellipse->data->xstart = p.x;
+	ellipse->data->ystart = p.y;
+	lwpoint_getPoint3dz_p((LWPOINT *)end, &p);
+	ellipse->data->xend = p.x;
+	ellipse->data->yend = p.y;
+	lwpoint_getPoint3dz_p((LWPOINT *)center, &p);
+	ellipse->data->xcenter = p.x;
+	ellipse->data->ycenter = p.y;
 	ellipse->data->minor = minor ? 1 : 0;
 	ellipse->data->clockwise = clockwise ? 1 : 0;
 	ellipse->data->rotation = roattion;

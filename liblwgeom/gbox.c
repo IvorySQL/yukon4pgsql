@@ -694,20 +694,19 @@ static int lwtriangle_calculate_gbox_cartesian(LWTRIANGLE *triangle, GBOX *gbox)
 	return ptarray_calculate_gbox_cartesian( triangle->points, gbox );
 }
 
-static int lwellipse_calculate_gbox_cartesian(LWELLIPSE *ellipse, GBOX *gbox)
+static int
+lwellipse_calculate_gbox_cartesian(LWELLIPSE *ellipse, GBOX *gbox)
 {
 	if (!ellipse)
 	{
 		return LW_FAILURE;
 	}
+	/* convert it to linestring  */
+	LWGEOM *temp = lwellipse_get_spatialdata(ellipse, 72);
 
-	gbox->xmin = ellipse->data->xcenter - ellipse->data->axis * 2;
-	gbox->xmax = ellipse->data->xcenter + ellipse->data->axis * 2;
-	gbox->ymin = ellipse->data->ycenter - ellipse->data->axis * 2 * ellipse->data->ratio;
-	gbox->ymax = ellipse->data->ycenter + ellipse->data->axis * 2 * ellipse->data->ratio;
-
-	//TODO:计算旋转后的包围盒
-	return LW_SUCCESS;
+	int res = lwline_calculate_gbox_cartesian(temp, gbox);
+	lwgeom_free(temp);
+	return res;
 }
 
 static int lwpoly_calculate_gbox_cartesian(LWPOLY *poly, GBOX *gbox)

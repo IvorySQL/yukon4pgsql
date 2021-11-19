@@ -704,7 +704,7 @@ lwellipse_calculate_gbox_cartesian(LWELLIPSE *ellipse, GBOX *gbox)
 	/* convert it to linestring  */
 	LWGEOM *temp = lwellipse_get_spatialdata(ellipse, 72);
 
-	int res = lwline_calculate_gbox_cartesian(temp, gbox);
+	int res = lwline_calculate_gbox_cartesian((LWLINE*)temp, gbox);
 	lwgeom_free(temp);
 	return res;
 }

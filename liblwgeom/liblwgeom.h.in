@@ -429,11 +429,19 @@ typedef struct
 }
 POINT4D;
 
-typedef struct
-{
-    double x, y, a, b, startangle,endangle, angle;
-}
-ELLIPSE;
+typedef struct {
+	double xstart;
+	double ystart;
+	double xend;
+	double yend;
+	double xcenter;
+	double ycenter;
+	double minor;
+	double clockwise;
+	double rotation;
+	double axis;
+	double ratio;
+} ELLIPSE;
 
 /******************************************************************
 *  POINTARRAY

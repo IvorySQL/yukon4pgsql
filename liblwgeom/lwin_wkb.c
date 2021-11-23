@@ -683,8 +683,8 @@ static LWELLIPSE * lwellipse_from_wkb_state(wkb_parse_state *s)
 {
 	LWELLIPSE *res;
 
-	/* Does the data we want to read exist? */
-	wkb_parse_state_check(s, sizeof(ELLIPSE));
+	/* TODO: 计算合理的数据长度 */
+	//wkb_parse_state_check(s, sizeof(ELLIPSE));
 	if (s->error)
 		return NULL;
 
@@ -697,15 +697,16 @@ static LWELLIPSE * lwellipse_from_wkb_state(wkb_parse_state *s)
 	res->srid = s->srid;
 	res->bbox = NULL;	
 	res->data = lwalloc(sizeof(ELLIPSE));
-	if(s->has_srid)
-	{
-		memcpy(res->data, s->wkb+9, sizeof(ELLIPSE));
-	}
-	else
-	{
-		memcpy(res->data, s->wkb+5, sizeof(ELLIPSE));
-	}
-	res->flags = 0;
+
+	// memcpy(res->data, s->wkb+5, sizeof(ELLIPSE));
+	res->data->points = ptarray_from_wkb_state(s);
+	res->data->minor = double_from_wkb_state(s);
+	res->data->clockwise = double_from_wkb_state(s);
+	res->data->rotation = double_from_wkb_state(s);
+	res->data->axis = double_from_wkb_state(s);
+	res->data->ratio = double_from_wkb_state(s);
+
+	res->flags = res->data->points->flags;
 	return res;
 }
 /**

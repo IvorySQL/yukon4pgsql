@@ -717,13 +717,17 @@ static size_t gserialized2_from_lwcircstring_size(const LWCIRCSTRING *curve)
 	return size;
 }
 
-static size_t gserialized2_from_lwellipse_size(const LWELLIPSE *curve)
+static size_t gserialized2_from_lwellipse_size(const LWELLIPSE *ellipse)
 {
 	size_t size = 4; /* Type number. */
 
-	assert(curve);
-	// ELLIPSE 数据
-	size += sizeof(ELLIPSE);
+	assert(ellipse);
+	POINTARRAY *point = ellipse->data->points;
+	size += 4; /* Number of points (one or zero (empty)). */
+	size += point->npoints * FLAGS_NDIMS(point->flags) * sizeof(double);
+
+	// ELLIPSE 数据,减去一个 POINTARRAY * 的长度
+	size += sizeof(ELLIPSE) - sizeof(POINTARRAY*);
 
 	LWDEBUGF(3, "ellipse size = %d", size);
 
@@ -1029,16 +1033,28 @@ static size_t gserialized2_from_lwellipse(const LWELLIPSE *ellipse, uint8_t *buf
 
 	assert(ellipse);
 	assert(buf);
-
+	ptsize = ptarray_point_size(ellipse->data->points);
 	loc = buf;
 
 	// write type
 	memcpy(loc, &type, sizeof(uint32_t));
 	loc += sizeof(uint32_t);
 
-	// write x ,y a,b,startangle,endangle,angle data
-	memcpy(loc, ellipse->data, sizeof(ELLIPSE));
-	loc += sizeof(ELLIPSE);
+	/* Write in the npoints. */
+	memcpy(loc, &ellipse->data->points->npoints, sizeof(uint32_t));
+	loc += sizeof(uint32_t);
+
+	/* Copy in the ordinates. */
+	if (ellipse->data->points->npoints > 0)
+	{
+		size = ellipse->data->points->npoints * ptsize;
+		memcpy(loc, getPoint_internal(ellipse->data->points, 0), size);
+		loc += size;
+	}
+
+	// write minor clockwise roatation axis ration
+	memcpy(loc, (char*)(ellipse->data) + sizeof(POINTARRAY *), sizeof(ELLIPSE) - sizeof(POINTARRAY *));
+	loc += sizeof(ELLIPSE) - sizeof(POINTARRAY *);
 
 	return (size_t)(loc - buf);
 }
@@ -1408,7 +1424,7 @@ static LWELLIPSE * lwellipse_from_gserialized2_buffer(uint8_t *data_ptr, lwflags
 {
 	uint8_t *start_ptr = data_ptr;
 	LWELLIPSE *ellipse;
-
+	int npoints = 0;
 	assert(data_ptr);
 
 	ellipse = (LWELLIPSE *)lwalloc(sizeof(LWELLIPSE));
@@ -1417,11 +1433,22 @@ static LWELLIPSE * lwellipse_from_gserialized2_buffer(uint8_t *data_ptr, lwflags
 	ellipse->type = ELLIPSETYPE;
 	ellipse->flags = lwflags;
 
-	data_ptr += 4;                                 /* Skip past the type. */
+	data_ptr += 4; /* Skip past the type. */
+
+	npoints = gserialized2_get_uint32_t(data_ptr); /* Zero => empty geometry */
+	data_ptr += 4;                                 /* Skip past the npoints. */
+
 	//需要复制数据，否则会造成同一块空间释放两次
 	ellipse->data = lwalloc(sizeof(ELLIPSE));
-	memcpy(ellipse->data,data_ptr,sizeof(ELLIPSE));
-	data_ptr += sizeof(ELLIPSE);
+
+	if (npoints > 0)
+		ellipse->data->points =
+		    ptarray_construct_reference_data(FLAGS_GET_Z(lwflags), FLAGS_GET_M(lwflags), npoints, data_ptr);
+
+	data_ptr += FLAGS_NDIMS(lwflags) * npoints * sizeof(double);
+
+	memcpy(((char *)(ellipse->data)) + sizeof(POINTARRAY *), data_ptr, sizeof(ELLIPSE) - sizeof(POINTARRAY *));
+	data_ptr += sizeof(ELLIPSE) - sizeof(POINTARRAY *);
 	if (size)
 		*size = data_ptr - start_ptr;
 	return ellipse;

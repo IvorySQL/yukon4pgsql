@@ -105,10 +105,8 @@ int lwcompound_add_lwgeom(LWCOMPOUND *comp, LWGEOM *geom)
 		/* First point of the component we are adding */
 		if (geom->type == ELLIPSETYPE)
 		{
-			first.x = ((LWELLIPSE *)geom)->data->xstart;
-			first.y = ((LWELLIPSE *)geom)->data->ystart;
-			first.m = 0;
-			first.z = 0;
+			LWELLIPSE *ellipse = (LWELLIPSE *)geom;
+			getPoint4d_p(ellipse->data->points, 0, &first);
 		}
 		else
 		{
@@ -118,11 +116,9 @@ int lwcompound_add_lwgeom(LWCOMPOUND *comp, LWGEOM *geom)
 		/*previous poiont of the collection we have added*/
 		if (col->geoms[col->ngeoms - 1]->type == ELLIPSETYPE)
 		{
-			LWGEOM* prelwgeom = col->geoms[col->ngeoms-1];
-			last.x = ((LWELLIPSE *)prelwgeom)->data->xend;
-			last.y = ((LWELLIPSE *)prelwgeom)->data->yend;
-			last.m = 0;
-			last.z = 0;
+			LWGEOM *prelwgeom = col->geoms[col->ngeoms - 1];
+			LWELLIPSE *ellipse = (LWELLIPSE *)prelwgeom;
+			getPoint4d_p(ellipse->data->points, 2, &last);
 		}
 		else
 		{

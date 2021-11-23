@@ -681,11 +681,13 @@ static size_t lwellipse_to_wkb_size(const LWELLIPSE *e, uint8_t variant)
 	size_t size = WKB_BYTE_SIZE + WKB_INT_SIZE;
 
 	/* Extended WKB needs space for optional SRID integer */
-	if ( lwgeom_wkb_needs_srid((LWGEOM*)e, variant) )
+	if (lwgeom_wkb_needs_srid((LWGEOM *)e, variant))
 		size += WKB_INT_SIZE;
-	
-	
-	size += sizeof(ELLIPSE);
+
+	/* npoints ,points, minor,clockwise,roation,axis,ration*/
+	size += ptarray_to_wkb_size(e->data->points, variant);
+
+	size += sizeof(ELLIPSE) - sizeof(POINTARRAY *);
 
 	return size;
 }
@@ -707,18 +709,14 @@ static uint8_t* lwellipse_to_wkb_buf(const LWELLIPSE *e, uint8_t *buf, uint8_t v
 		LWDEBUGF(4, "SRID set, buf = %p", buf);
 	}
 
-	/* copy data */
-	buf = double_to_wkb_buf(e->data->xstart, buf, variant);
-	buf = double_to_wkb_buf(e->data->ystart, buf, variant);
-	buf = double_to_wkb_buf(e->data->xend, buf, variant);
-	buf = double_to_wkb_buf(e->data->yend, buf, variant);
-	buf = double_to_wkb_buf(e->data->xcenter, buf, variant);
-	buf = double_to_wkb_buf(e->data->ycenter, buf, variant);
+	/* npoints,point,minor,clockwise roation,axis,ration */
+	buf = ptarray_to_wkb_buf(e->data->points, buf, variant);
 	buf = double_to_wkb_buf(e->data->minor, buf, variant);
 	buf = double_to_wkb_buf(e->data->clockwise, buf, variant);
 	buf = double_to_wkb_buf(e->data->rotation, buf, variant);
 	buf = double_to_wkb_buf(e->data->axis, buf, variant);
 	buf = double_to_wkb_buf(e->data->ratio, buf, variant);
+
 	return buf;
 }
 

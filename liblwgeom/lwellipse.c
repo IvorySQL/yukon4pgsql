@@ -101,14 +101,24 @@ lwellipse_get_spatialdata(LWELLIPSE *geom, unsigned int segment)
 	{
 		segment = 72;
 	}
-
+	double xstart,ystart,xend,yend,xcenter,ycenter;
+	POINT4D pt;
+	getPoint4d_p(geom->data->points, 0, &pt);
+	xstart = pt.x;
+	ystart = pt.y;
+	getPoint4d_p(geom->data->points, 1, &pt);
+	xend = pt.x;
+	yend = pt.y;
+	getPoint4d_p(geom->data->points, 2, &pt);
+	xcenter = pt.x;
+	ycenter = pt.y;
 	double dRadianBegin, dRadianEnd;
-	CalcEllipseRotation(geom->data->xstart,
-			    geom->data->ystart,
-			    geom->data->xend,
-			    geom->data->yend,
-			    geom->data->xcenter,
-			    geom->data->ycenter,
+	CalcEllipseRotation(xstart,
+			    ystart,
+			    xend,
+			    yend,
+			    xcenter,
+			    ycenter,
 			    geom->data->rotation,
 			    geom->data->minor,
 			    &dRadianBegin,
@@ -118,8 +128,8 @@ lwellipse_get_spatialdata(LWELLIPSE *geom, unsigned int segment)
 	unsigned long len;
 	bool res = BuildArc(&poarr,
 			    &len,
-			    geom->data->xcenter,
-			    geom->data->ycenter,
+			    xcenter,
+			    ycenter,
 			    geom->data->axis,
 			    geom->data->axis * geom->data->ratio,
 			    geom->data->rotation,

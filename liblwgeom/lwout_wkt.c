@@ -283,34 +283,26 @@ static void lwmline_to_wkt_sb(const LWMLINE *mline, stringbuffer_t *sb, int prec
 /* 
 * ELLIPSE 
 */
-static void lwellipse_to_wkt_sb(const LWELLIPSE *pt, stringbuffer_t *sb, int precision, uint8_t variant)
+static void lwellipse_to_wkt_sb(const LWELLIPSE *ellipse, stringbuffer_t *sb, int precision, uint8_t variant)
 {
 	if ( ! (variant & WKT_NO_TYPE) )
 	{
-		stringbuffer_append_len(sb, "ELLIPSEARC", 10);
+		stringbuffer_append_len(sb, "ELLIPSESTRING", 13);
+		dimension_qualifiers_to_wkt_sb((LWGEOM*)ellipse, sb, variant);
 	}
 	stringbuffer_append_len(sb, "(", 1);
-	stringbuffer_append_double(sb, pt->data->xstart, precision);
-	stringbuffer_append_len(sb, " ", 1);
-	stringbuffer_append_double(sb, pt->data->ystart, precision);
-	stringbuffer_append_len(sb, " ", 1);
-	stringbuffer_append_double(sb, pt->data->xend, precision);
-	stringbuffer_append_len(sb, " ", 1);
-	stringbuffer_append_double(sb, pt->data->yend, precision);
-	stringbuffer_append_len(sb, " ", 1);
-	stringbuffer_append_double(sb, pt->data->xcenter, precision);
-	stringbuffer_append_len(sb, " ", 1);
-	stringbuffer_append_double(sb, pt->data->ycenter, precision);
+	ptarray_to_wkt_sb(ellipse->data->points, sb, precision, variant);
+
 	stringbuffer_append_len(sb, ",", 1);
-	stringbuffer_append_double(sb, pt->data->minor, precision);
+	stringbuffer_append_double(sb, ellipse->data->minor, precision);
 	stringbuffer_append_len(sb, ",", 1);
-	stringbuffer_append_double(sb, pt->data->clockwise, precision);
+	stringbuffer_append_double(sb, ellipse->data->clockwise, precision);
 	stringbuffer_append_len(sb, ",", 1);
-	stringbuffer_append_double(sb, pt->data->rotation, precision);
+	stringbuffer_append_double(sb, ellipse->data->rotation, precision);
 	stringbuffer_append_len(sb, ",", 1);
-	stringbuffer_append_double(sb, pt->data->axis, precision);
+	stringbuffer_append_double(sb, ellipse->data->axis, precision);
 	stringbuffer_append_len(sb, ",", 1);
-	stringbuffer_append_double(sb, pt->data->ratio, precision);
+	stringbuffer_append_double(sb, ellipse->data->ratio, precision);
 	stringbuffer_append_len(sb, ")", 1);
 }
 

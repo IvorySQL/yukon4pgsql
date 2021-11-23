@@ -802,27 +802,74 @@ LWGEOM* wkt_parser_collection_add_geom(LWGEOM *col, LWGEOM *geom)
 	return lwcollection_as_lwgeom(lwcollection_add_lwgeom(lwgeom_as_lwcollection(col), geom));
 }
 
-LWGEOM* wkt_parser_ellipse(LWGEOM* start,LWGEOM* end, LWGEOM* center, double minor, double clockwise, double roattion, double axis,double ratio)
+LWGEOM *
+wkt_parser_ellipse(POINT start,
+		   POINT end,
+		   POINT center,
+		   double minor,
+		   double clockwise,
+		   double roattion,
+		   double axis,
+		   double ratio,
+		   char *dimensionality)
 {
+	lwflags_t dim = wkt_dimensionality(dimensionality);
+	lwflags_t flags = 0;
+	POINT4D pt;
 	LWELLIPSE *ellipse = lwalloc(sizeof(LWELLIPSE));
 	POINT3DZ p;
 	ellipse->bbox = NULL;
 	ellipse->data = lwalloc(sizeof(ELLIPSE));
-	lwpoint_getPoint3dz_p((LWPOINT *)start, &p);
-	ellipse->data->xstart = p.x;
-	ellipse->data->ystart = p.y;
-	lwpoint_getPoint3dz_p((LWPOINT *)end, &p);
-	ellipse->data->xend = p.x;
-	ellipse->data->yend = p.y;
-	lwpoint_getPoint3dz_p((LWPOINT *)center, &p);
-	ellipse->data->xcenter = p.x;
-	ellipse->data->ycenter = p.y;
+	/* 这里我们新建一个空的 pointarray */
+	ellipse->data->points = ptarray_construct_empty(FLAGS_GET_Z(dim), FLAGS_GET_M(dim), 3);
+
+	/* 起始点 */
+	pt.x = start.x;
+	pt.y = start.y;
+	if (FLAGS_GET_Z(ellipse->data->points->flags))
+		pt.z = start.z;
+	if (FLAGS_GET_M(ellipse->data->points->flags))
+		pt.m = start.m;
+	/* If the destination is XYM, we'll write the third coordinate to m */
+	if (FLAGS_GET_M(ellipse->data->points->flags) && !FLAGS_GET_Z(ellipse->data->points->flags))
+		pt.m = start.z;
+	ptarray_append_point(ellipse->data->points, &pt, LW_TRUE);
+
+	/* 终止点 */
+	pt.x = end.x;
+	pt.y = end.y;
+	if (FLAGS_GET_Z(ellipse->data->points->flags))
+		pt.z = end.z;
+	if (FLAGS_GET_M(ellipse->data->points->flags))
+		pt.m = end.m;
+	/* If the destination is XYM, we'll write the third coordinate to m */
+	if (FLAGS_GET_M(ellipse->data->points->flags) && !FLAGS_GET_Z(ellipse->data->points->flags))
+		pt.m = end.z;
+	ptarray_append_point(ellipse->data->points, &pt, LW_TRUE);
+
+	/* 中心点 */
+	pt.x = center.x;
+	pt.y = center.y;
+	if (FLAGS_GET_Z(ellipse->data->points->flags))
+		pt.z = center.z;
+	if (FLAGS_GET_M(ellipse->data->points->flags))
+		pt.m = center.m;
+	/* If the destination is XYM, we'll write the third coordinate to m */
+	if (FLAGS_GET_M(ellipse->data->points->flags) && !FLAGS_GET_Z(ellipse->data->points->flags))
+		pt.m = center.z;
+	ptarray_append_point(ellipse->data->points, &pt, LW_TRUE);
+
 	ellipse->data->minor = minor ? 1 : 0;
 	ellipse->data->clockwise = clockwise ? 1 : 0;
 	ellipse->data->rotation = roattion;
 	ellipse->data->axis = axis;
 	ellipse->data->ratio = ratio;
-	ellipse->flags = 0;
+
+	FLAGS_SET_Z(flags, FLAGS_GET_Z(dim));
+	FLAGS_SET_M(flags, FLAGS_GET_M(dim));
+	FLAGS_SET_BBOX(flags, 0);
+
+	ellipse->flags = flags;
 	ellipse->srid = 0;
 	ellipse->type = ELLIPSETYPE;
 	return (LWGEOM *)ellipse;

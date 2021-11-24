@@ -1259,6 +1259,9 @@ uint32_t lwgeom_count_vertices(const LWGEOM *geom)
 	case POLYGONTYPE:
 		result = lwpoly_count_vertices((LWPOLY *)geom);
 		break;
+	case ELLIPSETYPE:
+		result = lwellipse_count_vertices((LWELLIPSE*)geom);
+		break;
 	case COMPOUNDTYPE:
 	case CURVEPOLYTYPE:
 	case MULTICURVETYPE:

@@ -360,7 +360,8 @@ curvering :
 	linestring_untagged { $$ = $1; } |
 	linestring { $$ = $1; } |
 	compoundcurve { $$ = $1; } |
-	circularstring { $$ = $1; } ;
+	circularstring { $$ = $1; } |
+	ellipse { $$ = $1; } ;;
 
 patchring_list :
 	patchring_list COMMA_TOK patchring

@@ -640,6 +640,10 @@ LWGEOM* wkt_parser_curvepolygon_add_ring(LWGEOM *poly, LWGEOM *ring)
 			case COMPOUNDTYPE:
 			is_closed = lwcompound_is_closed(lwgeom_as_lwcompound(ring));
 			break;
+
+			case ELLIPSETYPE:
+			is_closed = lwellipse_is_closed((LWELLIPSE*)ring);
+			break;
 		}
 		if ( ! is_closed )
 		{
@@ -817,7 +821,7 @@ wkt_parser_ellipse(POINT start,
 	lwflags_t flags = 0;
 	POINT4D pt;
 	LWELLIPSE *ellipse = lwalloc(sizeof(LWELLIPSE));
-	POINT3DZ p;
+	//POINT3DZ p;
 	ellipse->bbox = NULL;
 	ellipse->data = lwalloc(sizeof(ELLIPSE));
 	/* 这里我们新建一个空的 pointarray */

@@ -409,9 +409,10 @@ static void test_wkt_leak(void)
 
 static void test_wkt_in_ellipse(void)
 {
-	s = "ELLIPSE(1,2,3,4,5,6,7)";
+	s = "ELLIPSEARC(POINT(0.238 1.393),POINT(-0.264 -1.405),POINT(0 0),1,0,0.7853,2,0.5)";
+	char *o = "ELLIPSEARC(0.238 1.393 -0.264 -1.405 0 0,1,0,0.7853,2,0.5)";
 	r = cu_wkt_in(s, WKT_SFSQL);
-	CU_ASSERT_STRING_EQUAL(r,s);
+	CU_ASSERT_STRING_EQUAL(r,o);
 	lwfree(r);
 }
 

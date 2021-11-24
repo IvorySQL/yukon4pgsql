@@ -34,6 +34,7 @@
 int
 lwcompound_is_closed(const LWCOMPOUND *compound)
 {
+#if 0
 	size_t size;
 	int npoints=0;
 
@@ -61,6 +62,44 @@ lwcompound_is_closed(const LWCOMPOUND *compound)
 	            size) )
 	{
 		return LW_FALSE;
+	}
+#endif
+	POINT4D last, first;
+	int npoints = 0;
+	if (compound->ngeoms > 0)
+	{
+		LWGEOM *firstlwgeom = compound->geoms[0];
+		LWGEOM *lastlwgeom = compound->geoms[compound->ngeoms - 1];
+
+		/* First point of the component we are adding */
+		if(firstlwgeom->type == CIRCSTRINGTYPE || firstlwgeom->type ==LINETYPE)
+		{
+			getPoint4d_p(((LWLINE*)firstlwgeom)->points, 0, &first);
+		}
+		else if(firstlwgeom->type == ELLIPSETYPE)
+		{
+			getPoint4d_p(((LWELLIPSE*)firstlwgeom)->data->points, 0, &first);
+		}
+		
+		if(lastlwgeom->type == CIRCSTRINGTYPE )
+		{
+			npoints = ((LWCIRCSTRING *)compound->geoms[compound->ngeoms - 1])->points->npoints;
+			getPoint4d_p(((LWCIRCSTRING*)lastlwgeom)->points, npoints-1, &last);
+		}
+		else if(lastlwgeom->type ==LINETYPE)
+		{
+			npoints = ((LWLINE *)compound->geoms[compound->ngeoms - 1])->points->npoints;
+			getPoint4d_p(((LWLINE*)lastlwgeom)->points, npoints-1, &last);
+		}
+		else if(lastlwgeom->type == ELLIPSETYPE)
+		{
+			getPoint4d_p(((LWELLIPSE*)lastlwgeom)->data->points, 1, &last);
+		}
+
+		if (!(FP_EQUALS(first.x, last.x) && FP_EQUALS(first.y, last.y)))
+		{
+			return LW_FAILURE;
+		}
 	}
 
 	return LW_TRUE;
@@ -118,7 +157,7 @@ int lwcompound_add_lwgeom(LWCOMPOUND *comp, LWGEOM *geom)
 		{
 			LWGEOM *prelwgeom = col->geoms[col->ngeoms - 1];
 			LWELLIPSE *ellipse = (LWELLIPSE *)prelwgeom;
-			getPoint4d_p(ellipse->data->points, 2, &last);
+			getPoint4d_p(ellipse->data->points, 1, &last);
 		}
 		else
 		{

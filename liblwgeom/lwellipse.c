@@ -282,3 +282,18 @@ CalcEllipseRotation(double xstart,
 		*startangle = atan2(_yend, _xend);
 	}
 }
+
+int
+lwellipse_is_closed(const LWELLIPSE *ellipse)
+{
+	POINT4D first,last;
+	getPoint4d_p(ellipse->data->points, 0, &first);
+	getPoint4d_p(ellipse->data->points, 1, &last);
+
+	if (!(FP_EQUALS(first.x, last.x) && FP_EQUALS(first.y, last.y)))
+	{
+		return LW_FAILURE;
+	}
+
+	return LW_TRUE;
+}

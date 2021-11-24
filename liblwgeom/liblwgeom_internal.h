@@ -196,6 +196,7 @@ int lwpoint_is_empty(const LWPOINT *point);
 uint32_t lwline_count_vertices(LWLINE *line);
 uint32_t lwpoly_count_vertices(LWPOLY *poly);
 uint32_t lwcollection_count_vertices(LWCOLLECTION *col);
+uint32_t lwellipse_count_vertices(LWELLIPSE *ellipse);
 
 /*
 * DP simplification
@@ -408,6 +409,7 @@ int lwcircstring_is_closed(const LWCIRCSTRING *curve);
 int lwcompound_is_closed(const LWCOMPOUND *curve);
 int lwpsurface_is_closed(const LWPSURFACE *psurface);
 int lwtin_is_closed(const LWTIN *tin);
+int lwellipse_is_closed(const LWELLIPSE *ellipse);
 
 /**
 * Snap to grid

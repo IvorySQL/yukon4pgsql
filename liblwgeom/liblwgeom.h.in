@@ -429,20 +429,6 @@ typedef struct
 }
 POINT4D;
 
-typedef struct {
-	double xstart;
-	double ystart;
-	double xend;
-	double yend;
-	double xcenter;
-	double ycenter;
-	double minor;
-	double clockwise;
-	double rotation;
-	double axis;
-	double ratio;
-} ELLIPSE;
-
 /******************************************************************
 *  POINTARRAY
 *  Point array abstracts a lot of the complexity of points and point lists.
@@ -462,6 +448,15 @@ typedef struct
     uint8_t *serialized_pointlist;
 }
 POINTARRAY;
+
+typedef struct {
+	POINTARRAY *points;
+	double minor;
+	double clockwise;
+	double rotation;
+	double axis;
+	double ratio;
+} ELLIPSE;
 
 /******************************************************************
 * GSERIALIZED

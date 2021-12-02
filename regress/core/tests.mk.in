@@ -120,7 +120,8 @@ TESTS += \
 	$(topsrcdir)/regress/core/minimum_clearance \
 	$(topsrcdir)/regress/core/oriented_envelope \
 	$(topsrcdir)/regress/core/point_coordinates \
-	$(topsrcdir)/regress/core/out_geojson
+	$(topsrcdir)/regress/core/out_geojson \
+	$(topsrcdir)/regress/core/geomodel
 
 # Slow slow tests
 TESTS_SLOW = \

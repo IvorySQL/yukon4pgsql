@@ -1,47 +1,25 @@
-Debbie:
-   [![Build Status](https://debbie.postgis.net/buildStatus/icon?job=PostGIS_3.1)](https://debbie.postgis.net/view/PostGIS/job/PostGIS_3.1/)
-Winnie:
- [![Build Status](https://winnie.postgis.net:444/buildStatus/icon?job=PostGIS_3.1)](https://winnie.postgis.net:444/view/PostGIS/job/PostGIS_3.1/)
-Dronie:
- [![Build Status](https://dronie.osgeo.org/api/badges/postgis/postgis/status.svg?branch=stable-3.1)](https://dronie.osgeo.org/postgis/postgis?branch=stable-3.1)
+<img src=https://images.gitee.com/uploads/images/2021/1123/160022_8d571424_8511228.png height=250% width=25% alt=Yukon-logo align=center>  
+  
+Yukon（禹贡），基于openGauss数据库扩展地理空间数据的存储和管理能力，并提供专业的GIS（Geographic Information System）功能，赋能传统关系型数据库。
+> 注：《禹贡》是《尚书》中的一篇，是中国古代文献中最古老和最有系统性地理观念的著作。
+## 模块组织结构
 
-GitHub:
- ![CI](https://github.com/postgis/postgis/workflows/CI/badge.svg?branch=stable-3.1)](https://github.com/postgis/postgis/actions?query=branch%3Astable-3.1)
-GitLab-CI:
- [![Gitlab-CI](https://gitlab.com/postgis/postgis/badges/stable-3.1/pipeline.svg)](https://gitlab.com/postgis/postgis/commits/stable-3.1)
-Drone.io:
- [![Build Status](https://cloud.drone.io/api/badges/postgis/postgis/status.svg?branch=stable-3.1)](https://cloud.drone.io/postgis/postgis?branch=stable-3.1)
+目前，Yukon 基于openGauss扩展的模块包括：
+1. postgis：与openGauss适配的 PostGIS 矢量模块；
+2. postgis_raster：与 openGauss适配的PostGIS栅格模块；
+3. postgis_sfcgal：与 openGauss适配的PostGIS三维算法相关模块；
+4. yukon_geomodel：Yukon的三维模型数据模块。
 
-This file is here to play nicely with modern code repository facilities.
-Actual readme is [here](README.postgis).
+模块之间的依赖关系如图：
 
-## Official code repository, issue tracker and wiki:
-https://trac.osgeo.org/postgis/
+![模块依赖图](https://images.gitee.com/uploads/images/2021/1123/154741_6f7258fb_8511228.png "Yukon模块依赖图.png")
 
-## Official chat room:
+帮助文档参见 [Yukon在线文档](https://yukon.supermap.io/)。
 
-Official chat room is the #postgis channel on the
-[freenode](https://freenode.net) network.
+## 许可说明
+参见[LICENSE.TXT](https://gitee.com/opengauss/Yukon/blob/master/LICENSE.TXT)
 
-To participate, point your preferred
-[IRC client](https://en.wikipedia.org/wiki/Comparison_of_Internet_Relay_Chat_clients)
-to:
 
- irc://irc.freenode.net/#postgis
+## 贡献
 
-Or try a web IRC client like:
- - [qwebirc@freenode](https://webchat.freenode.net/?channels=#postgis)
- - [KiwiIRC](https://kiwiirc.com/client/irc.freenode.net/#postgis)
-
-Or join via [matrix](https://matrix.to/#/#postgis:matrix.org)
-
-## Official source tarball releases
-
-http://postgis.net/source
-
-If you would like to contribute to this project, please refer to our
-[contributing guidelines](CONTRIBUTING.md).
-
-## Project Home Page and Manuals
-Project homepage: http://postgis.net/
-PostGIS Manuals: http://postgis.net/documentation
+PostGIS与openGauss适配的初始版本源自https://github.com/pg-extension/postgis-xc.git

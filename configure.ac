@@ -971,6 +971,25 @@ if test "$CHECK_JSON" != "no"; then
 
 fi
 
+dnl ===========================================================================
+dnl Detect Whether to install geomodel
+dnl ===========================================================================
+dnl default to install
+CHECK_GEOMODEL=yes
+AC_SUBST([CHECK_GEOMODEL])
+
+AC_ARG_WITH([geomodel],
+	[AS_HELP_STRING([--without-geomodel], [build without geomodel support])],
+	[CHECK_GEOMODEL="$withval"], [])
+
+if test "$CHECK_GEOMODEL" != "no";then
+	GEOMODEL_MAKEFILE_LIST="
+	geomodel/Makefile \
+	geomodel/src/Makefile \
+	geomodel/libUGC/Makefile"
+else
+	GEOMODEL_MAKEFILE_LIST=""
+fi
 
 dnl ===========================================================================
 dnl Detect if protobuf-c installed
@@ -1597,7 +1616,8 @@ AC_OUTPUT([GNUmakefile
    doc/html/image_src/Makefile
    utils/Makefile
    $RT_MAKEFILE_LIST
-   $DEPS_MAKEFILE_LIST])
+   $DEPS_MAKEFILE_LIST
+   $GEOMODEL_MAKEFILE_LIST])
 
 dnl ===========================================================================
 dnl Display the configuration status information

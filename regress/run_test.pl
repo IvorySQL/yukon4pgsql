@@ -1418,6 +1418,14 @@ sub prepare_spatial_extensions
   	die;
 	}
 
+	$sql = "CREATE EXTENSION yukon_geomodel";
+    $cmd = "psql $psql_opts -c \"". $sql . "\" $DB >> $REGRESS_LOG 2>&1";
+    my $rv = system($cmd);
+    if ( $rv ) {
+        fail "Error encountered creating EXTENSION YUKON_GEOMODEL", $REGRESS_LOG;
+        die;
+    }
+
 	if ( $OPT_WITH_TOPO )
 	{
 		my $sql = "CREATE EXTENSION postgis_topology";

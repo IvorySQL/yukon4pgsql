@@ -75,7 +75,7 @@ static char *lwgeomTypeName[] =
 	"PolyhedralSurface",
 	"Triangle",
 	"Tin",
-	"Ellipse"
+	"EllipticalString"
 };
 
 /*
@@ -370,10 +370,10 @@ struct geomtype_struct
 
 struct geomtype_struct geomtype_struct_array[] =
 {
-	{ "ELLIPSESTRINGZM", ELLIPSETYPE, 1, 1 },
-	{ "ELLIPSESTRINGZ", ELLIPSETYPE, 1, 0 },
-	{ "ELLIPSESTRINGM", ELLIPSETYPE, 0, 1 },
-	{ "ELLIPSESTRING", ELLIPSETYPE, 0, 0 },
+	{ "ELLIPTICALSTRINGZM", ELLIPSETYPE, 1, 1 },
+	{ "ELLIPTICALSTRINGZ", ELLIPSETYPE, 1, 0 },
+	{ "ELLIPTICALSTRINGM", ELLIPSETYPE, 0, 1 },
+	{ "ELLIPTICALSTRING", ELLIPSETYPE, 0, 0 },
 
 	{ "GEOMETRYCOLLECTIONZM", COLLECTIONTYPE, 1, 1 },
 	{ "GEOMETRYCOLLECTIONZ", COLLECTIONTYPE, 1, 0 },

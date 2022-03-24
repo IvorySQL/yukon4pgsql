@@ -287,7 +287,7 @@ static void lwellipse_to_wkt_sb(const LWELLIPSE *ellipse, stringbuffer_t *sb, in
 {
 	if ( ! (variant & WKT_NO_TYPE) )
 	{
-		stringbuffer_append_len(sb, "ELLIPSESTRING", 13);
+		stringbuffer_append_len(sb, "ELLIPTICALSTRING", 16);
 		dimension_qualifiers_to_wkt_sb((LWGEOM*)ellipse, sb, variant);
 	}
 	stringbuffer_append_len(sb, "(", 1);

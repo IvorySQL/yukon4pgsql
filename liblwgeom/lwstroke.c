@@ -683,6 +683,12 @@ lwcurvepoly_linearize(const LWCURVEPOLY *curvepoly, double tol,
 			ptarray[i] = ptarray_clone_deep(line->points);
 			lwline_free(line);
 		}
+		else if (tmp->type == ELLIPSETYPE)
+		{
+			line = lwellipse_get_spatialdata((LWELLIPSE *)tmp, 72);
+			ptarray[i] = ptarray_clone_deep(line->points);
+			lwline_free(line);
+		}
 		else
 		{
 			lwerror("Invalid ring type found in CurvePoly.");
@@ -870,6 +876,9 @@ lwcurve_linearize(const LWGEOM *geom, double tol,
 		break;
 	case COLLECTIONTYPE:
 		ogeom = (LWGEOM *)lwcollection_linearize((LWCOLLECTION *)geom, tol, type, flags);
+		break;
+	case ELLIPSETYPE:
+		ogeom = (LWGEOM *)lwellipse_get_spatialdata((LWELLIPSE *)geom, 72);
 		break;
 	default:
 		ogeom = lwgeom_clone_deep(geom);

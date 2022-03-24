@@ -1219,7 +1219,7 @@ int lwgeom_needs_bbox(const LWGEOM *geom)
 		else
 			return LW_TRUE;
 	}
-	if ( geom->type == ELLIPSETYPE)
+	else if ( geom->type == ELLIPSETYPE)
 	{
 		return LW_TRUE;
 	}
@@ -1980,10 +1980,9 @@ double lwgeom_length_2d(const LWGEOM *geom)
 	}
 	else if(type == ELLIPSETYPE)
 	{
-		LWELLIPSE *e = (LWELLIPSE *)geom;
-		int a = e->data->axis;
-		int b = e->data->axis * e->data->ratio;
-		double len = 3.1415926 * (1.5 * (a + b) - sqrt(a * b));
+		LWGEOM *templwgeom = lwellipse_get_spatialdata((LWELLIPSE*)geom, 72);
+		double len = lwline_length_2d((LWLINE*)templwgeom);
+		lwgeom_free(templwgeom);
 		return len;
 	}
 	else

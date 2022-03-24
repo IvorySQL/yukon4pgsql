@@ -258,6 +258,9 @@ double lwpoly_area(const LWPOLY *poly);
 double lwcurvepoly_area(const LWCURVEPOLY *curvepoly);
 double lwtriangle_area(const LWTRIANGLE *triangle);
 double lwellipse_area(const LWELLIPSE *ellipse);
+double lwtriangle_area1(const POINT2D pntA, const POINT2D pntB, const POINT2D pntC);
+double lwsector_arc_area(LWCIRCSTRING *pcirArc, POINT2D Pnt);
+double lwsector_elliptic_arc_area(const LWELLIPSE* pGeoSub, POINT2D pntAnchar);
 
 /**
  * 参数化对象拟合函数

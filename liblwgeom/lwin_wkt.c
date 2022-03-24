@@ -806,6 +806,40 @@ LWGEOM* wkt_parser_collection_add_geom(LWGEOM *col, LWGEOM *geom)
 	return lwcollection_as_lwgeom(lwcollection_add_lwgeom(lwgeom_as_lwcollection(col), geom));
 }
 
+static int
+is_valid_ellipse(POINT start, POINT end, POINT center, double rotation, double axis, double ratio)
+{
+	double _xstart, _ystart, _xend, _yend;
+	double b = axis * ratio;
+	//先将中心的平移到 0 0 点，
+	start.x -= center.x;
+	start.y -= center.y;
+	end.x -= center.x;
+	end.y -= center.y;
+
+	if(axis == 0 || ratio == 0)
+	{
+		return LW_FAILURE;
+	}
+
+	//然后逆向旋转 rotation,最后计算起始角和终止角
+	_xstart = start.x * cos(-rotation) - start.y * sin(-rotation);
+	_ystart = start.x * sin(-rotation) + start.y * cos(-rotation);
+
+	_xend = end.x * cos(-rotation) - end.y * sin(-rotation);
+	_yend = end.x * sin(-rotation) + end.y * cos(-rotation);
+
+	double res1 = pow((_xstart / axis), 2) + pow((_ystart / b), 2);
+	double res2 = pow((_xend / axis), 2) + pow((_yend / b), 2);
+
+	if (fabs(res1 - 1) < 0.1 && fabs(res2 - 1) < 0.1)
+	{
+		return LW_SUCCESS;
+	}
+
+	return LW_FAILURE;
+}
+
 LWGEOM *
 wkt_parser_ellipse(POINT start,
 		   POINT end,
@@ -817,6 +851,12 @@ wkt_parser_ellipse(POINT start,
 		   double ratio,
 		   char *dimensionality)
 {
+	if (!is_valid_ellipse(start, end, center, roattion, axis, ratio))
+	{
+		lwerror("the parameters of the ellipse must be valid");
+		return NULL;
+	}
+	
 	lwflags_t dim = wkt_dimensionality(dimensionality);
 	lwflags_t flags = 0;
 	POINT4D pt;

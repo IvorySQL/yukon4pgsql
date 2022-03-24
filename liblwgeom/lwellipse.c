@@ -40,7 +40,7 @@ bool BuildArc(POINT2D **arr,
 	      double dRotation,
 	      double dRadianBegin,
 	      double dRadianEnd,
-	      double step);
+	      double step,int flag);
 
 double CalcEllipseRadian(const double dPntRadian, const double dRreAxis, const double dSemiMinorAxis);
 
@@ -71,7 +71,9 @@ void CalcEllipseRotation(double xstart,
 double
 lwellipse_area(const LWELLIPSE *ellipse)
 {
-	return PI * ellipse->data->axis * ellipse->data->axis * ellipse->data->ratio;
+	double a = ellipse->data->axis;
+	double b = ellipse->data->axis * ellipse->data->ratio;
+	return PI * a * b;
 }
 void
 lwellipse_free(LWELLIPSE *e)
@@ -135,7 +137,7 @@ lwellipse_get_spatialdata(LWELLIPSE *geom, unsigned int segment)
 			    geom->data->rotation,
 			    dRadianBegin,
 			    dRadianEnd,
-			    dStep);
+			    dStep,geom->data->minor);
 	if (res)
 	{
 		//创建 POINTARRAY
@@ -155,7 +157,7 @@ BuildArc(POINT2D **arr,
 	 double dRotation,
 	 double dRadianBegin,
 	 double dRadianEnd,
-	 double step)
+	 double step,int flag)
 {
 	a = fabs(a);
 	b = fabs(b);
@@ -204,14 +206,29 @@ BuildArc(POINT2D **arr,
 	if (arr != NULL)
 	{
 		int i = 0;
-		for (; i < *len - 1; dRadianBeginT += step, i++)
+		if (flag == 0)
 		{
-			(*arr)[i].x = x + dCos_a_Pri * cos(dRadianBeginT) - dSin_a_Sec * sin(dRadianBeginT);
-			(*arr)[i].y = y + dSin_a_Pri * cos(dRadianBeginT) + dCos_a_Sec * sin(dRadianBeginT);
+			for (i = *len - 1; i> 0; dRadianBeginT += step, i--)
+			{
+				(*arr)[i].x = x + dCos_a_Pri * cos(dRadianBeginT) - dSin_a_Sec * sin(dRadianBeginT);
+				(*arr)[i].y = y + dSin_a_Pri * cos(dRadianBeginT) + dCos_a_Sec * sin(dRadianBeginT);
+			}
+
+			(*arr)[0].x = x + dCos_a_Pri * cos(dRadianEndT) - dSin_a_Sec * sin(dRadianEndT);
+			(*arr)[0].y = y + dSin_a_Pri * cos(dRadianEndT) + dCos_a_Sec * sin(dRadianEndT);
+		}
+		else
+		{
+			for (; i < *len - 1; dRadianBeginT += step, i++)
+			{
+				(*arr)[i].x = x + dCos_a_Pri * cos(dRadianBeginT) - dSin_a_Sec * sin(dRadianBeginT);
+				(*arr)[i].y = y + dSin_a_Pri * cos(dRadianBeginT) + dCos_a_Sec * sin(dRadianBeginT);
+			}
+
+			(*arr)[i].x = x + dCos_a_Pri * cos(dRadianEndT) - dSin_a_Sec * sin(dRadianEndT);
+			(*arr)[i].y = y + dSin_a_Pri * cos(dRadianEndT) + dCos_a_Sec * sin(dRadianEndT);
 		}
 
-		(*arr)[i].x = x + dCos_a_Pri * cos(dRadianEndT) - dSin_a_Sec * sin(dRadianEndT);
-		(*arr)[i].y = y + dSin_a_Pri * cos(dRadianEndT) + dCos_a_Sec * sin(dRadianEndT);
 		return true;
 	}
 	return false;
@@ -271,6 +288,13 @@ CalcEllipseRotation(double xstart,
 	_xend = xend * cos(-rotation) - yend * sin(-rotation);
 	_yend = xend * sin(-rotation) + yend * cos(-rotation);
 
+	if(_xstart == _xend && _ystart == _yend)
+	{
+		*startangle = 0;
+		*endangle = 2 * PI;
+		return;
+	}
+
 	if (minor)
 	{
 		*startangle = atan2(_ystart, _xstart);
@@ -280,6 +304,16 @@ CalcEllipseRotation(double xstart,
 	{
 		*endangle = atan2(_ystart, _xstart);
 		*startangle = atan2(_yend, _xend);
+	}
+
+	if (*endangle < 0)
+	{
+		*endangle += 2 * PI;
+	}
+
+	if (*startangle < 0)
+	{
+		*startangle += 2 * PI;
 	}
 }
 
@@ -296,4 +330,68 @@ lwellipse_is_closed(const LWELLIPSE *ellipse)
 	}
 
 	return LW_TRUE;
+}
+
+POINT2D
+lwellipse_get_middle_point(const LWELLIPSE *ellipse)
+{
+	double dRadian = ellipse->data->rotation; // m_dRotationAngle * DTOR;
+	double xstart, ystart, xend, yend, xcenter, ycenter;
+	POINT4D pt;
+	getPoint4d_p(ellipse->data->points, 0, &pt);
+	xstart = pt.x;
+	ystart = pt.y;
+	getPoint4d_p(ellipse->data->points, 1, &pt);
+	xend = pt.x;
+	yend = pt.y;
+	getPoint4d_p(ellipse->data->points, 2, &pt);
+	xcenter = pt.x;
+	ycenter = pt.y;
+	// double dRadianBegin = m_dStartAngle * DTOR;
+	// double dRadianEnd = m_dEndAngle * DTOR /2;
+	double dRadianBegin, dRadianEnd;
+	CalcEllipseRotation(xstart,
+			    ystart,
+			    xend,
+			    yend,
+			    xcenter,
+			    ycenter,
+			    ellipse->data->rotation,
+			    ellipse->data->minor,
+			    &dRadianBegin,
+			    &dRadianEnd);
+	int nPointCount = 0;
+	POINT2D *pPoints = NULL;
+
+	double dSemiMajorAxis = fabs(ellipse->data->axis);
+	double dSemiMinorAxis = fabs(ellipse->data->axis * ellipse->data->ratio);
+
+	while (dRadianEnd < dRadianBegin)
+	{
+		dRadianEnd += PI * 2;
+	}
+
+	while (dRadianEnd > (dRadianBegin + PI * 2))
+	{
+		dRadianBegin += PI * 2;
+	}
+
+	double dSin_a_Pri = 0, dCos_a_Pri = 0, dSin_a_Sec = 0, dCos_a_Sec = 0;
+	dCos_a_Pri = cos(dRadian) * dSemiMajorAxis;
+	dSin_a_Pri = sin(dRadian) * dSemiMajorAxis;
+	dCos_a_Sec = cos(dRadian) * dSemiMinorAxis;
+	dSin_a_Sec = sin(dRadian) * dSemiMinorAxis;
+
+	double dRadianBeginT = CalcEllipseRadian(dRadianBegin, dSemiMajorAxis, dSemiMinorAxis);
+	double dRadianEndT = CalcEllipseRadian(dRadianEnd, dSemiMajorAxis, dSemiMinorAxis);
+
+	if (FP_IS_ZERO(dRadianEndT - dRadianBeginT))
+	{
+		dRadianEndT += 2 * PI;
+	}
+
+	POINT2D respoint = {(xcenter + dCos_a_Pri * cos(dRadianEndT) - dSin_a_Sec * sin(dRadianEndT)),
+			    (ycenter + dSin_a_Pri * cos(dRadianEndT) + dCos_a_Sec * sin(dRadianEndT))};
+
+	return respoint;
 }

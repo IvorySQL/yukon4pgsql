@@ -629,6 +629,12 @@ CREATE OR REPLACE FUNCTION ST_SETSRID(geom geomodel, srid integer)
 	AS '$libdir/yukon_geomodel-1.0', 'geomodel_set_srid'
 	LANGUAGE 'c'   IMMUTABLE STRICT ;	
 
+CREATE OR REPLACE FUNCTION geomodel_analyze(internal)
+	RETURNS bool
+	AS '$libdir/postgis-3', 'gserialized_analyze_nd'
+	LANGUAGE 'c' VOLATILE STRICT;
+	
+
 CREATE TYPE geomodel (
 	internallength = variable,
 	input = geomodel_in,
@@ -639,7 +645,7 @@ CREATE TYPE geomodel (
 	typmod_out = geomodel_typmod_out,
 	-- delimiter = ':',
 	alignment = double,
-	-- analyze = geomodel_analyze,
+	analyze = geomodel_analyze,
 	storage = main
 );
 

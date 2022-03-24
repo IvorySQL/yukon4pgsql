@@ -96,7 +96,7 @@ geomodel_type_from_string(const char *str, uint8_t *type)
 	}
 
 	/* 将字符串拷贝出来，并转换未大写 */
-	tmpstr = palloc(tmpendpos - tmpstartpos + 2);
+	tmpstr = (char *)palloc(tmpendpos - tmpstartpos + 2);
 	for (i = tmpstartpos; i <= tmpendpos; i++)
 		tmpstr[i - tmpstartpos] = char_toupper(str[i]);
 
@@ -150,7 +150,7 @@ cstring2text(const char *cstring)
 		return NULL;
 
 	sz = strlen(cstring);
-	output = palloc(sz + VARHDRSZ);
+	output = (text *)palloc(sz + VARHDRSZ);
 	if (!output)
 		return NULL;
 	SET_VARSIZE(output, sz + VARHDRSZ);

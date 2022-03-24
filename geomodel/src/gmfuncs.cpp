@@ -37,7 +37,7 @@ Datum BOX3D_combine(PG_FUNCTION_ARGS);
 Datum boundary(PG_FUNCTION_ARGS)
 {
 	GSERIALIZED *gms = NULL;
-	BOX3D *result = malloc(sizeof(BOX3D));
+	BOX3D *result = (BOX3D *)malloc(sizeof(BOX3D));
 	if (result == NULL)
 	{
 		PG_RETURN_NULL();
@@ -68,24 +68,24 @@ Datum BOX3D_combine(PG_FUNCTION_ARGS)
 	/*if gms is null,return box */
 	if (gms == NULL)
 	{
-		result = palloc(sizeof(BOX3D));
+		result = (BOX3D *)palloc(sizeof(BOX3D));
 		memcpy(result, box, sizeof(BOX3D));
 		PG_RETURN_POINTER(result);
 	}
 
-	BOX3D *gbox = palloc(sizeof(BOX3D));
+	BOX3D *gbox = (BOX3D *)palloc(sizeof(BOX3D));
 	gmserialized_get_bbox(gms, gbox);
 	// result = bbox3f_merge(box, &geoBox);
 
 	/*if box is null,return gbox */
 	if (box == NULL)
 	{
-		result = palloc(sizeof(BOX3D));
+		result = (BOX3D *)palloc(sizeof(BOX3D));
 		memcpy(result, gbox, sizeof(BOX3D));
 		PG_RETURN_POINTER(result);
 	}
 
-	result = palloc(sizeof(BOX3D));
+	result = (BOX3D *)palloc(sizeof(BOX3D));
 	result->xmax = Max(box->xmax, gbox->xmax);
 	result->ymax = Max(box->ymax, gbox->ymax);
 	result->zmax = Max(box->zmax, gbox->zmax);

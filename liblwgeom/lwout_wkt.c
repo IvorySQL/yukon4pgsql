@@ -291,7 +291,7 @@ static void lwellipse_to_wkt_sb(const LWELLIPSE *ellipse, stringbuffer_t *sb, in
 		dimension_qualifiers_to_wkt_sb((LWGEOM*)ellipse, sb, variant);
 	}
 	stringbuffer_append_len(sb, "(", 1);
-	ptarray_to_wkt_sb(ellipse->data->points, sb, precision, variant);
+	ptarray_to_wkt_sb(ellipse->data->points, sb, precision, variant | WKT_NO_PARENS);
 
 	stringbuffer_append_len(sb, ",", 1);
 	stringbuffer_append_double(sb, ellipse->data->minor, precision);

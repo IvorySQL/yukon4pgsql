@@ -185,7 +185,7 @@ Datum geomodel_recv(PG_FUNCTION_ARGS)
 	YkGeoModel *pGeoModel = LoadShell(buf->data, len);
 	if (pGeoModel == NULL)
 	{
-		// log ......
+		elog(NOTICE, "Load shell data failed!");
 		return false;
 	}
 	YkBoundingBox bbox = pGeoModel->GetGeoBoundingBox();
@@ -313,13 +313,34 @@ gmserialized_get_bbox(GSERIALIZED *gms, BOX3D *bbox)
 	{
 		return false;
 	}
+	/*
+	 * 由于 GSERIALIZED 中索引使用的  BOX 为 float 类型，
+	 * 为了提高精度，这里我们直接从模型数据中读取 BOX 并返回
+	 */
+	uint32_t size = VARSIZE((varlena *)gms);
 
-	bbox->xmin = (*((float *)(gms->data) + 0));
-	bbox->xmax = (*((float *)(gms->data) + 1));
-	bbox->ymin = (*((float *)(gms->data) + 2));
-	bbox->ymax = (*((float *)(gms->data) + 3));
-	bbox->zmin = (*((float *)(gms->data) + 4));
-	bbox->zmax = (*((float *)(gms->data) + 5));
+	/* 这里我们减去 size(4) + srid(3) + gflag(1) + box(6*4) 个字节大小 */
+	size -= 32;
+
+	YkGeoModel *pGeoModel = LoadShell((char *)gms + 32, size);
+	if (pGeoModel == NULL)
+	{
+		elog(NOTICE, "Load shell data failed!");
+		return false;
+	}
+	YkBoundingBox ykbbox = pGeoModel->GetGeoBoundingBox();
+	delete pGeoModel;
+	pGeoModel = NULL;
+
+	YkVector3d vecMax = ykbbox.GetMax();
+	YkVector3d vecMin = ykbbox.GetMin();
+
+	bbox->xmin = vecMin.x;
+	bbox->xmax = vecMax.x;
+	bbox->ymin = vecMin.y;
+	bbox->ymax = vecMax.y;
+	bbox->zmin = vecMin.z;
+	bbox->zmax = vecMax.z;
 	bbox->srid = 0;
 
 	return true;
@@ -350,8 +371,12 @@ gmserialized_set_bbox(GSERIALIZED *gms, YkBoundingBox &bbox)
 
 Datum yukon_version(PG_FUNCTION_ARGS)
 {
+	char src[100] = {0};
 	char *ver = YUKON_VERSION;
-	text *result = cstring2text(ver);
+	char *compileinfo = COMPILEINFO;
+	strcat(src, ver);
+	strcat(src, compileinfo);
+	text *result = cstring2text(src);
 	PG_RETURN_TEXT_P(result);
 }
 

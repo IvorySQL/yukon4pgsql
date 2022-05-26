@@ -972,6 +972,24 @@ if test "$CHECK_JSON" != "no"; then
 fi
 
 dnl ===========================================================================
+dnl Detect Whether to install geogridcoder
+dnl ===========================================================================
+dnl default to install
+CHECK_GEOGRIDCODER=yes
+AC_SUBST([CHECK_GEOGRIDCODER])
+
+AC_ARG_WITH([geogridcoder],
+	[AS_HELP_STRING([--without-geogridcoder], [build without geogridcoder support])],
+	[CHECK_GEOGRIDCODER="$withval"], [])
+
+if test "$CHECK_GEOGRIDCODER" != "no";then
+	GEOGRIDCODER_MAKEFILE_LIST="
+	geogridcoder/Makefile"
+else
+	GEOGRIDCODER_MAKEFILE_LIST=""
+fi
+
+dnl ===========================================================================
 dnl Detect Whether to install geomodel
 dnl ===========================================================================
 dnl default to install
@@ -1617,7 +1635,8 @@ AC_OUTPUT([GNUmakefile
    utils/Makefile
    $RT_MAKEFILE_LIST
    $DEPS_MAKEFILE_LIST
-   $GEOMODEL_MAKEFILE_LIST])
+   $GEOMODEL_MAKEFILE_LIST
+   $GEOGRIDCODER_MAKEFILE_LIST])
 
 dnl ===========================================================================
 dnl Display the configuration status information

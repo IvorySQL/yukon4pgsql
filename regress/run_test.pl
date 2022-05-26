@@ -1418,6 +1418,14 @@ sub prepare_spatial_extensions
   	die;
 	}
 
+	$sql = "CREATE EXTENSION yukon_geogridcoder";
+    $cmd = "psql $psql_opts -c \"". $sql . "\" $DB >> $REGRESS_LOG 2>&1";
+    my $rv = system($cmd);
+    if ( $rv ) {
+        fail "Error encountered creating EXTENSION YUKON_GEOGRIDCODER", $REGRESS_LOG;
+        die;
+    }
+
 	$sql = "CREATE EXTENSION yukon_geomodel";
     $cmd = "psql $psql_opts -c \"". $sql . "\" $DB >> $REGRESS_LOG 2>&1";
     my $rv = system($cmd);

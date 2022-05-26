@@ -121,7 +121,8 @@ TESTS += \
 	$(topsrcdir)/regress/core/oriented_envelope \
 	$(topsrcdir)/regress/core/point_coordinates \
 	$(topsrcdir)/regress/core/out_geojson \
-	$(topsrcdir)/regress/core/geomodel
+	$(topsrcdir)/regress/core/geomodel \
+	$(topsrcdir)/regress/core/geogridcoder
 
 # Slow slow tests
 TESTS_SLOW = \

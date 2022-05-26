@@ -9,6 +9,10 @@ ifeq (@LIBLWGEOM_ONLY@,no)
 SUBDIRS += libpgcommon postgis regress @RASTER@ @TOPOLOGY@ @SFCGAL@ loader utils doc @EXTENSIONS@ @DEPS_SUBDIR@
 endif
 
+ifeq (@CHECK_GEOGRIDCODER@,yes)
+SUBDIRS += geogridcoder
+endif
+
 ifeq (@CHECK_GEOMODEL@,yes)
 SUBDIRS += geomodel
 endif

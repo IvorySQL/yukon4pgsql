@@ -36,7 +36,7 @@ BEGIN
 
 
 	-- Find, check or fix schema_name
-	IF ( schema_name IS NOT NULL ) THEN
+	IF ( schema_name !='') THEN
 		okay = false;
 
 		FOR myrec IN SELECT nspname FROM pg_namespace WHERE text(nspname) = schema_name LOOP
@@ -211,7 +211,7 @@ BEGIN
     END IF;
 
    -- Verify schema
-	IF ( schema_name IS NOT NULL) THEN
+	IF ( schema_name !='' ) THEN
 		sql_str := 'SELECT count(*) FROM pg_namespace ' ||
 			'WHERE text(nspname) = ' || quote_literal(schema_name) ||
 			'LIMIT 1';

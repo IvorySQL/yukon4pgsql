@@ -19,7 +19,7 @@ HAVE_SPGIST=@HAVE_SPGIST@
 INTERRUPTTESTS=@INTERRUPTTESTS@
 
 current_dir := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
-
+RUNTESTFLAGS = --sfcgal --extension
 TESTS += \
 	$(topsrcdir)/regress/core/affine \
 	$(topsrcdir)/regress/core/bestsrid \
@@ -122,7 +122,7 @@ TESTS += \
 	$(topsrcdir)/regress/core/point_coordinates \
 	$(topsrcdir)/regress/core/out_geojson \
 	$(topsrcdir)/regress/core/geomodel \
-	$(topsrcdir)/regress/core/geogridcoder
+	$(topsrcdir)/regress/core/geosotgrid
 
 # Slow slow tests
 TESTS_SLOW = \

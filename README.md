@@ -18,9 +18,4 @@ Yukon（禹贡），基于 PostgreSQL 数据库扩展地理空间数据的存储
 帮助文档参见 [Yukon在线文档](https://yukon.supermap.io/)。
 
 ## 许可说明
-参见[LICENSE.TXT](https://gitee.com/opengauss/Yukon/blob/master/LICENSE.TXT)
-
-
-## 贡献
-
-PostGIS与openGauss适配的初始版本源自https://github.com/pg-extension/postgis-xc.git
+参见[COPYING](https://gitee.com/isupermap/yukon4pgsql/blob/master/COPYING)

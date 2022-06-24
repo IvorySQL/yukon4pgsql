@@ -20,9 +20,12 @@
 
 #include "GeoGrid.h"
 #include <math.h>
+#include <algorithm>
 #include "geosot.h"
 #include "rasterize_grid.h"
 #include "GSGUtil.h"
+
+extern ArrayType* array_grid2d_unique(ArrayType* r);
 
 extern "C" {
 PG_MODULE_MAGIC;
@@ -975,6 +978,7 @@ Datum gsg_degenerate(PG_FUNCTION_ARGS)
 Datum gsg_degenerate_array(PG_FUNCTION_ARGS)
 {
 	ArrayType *array = PG_GETARG_ARRAYTYPE_P(0);
+	int level = PG_GETARG_INT32(1);
 	int nelems = ArrayGetNItems(ARR_NDIM(array), ARR_DIMS(array));
 
 	if (nelems == 0)
@@ -986,8 +990,12 @@ Datum gsg_degenerate_array(PG_FUNCTION_ARGS)
 	for (int i = 0; i < nelems; i++)
 	{
 		uint16_t flag = grid[i].flag;
-		uint16_t level = grid[i].level;
+		uint16_t grid_level = grid[i].level;
 		uint64_t code = grid[i].data;
+		if (level > grid_level)
+			lwpgerror("can't convert to higher precision");
+		else if (level == grid_level)
+			PG_RETURN_POINTER(array);
 		code = code & (0XFFFFFFFFFFFFFFFF << (64 - level * 2));
 		int data_size = flag == 0 ? 16 : 20;
 		char *buf_data = (char *)palloc(data_size);
@@ -1007,6 +1015,9 @@ Datum gsg_degenerate_array(PG_FUNCTION_ARGS)
 	Oid typ_ID = GetSysCacheOid2(TYPENAMENSP, Anum_pg_type_oid, PointerGetDatum("geosotgrid"), ObjectIdGetDatum(namespaceId));
 	get_typlenbyvalalign(typ_ID, &elmlen, &elmbyval, &elmalign);
 	ArrayType *result = construct_array(result_array_data, nelems, typ_ID, elmlen, elmbyval, elmalign);
+	GEOSOTGRID *gridarray = (GEOSOTGRID*)ARR_DATA_PTR(result);
+	std::sort(gridarray, gridarray + nelems);
+	result = array_grid2d_unique(result);
 
 	PG_RETURN_POINTER(result);
 }

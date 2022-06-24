@@ -81,8 +81,8 @@ PG_FUNCTION_INFO_V1(gridarray_cmp);
 PG_FUNCTION_INFO_V1(gridarray_overlap);
 PG_FUNCTION_INFO_V1(gridarray_contains);
 PG_FUNCTION_INFO_V1(gridarray_contained);
-PG_FUNCTION_INFO_V1(gridarray_extract);
-PG_FUNCTION_INFO_V1(gridarray_queryextract);
+PG_FUNCTION_INFO_V1(gridarray_extractvalue);
+PG_FUNCTION_INFO_V1(gridarray_extractquery);
 PG_FUNCTION_INFO_V1(gridarray_consistent);
 
 Datum geosotgrid_in(PG_FUNCTION_ARGS);
@@ -101,8 +101,8 @@ Datum gridarray_cmp(PG_FUNCTION_ARGS);
 Datum gridarray_overlap(PG_FUNCTION_ARGS);
 Datum gridarray_contains(PG_FUNCTION_ARGS);
 Datum gridarray_contained(PG_FUNCTION_ARGS);
-Datum gridarray_extract(PG_FUNCTION_ARGS);
-Datum gridarray_queryextract(PG_FUNCTION_ARGS);
+Datum gridarray_extractvalue(PG_FUNCTION_ARGS);
+Datum gridarray_extractquery(PG_FUNCTION_ARGS);
 Datum gridarray_consistent(PG_FUNCTION_ARGS);
 }
 
@@ -534,9 +534,12 @@ Datum gridarray_overlap(PG_FUNCTION_ARGS)
 {
 	ArrayType *a = PG_GETARG_ARRAYTYPE_P_COPY(0);
 	ArrayType *b = PG_GETARG_ARRAYTYPE_P_COPY(1);
-	bool result = false;
+
 	if (nullptr == a || nullptr == b)
-		return false;
+		PG_RETURN_BOOL(false);
+
+	if (0 == ARRNELEMS(a) || 0 == ARRNELEMS(b))
+		PG_RETURN_BOOL(false);
 
 	char *pl = ARR_DATA_PTR(a);
 	char *pr = ARR_DATA_PTR(b);
@@ -561,7 +564,7 @@ Datum gridarray_overlap(PG_FUNCTION_ARGS)
 		std::sort(grid_r, grid_r + ARRNELEMS(b));
 	}
 
-	result = array_grid_overlap(a, b);
+	bool result = array_grid_overlap(a, b);
 	pfree(a);
 	pfree(b);
 
@@ -572,10 +575,12 @@ Datum gridarray_contains(PG_FUNCTION_ARGS)
 {
 	ArrayType *a = PG_GETARG_ARRAYTYPE_P_COPY(0);
 	ArrayType *b = PG_GETARG_ARRAYTYPE_P_COPY(1);
-	bool res = false;
 
 	if (nullptr == a || nullptr == b)
-		return false;
+		PG_RETURN_BOOL(false);
+
+	if (0 == ARRNELEMS(a) || 0 == ARRNELEMS(b))
+		PG_RETURN_BOOL(false);
 
 	char *pl = ARR_DATA_PTR(a);
 	char *pr = ARR_DATA_PTR(b);
@@ -604,7 +609,7 @@ Datum gridarray_contains(PG_FUNCTION_ARGS)
 		b = array_grid3d_unique(b);
 	}
 	
-	res = array_grid_contains(a, b);
+	bool res = array_grid_contains(a, b);
 	pfree(a);
 	pfree(b);
 	PG_RETURN_BOOL(res);
@@ -614,10 +619,12 @@ Datum gridarray_contained(PG_FUNCTION_ARGS)
 {
 	ArrayType *a = PG_GETARG_ARRAYTYPE_P_COPY(0);
 	ArrayType *b = PG_GETARG_ARRAYTYPE_P_COPY(1);
-	bool res = false;
 
 	if (nullptr == a || nullptr == b)
-		return false;
+		PG_RETURN_BOOL(false);
+
+	if (0 == ARRNELEMS(a) || 0 == ARRNELEMS(b))
+		PG_RETURN_BOOL(false);
 
 	char *pl = ARR_DATA_PTR(a);
 	char *pr = ARR_DATA_PTR(b);
@@ -645,7 +652,7 @@ Datum gridarray_contained(PG_FUNCTION_ARGS)
 		a = array_grid3d_unique(a);
 		b = array_grid3d_unique(b);
 	}
-	res = array_grid_contains(b, a);
+	bool res = array_grid_contains(b, a);
 	pfree(a);
 	pfree(b);
 	PG_RETURN_BOOL(res);
@@ -653,7 +660,7 @@ Datum gridarray_contained(PG_FUNCTION_ARGS)
 
 /****************************************GIN索引函数****************************************/
 
-Datum gridarray_extract(PG_FUNCTION_ARGS)
+Datum gridarray_extractvalue(PG_FUNCTION_ARGS)
 {
 	ArrayType *array = PG_GETARG_ARRAYTYPE_P_COPY(0);
 	int32 *nkeys 	 = (int32 *)PG_GETARG_POINTER(1);
@@ -662,7 +669,7 @@ Datum gridarray_extract(PG_FUNCTION_ARGS)
 	if (array == NULL || nkeys == NULL || nullFlags == NULL)
 		ereport(ERROR,
 			(errcode(ERRCODE_INVALID_PARAMETER_VALUE),
-			 errmsg("Invalid arguments for function gridarray_extract")));
+			 errmsg("Invalid arguments for function gridarray_extractvalue")));
 
 	int16_t elmlen;
 	bool elmbyval = false;
@@ -680,7 +687,7 @@ Datum gridarray_extract(PG_FUNCTION_ARGS)
 	PG_RETURN_POINTER(elems);
 }
 
-Datum gridarray_queryextract(PG_FUNCTION_ARGS)
+Datum gridarray_extractquery(PG_FUNCTION_ARGS)
 {
 	int32 *nentries = (int32 *)PG_GETARG_POINTER(1);
 	StrategyNumber strategy = PG_GETARG_UINT16(2);
@@ -688,96 +695,57 @@ Datum gridarray_queryextract(PG_FUNCTION_ARGS)
 	Datum *res = nullptr;
 	*nentries = 0;
 
-	if (strategy == 20)
+	ArrayType *query = PG_GETARG_ARRAYTYPE_P(0);
+
+	CHECKARRVALID(query);
+	*nentries = ARRNELEMS(query);
+	if (*nentries > 0)
 	{
-		// QUERYTYPE *query = (QUERYTYPE *)PG_DETOAST_DATUM(PG_GETARG_DATUM(0));
-		// ITEM *items = query->items;
-		// int i;
-
-		// /* empty query must fail */
-		// if (query->size <= 0)
-		//   PG_RETURN_POINTER(NULL);
-
-		// /*
-		//      * If the query doesn't have any required primitive values (for
-		//      * instance, it's something like '! 42'), we have to do a full index
-		//      * scan.
-		//      */
-		// if (query_has_required_values(query))
-		//   *searchMode = 0;
-		// else
-		//   *searchMode = 2;
-
-		// /*
-		//      * Extract all the VAL items as things we want GIN to check for.
-		//      */
-		// res = (Datum *)palloc(sizeof(Datum) * query->size);
-		// *nentries = 0;
-
-		// for (i = 0; i < query->size; i++)
-		// {
-		//   if (items[i].type == 2)
-		//   {
-		//     res[*nentries] = Int32GetDatum(items[i].val);
-		//     (*nentries)++;
-		//   }
-		// }
+		char *data = ARR_DATA_PTR(query);
+		uint16_t flag = *(uint16_t *)(data + 4);
+		if (0 == flag)
+		{
+			GEOSOTGRID *arr = nullptr;
+			res = (Datum *)palloc(sizeof(Datum) * (*nentries));
+			arr = (GEOSOTGRID *)ARR_DATA_PTR(query);
+			// //变长类型按引用传递，此处传地址，res[i]存每个geosotgrid对象地址
+			for (int i = 0; i < *nentries; i++)
+				res[i] = PointerGetDatum(&arr[i]);
+		}
+		else
+		{
+			GEOSOTGRID3D *arr = nullptr;
+			res = (Datum *)palloc(sizeof(Datum) * (*nentries));
+			arr = (GEOSOTGRID3D *)ARR_DATA_PTR(query);
+			for (int i = 0; i < *nentries; i++)
+				res[i] = PointerGetDatum(&arr[i]);
+		}
 	}
-	else
+
+	switch (strategy)
 	{
-		ArrayType *query = PG_GETARG_ARRAYTYPE_P(0);
-
-		CHECKARRVALID(query);
-		*nentries = ARRNELEMS(query);
+	case RTOverlapStrategyNumber:
+		*searchMode = GIN_SEARCH_MODE_DEFAULT;
+		break;
+	case RTContainedByStrategyNumber:
+		/* empty set is contained in everything */
+		*searchMode = GIN_SEARCH_MODE_INCLUDE_EMPTY;
+		break;
+	case RTContainsStrategyNumber:
 		if (*nentries > 0)
-		{
-			char *data = ARR_DATA_PTR(query);
-			uint16_t flag = *(uint16_t *)(data + 4);
-			if (0 == flag)
-			{
-				GEOSOTGRID *arr = nullptr;
-				res = (Datum *)palloc(sizeof(Datum) * (*nentries));
-				arr = (GEOSOTGRID *)ARR_DATA_PTR(query);
-				// //变长类型按引用传递，此处传地址，res[i]存每个geosotgrid对象地址
-				for (int i = 0; i < *nentries; i++)
-					res[i] = PointerGetDatum(&arr[i]);
-			}
-			else
-			{
-				GEOSOTGRID3D *arr = nullptr;
-				res = (Datum *)palloc(sizeof(Datum) * (*nentries));
-				arr = (GEOSOTGRID3D *)ARR_DATA_PTR(query);
-				for (int i = 0; i < *nentries; i++)
-					res[i] = PointerGetDatum(&arr[i]);
-			}
-		}
-
-		switch (strategy)
-		{
-		case RTOverlapStrategyNumber:
 			*searchMode = GIN_SEARCH_MODE_DEFAULT;
-			break;
-		case RTContainedByStrategyNumber:
-		case RTOldContainedByStrategyNumber:
-			/* empty set is contained in everything */
+		else /* everything contains the empty set */
+			*searchMode = GIN_SEARCH_MODE_ALL;
+		break;
+		case RTEqualStrategyNumber:
+	case RTNotEqualStrategyNumber:
+		if (*nentries > 0)
+			*searchMode = GIN_SEARCH_MODE_DEFAULT;
+		else
 			*searchMode = GIN_SEARCH_MODE_INCLUDE_EMPTY;
-			break;
-		case RTSameStrategyNumber:
-			if (*nentries > 0)
-				*searchMode = GIN_SEARCH_MODE_DEFAULT;
-			else
-				*searchMode = GIN_SEARCH_MODE_INCLUDE_EMPTY;
-			break;
-		case RTContainsStrategyNumber:
-		case RTOldContainsStrategyNumber:
-			if (*nentries > 0)
-				*searchMode = GIN_SEARCH_MODE_DEFAULT;
-			else /* everything contains the empty set */
-				*searchMode = GIN_SEARCH_MODE_ALL;
-			break;
-		default:
-			elog(ERROR, "gridarray_queryextract: unknown strategy number: %d", strategy);
-		}
+		break;
+	default:
+		elog(ERROR, "gridarray_extractquery: unknown strategy number: %d", strategy);
 	}
 
 	PG_RETURN_POINTER(res);
@@ -788,8 +756,6 @@ Datum gridarray_consistent(PG_FUNCTION_ARGS)
 	bool *check = (bool *)PG_GETARG_POINTER(0);
 	StrategyNumber strategy = PG_GETARG_UINT16(1);
 	int32 nkeys = PG_GETARG_INT32(3);
-
-	/* Pointer	   *extra_data = (Pointer *) PG_GETARG_POINTER(4); */
 	bool *recheck = (bool *)PG_GETARG_POINTER(5);
 	bool res = false;
 	int32 i;
@@ -803,28 +769,12 @@ Datum gridarray_consistent(PG_FUNCTION_ARGS)
 		res = true;
 		break;
 	case RTContainedByStrategyNumber:
-	case RTOldContainedByStrategyNumber:
 		/* we will need recheck */
 		*recheck = true;
 		/* at least one element in check[] is true, so result = true */
 		res = true;
 		break;
-	case RTSameStrategyNumber:
-		/* we will need recheck */
-		*recheck = true;
-		/* Must have all elements in check[] true */
-		res = true;
-		for (i = 0; i < nkeys; i++)
-		{
-			if (!check[i])
-			{
-				res = false;
-				break;
-			}
-		}
-		break;
 	case RTContainsStrategyNumber:
-	case RTOldContainsStrategyNumber:
 		/* result is not lossy */
 		*recheck = false;
 		/* Must have all elements in check[] true */
@@ -838,17 +788,13 @@ Datum gridarray_consistent(PG_FUNCTION_ARGS)
 			}
 		}
 		break;
-	// case BooleanSearchStrategy:
-	// 	{
-	// 		QUERYTYPE  *query = PG_GETARG_QUERYTYPE_P(2);
-
-	// 		/* result is not lossy */
-	// 		*recheck = false;
-	// 		res = gin_bool_consistent(query, check);
-	// 	}
-	// 	break;
+	case RTEqualStrategyNumber:
+	case RTNotEqualStrategyNumber:
+		*recheck = false;
+		res = true;
+		break;
 	default:
-		elog(ERROR, "gingrid_consistent: unknown strategy number: %d", strategy);
+		elog(ERROR, "gridarray_consistent: unknown strategy number: %d", strategy);
 	}
 
 	PG_RETURN_BOOL(res);

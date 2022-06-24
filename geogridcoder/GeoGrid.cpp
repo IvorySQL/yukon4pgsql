@@ -43,8 +43,8 @@ PG_FUNCTION_INFO_V1(gsg_geom_from_geosotgrid);
 PG_FUNCTION_INFO_V1(gsg_geom_from_geosotgrid_array);
 PG_FUNCTION_INFO_V1(gsg_has_z);
 PG_FUNCTION_INFO_V1(gsg_get_level);
-PG_FUNCTION_INFO_V1(gsg_degenerate);
-PG_FUNCTION_INFO_V1(gsg_degenerate_array);
+PG_FUNCTION_INFO_V1(gsg_aggregate);
+PG_FUNCTION_INFO_V1(gsg_aggregate_array);
 
 Datum gsg_geohash(PG_FUNCTION_ARGS);
 Datum gsg_boxgeohash(PG_FUNCTION_ARGS);
@@ -60,8 +60,8 @@ Datum gsg_geom_from_geosotgrid(PG_FUNCTION_ARGS);
 Datum gsg_geom_from_geosotgrid_array(PG_FUNCTION_ARGS);
 Datum gsg_has_z(PG_FUNCTION_ARGS);
 Datum gsg_get_level(PG_FUNCTION_ARGS);
-Datum gsg_degenerate(PG_FUNCTION_ARGS);
-Datum gsg_degenerate_array(PG_FUNCTION_ARGS);
+Datum gsg_aggregate(PG_FUNCTION_ARGS);
+Datum gsg_aggregate_array(PG_FUNCTION_ARGS);
 }
 
 /**
@@ -918,7 +918,7 @@ Datum gsg_get_level(PG_FUNCTION_ARGS)
 	PG_RETURN_INT16(level);
 }
 
-Datum gsg_degenerate(PG_FUNCTION_ARGS)
+Datum gsg_aggregate(PG_FUNCTION_ARGS)
 {
 	varlena *buf = PG_GETARG_VARLENA_P(0);
 	int level = PG_GETARG_INT32(1);
@@ -975,7 +975,7 @@ Datum gsg_degenerate(PG_FUNCTION_ARGS)
 	PG_RETURN_POINTER(buf_data);
 }
 
-Datum gsg_degenerate_array(PG_FUNCTION_ARGS)
+Datum gsg_aggregate_array(PG_FUNCTION_ARGS)
 {
 	ArrayType *array = PG_GETARG_ARRAYTYPE_P(0);
 	int level = PG_GETARG_INT32(1);

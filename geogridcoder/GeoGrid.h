@@ -21,17 +21,16 @@
 #ifndef GEOGRID_H_
 #define GEOGRID_H_
 
-extern "C"
-{
-    #include "../libpgcommon/lwgeom_pg.h"
-    #include "../liblwgeom/liblwgeom.h"
-    #include "postgres.h"
-    #include "fmgr.h"
-    #include "rtpostgis.h"
-    #include "utils/array.h"
-    #include "utils/syscache.h" 
-    #include "catalog/pg_type.h"
-    #include "catalog/pg_namespace_d.h" 
+extern "C" {
+#include "../libpgcommon/lwgeom_pg.h"
+#include "../liblwgeom/liblwgeom.h"
+#include "postgres.h"
+#include "fmgr.h"
+#include "rtpostgis.h"
+#include "utils/array.h"
+#include "utils/syscache.h"
+#include "catalog/pg_type.h"
+#include "catalog/pg_namespace_d.h"
 }
 
 #include <cmath>

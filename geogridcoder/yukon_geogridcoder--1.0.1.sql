@@ -115,6 +115,11 @@ RETURNS bool
 AS '$libdir/yukon_geogridcoder-1.0'
 LANGUAGE 'c' IMMUTABLE STRICT ;
 
+CREATE OR REPLACE FUNCTION gridarray_spanoverlap(_geosotgrid, _geosotgrid)
+RETURNS bool
+AS '$libdir/yukon_geogridcoder-1.0'
+LANGUAGE 'c' IMMUTABLE STRICT ;
+
 CREATE OR REPLACE FUNCTION gridarray_contains(_geosotgrid, _geosotgrid)
 RETURNS bool
 AS '$libdir/yukon_geogridcoder-1.0'
@@ -140,11 +145,16 @@ RETURNS bool
 AS '$libdir/yukon_geogridcoder-1.0'
 LANGUAGE 'c' IMMUTABLE STRICT ;
 
+CREATE OR REPLACE FUNCTION gridarray_comparepartial(geosotgrid, geosotgrid, int2, internal)
+RETURNS internal
+AS '$libdir/yukon_geogridcoder-1.0'
+LANGUAGE 'c' IMMUTABLE STRICT ;
+
 
 CREATE OPERATOR && (
 	LEFTARG = _geosotgrid,
 	RIGHTARG = _geosotgrid,
-	PROCEDURE = gridarray_overlap,
+	PROCEDURE = gridarray_spanoverlap,
 	COMMUTATOR = '&&',
 	RESTRICT = contsel,
 	JOIN = contjoinsel
@@ -168,6 +178,14 @@ CREATE OPERATOR <@ (
 	JOIN = contjoinsel
 );
 
+-- CREATE OPERATOR @@ (
+-- 	LEFTARG = _geosotgrid,
+-- 	RIGHTARG = _geosotgrid,
+-- 	PROCEDURE = gridarray_spanoverlap,
+-- 	RESTRICT = contsel,
+-- 	JOIN = contjoinsel
+-- );
+
 CREATE OPERATOR CLASS gin_grid_ops
 DEFAULT FOR TYPE _geosotgrid USING gin
 AS
@@ -175,11 +193,13 @@ AS
 	OPERATOR	7	@>,
 	OPERATOR	8	<@,
     OPERATOR	18	= (anyarray, anyarray),
-    OPERATOR	19	!= (anyarray, anyarray),
+	OPERATOR	19	!= (anyarray, anyarray),
+    -- OPERATOR	30	@@,
     FUNCTION    1   gridarray_cmp(geosotgrid, geosotgrid),
     FUNCTION	2	gridarray_extractvalue(anyarray, internal, internal),
 	FUNCTION	3	gridarray_extractquery(_geosotgrid, internal, int2, internal, internal, internal, internal),
 	FUNCTION	4	gridarray_consistent(internal, int2, _geosotgrid, int4, internal, internal, internal, internal),
+    FUNCTION	5	gridarray_comparepartial(geosotgrid, geosotgrid, int2, internal),
 	STORAGE 		geosotgrid;
 
 ----------------------------------------geosotgrid function----------------------------------------
@@ -187,6 +207,16 @@ AS
 CREATE OR REPLACE FUNCTION ST_GeoSOTGrid(geom geometry, level int)
 	RETURNS _geosotgrid
 	AS '$libdir/yukon_geogridcoder-1.0' ,'gsg_geosotgrid'
+	LANGUAGE 'c'  IMMUTABLE STRICT PARALLEL SAFE;
+
+CREATE OR REPLACE FUNCTION ST_GeoSOTGridAgg(geom geometry, levelmax int, levelmin int)
+	RETURNS _geosotgrid
+	AS '$libdir/yukon_geogridcoder-1.0' ,'gsg_geosotgridagg'
+	LANGUAGE 'c'  IMMUTABLE STRICT PARALLEL SAFE;
+
+CREATE OR REPLACE FUNCTION ST_GeoSOTGrid(geom geometry)
+	RETURNS geosotgrid
+	AS '$libdir/yukon_geogridcoder-1.0' ,'gsg_mingeosotgrid'
 	LANGUAGE 'c'  IMMUTABLE STRICT PARALLEL SAFE;
 
 CREATE OR REPLACE FUNCTION ST_GeoSOTGridZ(altitude float8, level int)
@@ -232,6 +262,11 @@ CREATE OR REPLACE FUNCTION ST_HasZ(grid geosotgrid)
 CREATE OR REPLACE FUNCTION ST_GetLevel(grid geosotgrid)
 	RETURNS int2
 	AS '$libdir/yukon_geogridcoder-1.0' ,'gsg_get_level'
+	LANGUAGE 'c' IMMUTABLE STRICT PARALLEL SAFE;
+
+CREATE OR REPLACE FUNCTION ST_GetLevelextremum(grids geosotgrid[])
+	RETURNS int2[]
+	AS '$libdir/yukon_geogridcoder-1.0' ,'gsg_get_level_extremum'
 	LANGUAGE 'c' IMMUTABLE STRICT PARALLEL SAFE;
 
 CREATE OR REPLACE FUNCTION ST_Aggregate(grid geosotgrid, level int)

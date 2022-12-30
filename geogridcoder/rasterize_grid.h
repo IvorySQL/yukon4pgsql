@@ -28,7 +28,7 @@ extern "C" {
 }
 
 #include <vector>
-
+#include "geosot.h"
 using std::vector;
 
 struct RawGridData
@@ -61,14 +61,24 @@ struct GridPos
 {
     double x;
     double y;
+    int level = 0;
+    bool operator <(const GridPos &pos)
+    {
+        return GetCode(x, y, level) < GetCode(pos.x, pos.y, pos.level);
+    }
+
+    bool operator ==(const GridPos &pos)
+    {
+        return (x == pos.x && y == pos.y && level == pos.level);
+    }
 };
 
-void GridRasterize(const uint8_t *wkb, uint32_t wkb_len, const char *srs,
-                   const uint32_t level, uint32_t geom_type,vector<GridPos> &results);
+void GridRasterize(const uint8_t *wkb, uint32_t wkb_len, const char *srs, 
+                   uint32_t level, uint32_t geom_type,vector<GridPos> &results, GBOX *src_box = nullptr);
 
 void RawFromGdalDataSet(GDALDatasetH ds, RawGridData &data);
 
-void RegularRasterize(GDALDriverH _drv, OGRGeometryH src_geom, OGREnvelope &src_env,
+void RegularRasterize(GDALDriverH _drv, OGRGeometryH src_geom, OGREnvelope &src_env, rt_envelope subextent,
                       char **options, const int level, LevelFlag level_flag, uint32_t geom_type,
                       vector<GridPos> &grid_record, vector<GridPos> &grid_back);
 

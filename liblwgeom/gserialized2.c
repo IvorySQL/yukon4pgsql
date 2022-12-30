@@ -1712,7 +1712,7 @@ GSERIALIZED* gserialized2_set_gbox(GSERIALIZED *g, GBOX *gbox)
 		fbox[fbox_pos++] = gbox->zmin;
 		fbox[fbox_pos++] = gbox->zmax;
 	}
-	if (gserialized2_has_m(g) && !gserialized2_is_geodetic(g))
+	if(gserialized2_has_m(g) && ! gserialized2_is_geodetic(g))
 	{
 		fbox[fbox_pos++] = gbox->mmin;
 		fbox[fbox_pos++] = gbox->mmax;

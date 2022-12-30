@@ -1224,7 +1224,9 @@ double edge_distance_to_point(const GEOGRAPHIC_EDGE *e, const GEOGRAPHIC_POINT *
 	/* Zero length edge, */
 	if ( geographic_point_equals(&(e->start), &(e->end)) )
 	{
-		*closest = e->start;
+		if (closest)
+			*closest = e->start;
+
 		return sphere_distance(&(e->start), gp);
 	}
 
@@ -1235,7 +1237,7 @@ double edge_distance_to_point(const GEOGRAPHIC_EDGE *e, const GEOGRAPHIC_POINT *
 	vector_difference(&p, &n, &k);
 	normalize(&k);
 	cart2geog(&k, &gk);
-	if ( edge_contains_point(e, &gk) )
+	if ( edge_point_in_cone(e, &gk) )
 	{
 		d1 = sphere_distance(gp, &gk);
 	}

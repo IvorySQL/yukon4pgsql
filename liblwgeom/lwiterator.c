@@ -93,6 +93,8 @@ extract_pointarrays_from_lwgeom(LWGEOM* g)
 		return prepend_node(lwgeom_as_lwtriangle(g)->points, NULL);
 	case CIRCSTRINGTYPE:
 		return prepend_node(lwgeom_as_lwcircstring(g)->points, NULL);
+	case ELLIPSETYPE:
+		return prepend_node(lwgeom_as_lwellipse(g)->data->points, NULL);
 	case POLYGONTYPE:
 	{
 		LISTNODE* n = NULL;

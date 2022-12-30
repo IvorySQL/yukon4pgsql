@@ -126,7 +126,7 @@ double lwcompound_length_2d(const LWCOMPOUND *comp)
 
 int lwcompound_add_lwgeom(LWCOMPOUND *comp, LWGEOM *geom)
 {
-	LWCOLLECTION *col = (LWCOLLECTION*)comp;	
+	LWCOLLECTION *col = (LWCOLLECTION*)comp;
 
 	/* Empty things can't continuously join up with other things */
 	if ( lwgeom_is_empty(geom) )

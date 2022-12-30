@@ -94,7 +94,7 @@ lwellipse_free(LWELLIPSE *e)
 	lwfree(e);
 }
 
-LWGEOM *
+LWLINE *
 lwellipse_get_spatialdata(LWELLIPSE *geom, unsigned int segment)
 {
 	LWLINE *lwgeom = NULL;
@@ -144,7 +144,7 @@ lwellipse_get_spatialdata(LWELLIPSE *geom, unsigned int segment)
 		POINTARRAY *parr = ptarray_construct_copy_data(FLAGS_GET_Z(geom->flags), FLAGS_GET_M(geom->flags), len, (uint8_t *)poarr);
 		lwgeom = lwline_construct(4326, NULL, parr);
 	}
-	return (LWGEOM *)lwgeom;
+	return lwgeom;
 }
 
 bool

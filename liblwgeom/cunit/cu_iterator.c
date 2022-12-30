@@ -39,7 +39,8 @@ char* inputs[] =
 	"CURVEPOLYGON(COMPOUNDCURVE(CIRCULARSTRING(0 0,2 0, 2 1, 2 3, 4 3),(4 3, 4 5, 1 4, 0 0)), LINESTRING (0.1 0.1, 0.3 0.1, 0.3 0.3, 0.1 0.1) )",
 	"MULTISURFACE(CURVEPOLYGON(CIRCULARSTRING(0 0, 4 0, 4 4, 0 4, 0 0),(1 1, 3 3, 3 1, 1 1)),((10 10, 14 12, 11 10, 10 10),(11 11, 11.5 11, 11 11.5, 11 11)))",
 	"POLYHEDRALSURFACE( ((0 0 0, 0 0 1, 0 1 1, 0 1 0, 0 0 0)), ((0 0 0, 0 1 0, 1 1 0, 1 0 0, 0 0 0)), ((0 0 0, 1 0 0, 1 0 1, 0 0 1, 0 0 0)), ((1 1 0, 1 1 1, 1 0 1, 1 0 0, 1 1 0)), ((0 1 0, 0 1 1, 1 1 1, 1 1 0, 0 1 0)), ((0 0 1, 1 0 1, 1 1 1, 0 1 1, 0 0 1)) )",
-	"TIN(((80 130,50 160,80 70,80 130)),((50 160,10 190,10 70,50 160)), ((80 70,50 160,10 70,80 70)),((120 160,120 190,50 160,120 160)), ((120 190,10 190,50 160,120 190)))"
+	"TIN(((80 130,50 160,80 70,80 130)),((50 160,10 190,10 70,50 160)), ((80 70,50 160,10 70,80 70)),((120 160,120 190,50 160,120 160)), ((120 190,10 190,50 160,120 190)))",
+	"ELLIPTICALSTRING(-2 0,2 0,0 0,0,0,0,2,0.5)"
 };
 
 static uint32_t
@@ -73,8 +74,8 @@ test_point_count(void)
 		types_visited[lwgeom_get_type(input)] = LW_TRUE;
 
 		uint32_t itercount = count_points_using_iterator(input);
-
-		CU_ASSERT_EQUAL(lwgeom_count_vertices(input), itercount);
+		uint32_t countvertices = lwgeom_count_vertices(input);
+		CU_ASSERT_EQUAL(countvertices, itercount);
 
 		lwgeom_free(input);
 	}

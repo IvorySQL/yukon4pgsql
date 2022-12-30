@@ -620,8 +620,7 @@ lwcompound_linearize(const LWCOMPOUND *icompound, double tol,
 		else if(geom->type == ELLIPSETYPE)
 		{
 			//convert ellipsearc to linestring
-			LWGEOM *line = lwellipse_get_spatialdata((LWELLIPSE*)geom,72);
-			tmp = (LWLINE*)line;
+			tmp = lwellipse_get_spatialdata((LWELLIPSE*)geom,72);
 			for (j = 0; j < tmp->points->npoints; j++)
 			{
 				getPoint4d_p(tmp->points, j, &p);

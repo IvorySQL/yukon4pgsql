@@ -66,6 +66,14 @@ static char* cu_wkt_in(char *wkt, uint8_t variant)
 	return s;
 }
 
+#include <ctype.h>
+static void cu_strtolower(char* str)
+{
+	size_t i;
+	for (i = 0; i < strlen(str); ++i) {
+		str[i] = tolower(str[i]);
+	}
+}
 
 static void test_wkt_in_point(void)
 {
@@ -94,7 +102,13 @@ static void test_wkt_in_point(void)
 	CU_ASSERT_STRING_EQUAL(r,s);
 	lwfree(r);
 
-	//printf("\nIN:  %s\nOUT: %s\n",s,r);
+	s = "point(nan 10)";
+	r = cu_wkt_in(s, WKT_ISO);
+	cu_strtolower(r);
+	CU_ASSERT_STRING_EQUAL(r,s);
+	lwfree(r);
+
+	// printf("\nIN:  %s\nOUT: %s\n",s,r);
 }
 
 static void test_wkt_in_linestring(void)
@@ -409,8 +423,8 @@ static void test_wkt_leak(void)
 
 static void test_wkt_in_ellipse(void)
 {
-	s = "ELLIPSEARC(POINT(0.238 1.393),POINT(-0.264 -1.405),POINT(0 0),1,0,0.7853,2,0.5)";
-	char *o = "ELLIPSEARC(0.238 1.393 -0.264 -1.405 0 0,1,0,0.7853,2,0.5)";
+	s = "ELLIPTICALSTRING(-2 0,2 0,0 0,0,0,0,2,0.5)";
+	char *o = "ELLIPTICALSTRING(-2 0,2 0,0 0,0,0,0,2,0.5)";
 	r = cu_wkt_in(s, WKT_SFSQL);
 	CU_ASSERT_STRING_EQUAL(r,o);
 	lwfree(r);

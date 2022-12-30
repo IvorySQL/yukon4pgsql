@@ -216,8 +216,8 @@ static void test_wkt_out_multisurface(void)
 static void test_wkt_out_ellipse(void)
 {
 	CU_ASSERT_STRING_EQUAL(
-	    cu_wkt("ELLIPSEARC(Point(0.238 1.393),Point(-0.264 -1.405),Point(0 0),1,0,0.7853,2,0.5)",WKT_ISO),
-	    "ELLIPSEARC(0.238 1.393 -0.264 -1.405 0 0,1,0,0.7853,2,0.5)"
+	    cu_wkt("ELLIPTICALSTRING(-2 0,2 0,0 0,0,0,0,2,0.5)",WKT_ISO),
+	    "ELLIPTICALSTRING(-2 0,2 0,0 0,0,0,0,2,0.5)"
 	);
 }
 

@@ -212,10 +212,10 @@ static void test_wkb_in_multisurface(void) {}
 
 static void test_wkb_in_ellipse(void)
 {
-	cu_wkb_in("ELLIPSEARC(Point(0.238 1.393),Point(-0.264 -1.405),Point(0 0),1,0,0.7853,2,0.5)");
+	cu_wkb_in("ELLIPTICALSTRING(-2 0,2 0,0 0,0,0,0,2,0.5)");
 	CU_ASSERT_STRING_EQUAL(hex_a, hex_b);
 
-	cu_wkb_in("SRID=4;ELLIPSEARC(Point(0.238 1.393),Point(-0.264 -1.405),Point(0 0),1,0,0.7853,2,0.5)");
+	cu_wkb_in("SRID=4;ELLIPTICALSTRING(-2 0,2 0,0 0,0,0,0,2,0.5)");
 	CU_ASSERT_STRING_EQUAL(hex_a, hex_b);
 }
 

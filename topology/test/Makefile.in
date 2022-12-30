@@ -2,7 +2,6 @@ DATABASE=postgis_topo_regress
 
 PSQL=psql
 PERL=@PERL@
-GEOS_NUMERIC_VERSION=@GEOS_NUMERIC_VERSION@
 
 # MingW hack: rather than use PGSQL_BINDIR directly, we change to the directory and
 # then use "pwd" to return the path. This ensures that the returned path is in MSYS
@@ -40,9 +39,8 @@ check-regress: check-regress-deps
 
 check-regress-deps: topo_predicates.sql load_topology.sql load_topology-4326.sql
 
-override RUNTESTFLAGS := $(RUNTESTFLAGS) --topology
-
 topsrcdir = $(realpath ../../)
+srcdir = $(realpath .)
 
 include tests.mk
 include ../../regress/runtest.mk

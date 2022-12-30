@@ -36,6 +36,9 @@ WARNING:  stats for "p.g" do not exist
 #3391.19|0.00|1.00|0.00|1.00
 #3391.20|0.00|1.00|0.00|1.00
 NOTICE:  drop cascades to 2 other objects
+#5120.without_index|LINESTRING(0 0,10 10)
+#5120.with_index|LINESTRING(0 0,10 10)
+#5120.without_data|
 1.a null|
 1.b null|
 2.a null|
@@ -44,5 +47,3 @@ NOTICE:  drop cascades to 2 other objects
 3.b null|
 4.a box|BOX(-100 -100,100 100)
 4.b box|BOX(-200 -200,200 200)
-NOTICE:  PostGIS: Unable to compute statistics for "test.geom1": No non-null/empty features
-NOTICE:  PostGIS: Unable to compute statistics for "test.geom2": No non-null/empty features

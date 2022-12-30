@@ -20,6 +20,13 @@ INTERRUPTTESTS=@INTERRUPTTESTS@
 
 current_dir := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 RUNTESTFLAGS = --sfcgal --extension
+
+RUNTESTFLAGS_INTERNAL += \
+  --before-upgrade-script $(topsrcdir)/regress/hooks/hook-before-upgrade.sql \
+  --after-upgrade-script  $(topsrcdir)/regress/hooks/hook-after-upgrade.sql \
+  --after-create-script   $(topsrcdir)/regress/hooks/hook-after-create.sql \
+  --before-uninstall-script $(topsrcdir)/regress/hooks/hook-before-uninstall.sql
+
 TESTS += \
 	$(topsrcdir)/regress/core/affine \
 	$(topsrcdir)/regress/core/bestsrid \
@@ -33,12 +40,16 @@ TESTS += \
 	$(topsrcdir)/regress/core/curvetoline \
 	$(topsrcdir)/regress/core/dump \
 	$(topsrcdir)/regress/core/dumppoints \
+	$(topsrcdir)/regress/core/dumpsegments \
 	$(topsrcdir)/regress/core/empty \
 	$(topsrcdir)/regress/core/estimatedextent \
 	$(topsrcdir)/regress/core/forcecurve \
+	$(topsrcdir)/regress/core/flatgeobuf \
 	$(topsrcdir)/regress/core/geography \
 	$(topsrcdir)/regress/core/geometric_median \
+  $(topsrcdir)/regress/core/geos_noop \
 	$(topsrcdir)/regress/core/hausdorff \
+	$(topsrcdir)/regress/core/in_flatgeobuf \
 	$(topsrcdir)/regress/core/in_geohash \
 	$(topsrcdir)/regress/core/in_gml \
 	$(topsrcdir)/regress/core/in_kml \
@@ -52,6 +63,7 @@ TESTS += \
 	$(topsrcdir)/regress/core/normalize \
 	$(topsrcdir)/regress/core/operators \
 	$(topsrcdir)/regress/core/orientation \
+	$(topsrcdir)/regress/core/out_flatgeobuf \
 	$(topsrcdir)/regress/core/out_geometry \
 	$(topsrcdir)/regress/core/out_geography \
 	$(topsrcdir)/regress/core/polygonize \
@@ -78,6 +90,7 @@ TESTS += \
 	$(topsrcdir)/regress/core/remove_repeated_points \
 	$(topsrcdir)/regress/core/removepoint \
 	$(topsrcdir)/regress/core/reverse \
+	$(topsrcdir)/regress/core/scroll \
 	$(topsrcdir)/regress/core/setpoint \
 	$(topsrcdir)/regress/core/simplify \
 	$(topsrcdir)/regress/core/simplifyvw \
@@ -121,8 +134,7 @@ TESTS += \
 	$(topsrcdir)/regress/core/oriented_envelope \
 	$(topsrcdir)/regress/core/point_coordinates \
 	$(topsrcdir)/regress/core/out_geojson \
-	$(topsrcdir)/regress/core/geomodel \
-	$(topsrcdir)/regress/core/geosotgrid
+  $(topsrcdir)/regress/core/wrapx
 
 # Slow slow tests
 TESTS_SLOW = \
@@ -134,24 +146,29 @@ ifeq ($(shell expr "$(POSTGIS_PGSQL_VERSION)" ">=" 120),1)
 		$(topsrcdir)/regress/core/computed_columns
 endif
 
-ifeq ($(shell expr "$(POSTGIS_GEOS_VERSION)" ">=" 37),1)
+ifeq ($(shell expr "$(POSTGIS_GEOS_VERSION)" ">=" 30700),1)
 	# GEOS-3.7 adds:
 	# ST_FrechetDistance
 	TESTS += \
 		$(topsrcdir)/regress/core/frechet
 endif
 
-ifeq ($(shell expr "$(POSTGIS_GEOS_VERSION)" ">=" 38),1)
+ifeq ($(shell expr "$(POSTGIS_GEOS_VERSION)" ">=" 30800),1)
 	# GEOS-3.8 adds stable pointonsurface implementation
 	TESTS += \
 		$(topsrcdir)/regress/core/geos38
 endif
 
-ifeq ($(shell expr "$(POSTGIS_GEOS_VERSION)" ">=" 39),1)
-	# GEOS-3.0 adds stable maximuminscribedcircle implementation
+ifeq ($(shell expr "$(POSTGIS_GEOS_VERSION)" ">=" 30900),1)
+	# GEOS-3.9 adds stable maximuminscribedcircle implementation
 	TESTS += \
 		$(topsrcdir)/regress/core/geos39 \
 		$(topsrcdir)/regress/core/fixedoverlay
+endif
+
+ifeq ($(shell expr "$(POSTGIS_GEOS_VERSION)" ">=" 31000),1)
+	TESTS += \
+		$(topsrcdir)/regress/core/geos310
 endif
 
 ifeq ($(INTERRUPTTESTS),yes)
@@ -184,3 +201,6 @@ ifeq (@HAVE_PROTOBUF@,yes)
 		$(topsrcdir)/regress/core/mvt_jsonb \
 		$(topsrcdir)/regress/core/geobuf
 endif
+	TESTS += \
+	$(topsrcdir)/regress/core/geomodel \
+	$(topsrcdir)/regress/core/geosotgrid

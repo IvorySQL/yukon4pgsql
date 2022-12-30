@@ -9,16 +9,6 @@ select '116', ST_length2d('MULTILINESTRING((0 0, 1 1),(0 0, 1 1, 2 2) )'::GEOMET
 select '117', ST_3dlength('MULTILINESTRING((0 0, 1 1),(0 0, 1 1, 2 2) )'::GEOMETRY)::numeric(12,6) as value;
 select '118', ST_3dlength('MULTILINESTRING((0 0 0, 1 1 1),(0 0 0, 1 1 1, 2 2 2) )'::GEOMETRY)::numeric(12,6) as value;
 
-select '119.1', ST_Length('ELLIPSESTRING(0 0,0 0,2 0,0,1,0,2,0.5)'); -- 1 ellipse
-select '119.2', ST_Length('ELLIPSESTRING(0 0,4 0,2 0,0,1,0,2,0.5)'); -- 1/2 ellipse
-select '119.3', ST_Length('ELLIPSESTRING(2 2,4 1,2 1,0,0,0,2,0.5)'); -- 1/4 ellipse
-select '119.4', ST_Length('ELLIPSESTRING(2 2,4 1,2 1,1,0,0,2,0.5)'); -- 3/4 ellipse
-select '119.5', ST_Length('COMPOUNDCURVE(LINESTRING(-4 0, -2 0),ELLIPSESTRING(-2 0,2 0,0 0,0,1,0,2,0.5))');  -- line + ellipsestring
-select '119.6', ST_Length('COMPOUNDCURVE((-4 0, -2 0),ELLIPSESTRING(-2 0,2 0,0 0,0,1,0,2,0.5))');  -- line + ellipse
-select '119.7', ST_Length('COMPOUNDCURVE(CIRCULARSTRING(1 -1,0.2929 -0.7071,0 0),ELLIPSESTRING(0 0,4 0,2 0,0,1,0,2,0.5))'); -- circularstring + ellipsestring
-select '119.8', ST_Length('COMPOUNDCURVE(CIRCULARSTRING(1 -1,0.2929 -0.7071,0 0),ELLIPSESTRING(0 0,4 0,2 0,0,1,0,2,0.5),LINESTRING(4 0,4 8))'); -- circularstring + ellipsestring + linestring
-
-
 select '134', ST_Distance('POINT(1 2)', 'POINT(1 2)');
 select '135', ST_Distance('POINT(5 0)', 'POINT(10 12)');
 
@@ -278,12 +268,6 @@ select 'emptyMultiPointArea', st_area('MULTIPOINT EMPTY');
 -- Area of an empty collection
 select 'emptyCollectionArea', st_area('GEOMETRYCOLLECTION EMPTY');
 
--- Area of an curvepolyton
-select 'curvepolygon', st_areaparam('CURVEPOLYGON(COMPOUNDCURVE(ELLIPSESTRING(-2 0,2 0,0 0,0,0,0,2,0.5 ),(2 0, 0 5,-2 0)))');
-select 'curvepolygon', st_areaparam('CURVEPOLYGON(COMPOUNDCURVE(CIRCULARSTRING(-2 0,0 -2,2 0),(2 0, 0 5,-2 0)))');
-select 'curvepolygon', st_areaparam('CURVEPOLYGON(CIRCULARSTRING(-1 5, 1 5 ,-1 5))');
-select 'curvepolygon', st_areaparam('CURVEPOLYGON(ELLIPSESTRING(12 5, 12 5, 10 5, 0,0,0,2,0.5 ))');
-select 'curvepolygon', st_areaparam('CURVEPOLYGON(COMPOUNDCURVE(CIRCULARSTRING(12 12,14 10,16 12),(16 12,14 17,12 12)))');
 --
 select 'spheroidLength1_deprecated', round(ST_LengthSpheroid('MULTILINESTRING((-118.584 38.374,-118.583 38.5),(-71.05957 42.3589 , -71.061 43))'::geometry,'SPHEROID["GRS_1980",6378137,298.257222101]'::spheroid)::numeric,5);
 select 'spheroidLength1', round(ST_LengthSpheroid('MULTILINESTRING((-118.584 38.374,-118.583 38.5),(-71.05957 42.3589 , -71.061 43))'::geometry,'SPHEROID["GRS_1980",6378137,298.257222101]'::spheroid)::numeric,5);

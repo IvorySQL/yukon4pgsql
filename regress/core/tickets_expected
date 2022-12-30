@@ -30,7 +30,6 @@ ERROR:  Invalid hex string, length (267) has to be a multiple of two!
 #157|ST_Polygon|POLYGON
 #157|ST_CurvePolygon|CURVEPOLYGON
 #157|ST_CircularString|CIRCULARSTRING
-#168|3|MULTIPOLYGON ZM (((4275341.969778511 259186.96699306098 1323.762958283311 -1.797693134862316e+308,4275341.969778511 259186.96699306098 1323.762958283311 -1.797693134862316e+308,4275341.969778511 259186.96699306098 1323.762958283311 -1.797693134862316e+308)))|IllegalArgumentException: Invalid number of points in LinearRing found 3 - must be 0 or >= 4
 #175|SRID=26915;POINT(482020 4984378)
 #178a|0
 #178b|5
@@ -68,7 +67,6 @@ NOTICE:  No points or linestrings in input array
 NOTICE:  Too few points in geometry component at or near point 0 0
 #408.1|f
 #408.2|Too few points in geometry component[0 0]
-NOTICE:  IllegalArgumentException: Invalid number of points in LinearRing found 2 - must be 0 or >= 4
 #408.3|f
 #408.4|IllegalArgumentException: Invalid number of points in LinearRing found 2 - must be 0 or >= 4
 #457.1|POINT(0 0)
@@ -93,7 +91,7 @@ NOTICE:  IllegalArgumentException: Invalid number of points in LinearRing found 
 #835.11|MULTILINESTRING EMPTY
 #835.12|MULTIPOLYGON EMPTY
 #650|MULTIPOINT(0 0,1 1,2 2)
-#667|SRID=4326;CURVEPOLYGON(CIRCULARSTRING(30 40,-50 39.99999999999987,30 40))
+#667|CURVEPOLYGON(CIRCULARSTRING(30 40,-50 40,30 40))
 #677.deprecated|1121395
 #677|1121395
 #680|01d107000000000000000024c000000000000049400000000000000040
@@ -441,9 +439,25 @@ ERROR:  LWGEOM_addpoint: Invalid offset
 #4796|POLYGON((178632 397744,178738 397769,178745 397741,178749 397742,178752 397727,178748 397726,178759 397684,178699 397669,178694 397691,178646 397680,178632 397744))
 #4812|999999
 #4840|0|29|90|149|180|211|270|331
+#4853|0
+#4853|0
+#4853|0
+#4853|0
 #4844|SRID=4326;POINT(19.492 69.79)
-#4853|0
-#4853|0
-#4853|0
-#4853|0
 #4863|t
+#4949|NZ forward|SRID=2193;POINT(1766289 5927325)
+#4949|NZ inverse|SRID=4326;POINT(174.863598 -36.785298)
+#4949|BC forward|SRID=3005;POINT(1286630.44 561883.98)
+#4949|BC inverse|SRID=4269;POINT(-122 50)
+#4949|North Pole LAEA inverse|SRID=4326;POINT(19.4921659 69.7902258)
+#4949|Arctic Stereographic forward|SRID=3413;POINT(2218082.1 -1409150)
+#4949|Antarctic Stereographic forward|SRID=3031;POINT(-2399498.7 3213318.5)
+#4770.a|
+#4770.a|
+#4770.b|POINT(0 0)|300
+#4770.b|POINT(1 1)|302
+#4770.c|POINT(0 0)|300
+#4770.c|MULTIPOINT(0 0,1 1)|602
+#4799|{"type": "Feature", "geometry": {"type":"Point","crs":{"type":"name","properties":{"name":"EPSG:25832"}},"coordinates":[359667,5651729]}, "properties": {"id": 1, "geom1": {"type":"Point","crs":{"type":"name","properties":{"name":"EPSG:3035"}},"coordinates":[4110471,3103061]}}}
+#5008|f|f
+ERROR:  Line has no points

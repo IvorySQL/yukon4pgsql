@@ -109,12 +109,6 @@ FROM ( VALUES
 	( ST_LineToCurve(ST_Boundary(ST_Buffer(ST_Point(1,2), 3))) )
 	) AS v(g);
 
--- #168 --
-SELECT '#168', ST_NPoints(g), ST_AsText(g), ST_isValidReason(g)
-FROM ( VALUES
-('01060000C00100000001030000C00100000003000000E3D9107E234F5041A3DB66BC97A30F4122ACEF440DAF9440FFFFFFFFFFFFEFFFE3D9107E234F5041A3DB66BC97A30F4122ACEF440DAF9440FFFFFFFFFFFFEFFFE3D9107E234F5041A3DB66BC97A30F4122ACEF440DAF9440FFFFFFFFFFFFEFFF'::geometry)
-) AS v(g);
-
 -- #175 --
 SELECT '#175', ST_AsEWKT(ST_GeomFromEWKT('SRID=26915;POINT(482020 4984378.)'));
 
@@ -309,7 +303,7 @@ SELECT '#650', ST_AsText(ST_Collect(ARRAY[ST_MakePoint(0,0), ST_MakePoint(1,1), 
 --SELECT '#662', ST_MakePolygon(ST_AddPoint(ST_AddPoint(ST_MakeLine(ST_SetSRID(ST_MakePointM(i+m,j,m),4326),ST_SetSRID(ST_MakePointM(j+m,i-m,m),4326)),ST_SetSRID(ST_MakePointM(i,j,m),4326)),ST_SetSRID(ST_MakePointM(i+m,j,m),4326))) As the_geom FROM generate_series(-10,50,20) As i CROSS JOIN generate_series(50,70, 20) As j CROSS JOIN generate_series(1,2) As m ORDER BY i, j, m, i*j*m LIMIT 1;
 
 -- #667 --
-SELECT '#667', ST_AsEWKT(ST_LineToCurve(ST_Buffer(ST_SetSRID(ST_Point(i,j),4326), j))) As the_geom FROM generate_series(-10,50,10) As i CROSS JOIN generate_series(40,70, 20) As j ORDER BY i, j, i*j LIMIT 1;
+SELECT '#667', ST_AsText( ST_LineToCurve(ST_Buffer(ST_SetSRID(ST_Point(i,j),4326), j)), 4 ) As the_geom FROM generate_series(-10,50,10) As i CROSS JOIN generate_series(40,70, 20) As j ORDER BY i, j, i*j LIMIT 1;
 
 -- #677 --
 SELECT '#677.deprecated',round(ST_DistanceSpheroid(ST_GeomFromEWKT('MULTIPOLYGON(((-10 40,-10 55,-10 70,5 40,-10 40)))'), ST_GeomFromEWKT('MULTIPOINT(20 40,20 55,20 70,35 40,35 55,35 70,50 40,50 55,50 70)'), 'SPHEROID["GRS_1980",6378137,298.257222101]')) As result;
@@ -594,15 +588,15 @@ select '#1580.1', ST_Summary(ST_Transform('SRID=4326;POINT(0 0)'::geometry, 3395
 
 do $$
 declare
-proj_version integer;       
+proj_version integer;
 err_str text;
 begin
 
     select ((regexp_matches(postgis_proj_version(), '(\d+)\.\d+'))[1])::integer into proj_version;
     select ST_Transform('SRID=4326;POINT(180 95)'::geometry, 3395); -- fails
 
-exception 
-when others then 
+exception
+when others then
     err_str := SQLERRM;
     if proj_version >= 8 and SQLERRM = 'transform: Invalid coordinate (2049)' then
         raise notice '#1580.2: Caught a PROJ error';
@@ -611,8 +605,8 @@ when others then
     else
     	raise notice '#1580.2: Unexpected PROJ Result. Proj version = %. Error string: %', proj_version, err_str;
     end if;
-    
-end; 
+
+end;
 $$ language 'plpgsql';
 
 select '#1580.3', ST_Summary(ST_Transform('SRID=4326;POINT(0 0)'::geometry, 3395));
@@ -1363,9 +1357,9 @@ FROM (SELECT
 'POINT(4 55)'::geography AS W,
 'POINT(4 56)'::geography AS NW ) points;
 
-SELECT '#4844', ST_AsEWKT(ST_SnapToGrid(ST_Transform('SRID=3575;POINT(370182.35945313 -2213980.8213281)'::geometry,4326),0.001));
-
 SELECT '#4853', ST_ClusterDBSCAN(geom,  eps := 0.000906495804256269, minpoints := 4) OVER() AS cid FROM (VALUES ('0101000020E6100000E4141DC9E5934B40D235936FB6193940'::geometry), ('0101000020E6100000C746205ED7934B40191C25AFCE193940'::geometry), ('0101000020E6100000C780ECF5EE934B40B6BE4868CB193940'::geometry), ('0101000020E6100000ABB2EF8AE0934B404451A04FE4193940'::geometry)) AS t(geom);
+
+SELECT '#4844', ST_AsEWKT(ST_SnapToGrid(ST_Transform('SRID=3575;POINT(370182.35945313 -2213980.8213281)'::geometry,4326),0.001));
 
 SELECT '#4863', st_contains(geometry, st_scale(st_orientedenvelope(geometry),
  'SRID=3857; POINT(0.8 0.8)', st_centroid(geometry))) from (select
@@ -1373,3 +1367,71 @@ SELECT '#4863', st_contains(geometry, st_scale(st_orientedenvelope(geometry),
  6755733.56891884,-141934.403428904 6755716.1146343,-141971.698204552
  6755713.77835553,-141972.789895508 6755731.24770785))'::geometry as
  geometry) x;
+
+-- New Zealand forward -- SRID=2193;POINT(1766289 5927325)
+SELECT '#4949', 'NZ forward', ST_AsEWKT(ST_SnapToGrid(ST_Transform(
+  'SRID=4326;POINT(174.863597538742 -36.785298415230315)'::geometry, 2193),0.1));
+--- New Zealand inverse (opposite EPSG order) -- SRID=4326;POINT(174.863598 -36.785298)
+SELECT '#4949', 'NZ inverse', ST_AsEWKT(ST_SnapToGrid(ST_Transform(
+  'SRID=2193;POINT(1766289 5927325)'::geometry, 4326),0.000001));
+-- British Columbia forward (respect EPSG order) -- SRID=3005;POINT(1286630.44 561883.98)
+SELECT '#4949', 'BC forward', ST_AsEWKT(ST_SnapToGrid(ST_Transform(
+  'SRID=4269;POINT(-122 50)'::geometry, 3005),0.01));
+-- British Columbia inverse (respect EPSG order) -- SRID=4269;POINT(-122 50)
+SELECT '#4949', 'BC inverse', ST_AsEWKT(ST_SnapToGrid(ST_Transform(
+  'SRID=3005;POINT(1286630.44 561883.98)'::geometry, 4269),0.000001));
+--  North Pole LAEA Europe inverse -- SRID=4326;POINT(19.4921659 69.7902258)
+SELECT '#4949', 'North Pole LAEA inverse', ST_AsEWKT(ST_SnapToGrid(ST_Transform(
+  'SRID=3575;POINT(370182 -2213980)'::geometry,4326),0.0000001));
+-- Polar Stereographic forward -- SRID=3413;POINT(2218082.1 -1409150)
+SELECT '#4949', 'Arctic Stereographic forward', ST_AsEWKT(ST_SnapToGrid(ST_Transform(
+  'SRID=4326;POINT(12.572160  66.081084)'::geometry,3413),0.1));
+-- Antarctic Polar Stereographic -- SRID=3031;POINT(-2399498.7 3213318.5)
+SELECT '#4949', 'Antarctic Stereographic forward', ST_AsEWKT(ST_SnapToGrid(ST_Transform(
+  'SRID=4326;POINT(-36.75 -54.25)'::geometry, 3031),0.1));
+
+-- #4916, #4770, #4724, #4916, #4940
+SELECT '#4770.a',
+ ST_Union(NULL::geometry) OVER (ORDER BY b)
+FROM (VALUES ('A0006', 300),
+	         ('A0006', 302)) t(a, b);
+
+WITH w AS (
+  SELECT
+    ST_Union(g) OVER (PARTITION BY b ORDER BY a) AS g,
+    Sum(b) OVER (PARTITION BY b ORDER BY a) AS s
+  FROM (VALUES ('POINT(0 0)'::geometry, 'A0006', 300),
+  	           ('POINT(1 1)'::geometry, 'A0006', 302)) t(g, a, b)
+)
+SELECT '#4770.b', ST_AsText(g), s FROM w;
+
+WITH w AS (
+  SELECT
+    ST_Union(g) OVER (PARTITION BY a ORDER BY b) AS g,
+    Sum(b) OVER (PARTITION BY a ORDER BY b) AS s
+  FROM (VALUES ('POINT(0 0)'::geometry, 'A0006', 300),
+  	           ('POINT(1 1)'::geometry, 'A0006', 302)) t(g, a, b)
+)
+SELECT '#4770.c', ST_AsText(g), s FROM w;
+
+-- https://trac.osgeo.org/postgis/ticket/4799
+SELECT
+    '#4799', ST_AsGeoJSON(data.*, geom_column => 'geom2', maxdecimaldigits => 3)
+FROM
+    (SELECT
+        1 AS id,
+        ST_SnapToGrid(ST_Transform(geom, 3035), 1) geom1,
+        ST_SnapToGrid(ST_Transform(geom, 25832), 1) geom2
+    FROM
+        ST_SetSRID(ST_MakePoint(7, 51), 4326) geom
+    ) data;
+
+
+-- https://trac.osgeo.org/postgis/ticket/5008
+SELECT
+	'#5008',
+	ST_DWithin('POINT EMPTY', 'POINT(0 0)', 'Inf'),
+	ST_DWithin('POINT(1 1)', 'POLYGON EMPTY', 'Inf');
+
+-- https://trac.osgeo.org/postgis/ticket/5151
+SELECT '#5151', ST_SetPoint(ST_GeomFromText('LINESTRING EMPTY',4326), 1, ST_GeomFromText('POINT(40 50)',4326)) As result;

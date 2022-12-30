@@ -39,15 +39,13 @@ DATA_built = \
 # Scripts making up the extension file
 # NOTE: order matters
 EXTENSION_SCRIPTS = \
-	sql/rtpostgis.sql \
-	sql/raster_comments.sql
+	sql/rtpostgis.sql 
 
 # Scripts making up the extension minor upgrade file
 # NOTE: order matters
 EXTENSION_UPGRADE_SCRIPTS = \
 	../postgis_extension_helper.sql \
 	sql/rtpostgis_upgrade.sql \
-	../../doc/raster_comments.sql \
 	../postgis_extension_helper_uninstall.sql
 
 # Scripts making up the extension upgrade-from-unpackaged file
@@ -92,7 +90,7 @@ unpackaged_check.sql: unpackaged_check.sql.in Makefile
 sql/rtpostgis.sql: sql/rtpostgis_for_extension.sql | sql
 	$(PERL) -pe 's/BEGIN\;//g ; s/COMMIT\;//g' $< > $@
 
-sql/rtpostgis_for_extension.sql: ../../raster/rt_pg/rtpostgis.sql.in | sql
+sql/rtpostgis_for_extension.sql: ../../raster/rt_pg/rtpostgis.sql.in ../../postgis_revision.h | sql
 	$(SQLPP) -I../../postgis/ -I../../ $< | grep -v '^#' | \
 	$(PERL) -lpe "s'MODULE_PATHNAME'\$(MODULEPATH)'g" > $@
 

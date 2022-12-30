@@ -18,11 +18,9 @@
  *
  **********************************************************************
  *
- * Copyright (C) 2016-2017 Björn Harrtell <bjorn@wololo.org>
+ * Copyright (C) 2021 Björn Harrtell <bjorn@wololo.org>
  *
  **********************************************************************/
-
-#include "geobuf.h"
 
 /**
  * @file
@@ -37,75 +35,62 @@
 #include "lwgeom_pg.h"
 #include "lwgeom_log.h"
 #include "liblwgeom.h"
-#include "geobuf.h"
+#include "flatgeobuf.h"
 
 /**
  * Process input parameters and row data into state
  */
-PG_FUNCTION_INFO_V1(pgis_asgeobuf_transfn);
-Datum pgis_asgeobuf_transfn(PG_FUNCTION_ARGS)
+PG_FUNCTION_INFO_V1(pgis_asflatgeobuf_transfn);
+Datum pgis_asflatgeobuf_transfn(PG_FUNCTION_ARGS)
 {
-#if !(defined HAVE_LIBPROTOBUF)
-	elog(ERROR, "ST_AsGeobuf: Compiled without protobuf-c support");
-	PG_RETURN_NULL();
-#else
 	MemoryContext aggcontext, oldcontext;
-	struct geobuf_agg_context *ctx;
+	char *geom_name = NULL;
+	bool create_index = false;
+	flatgeobuf_agg_ctx *ctx;
+
+	POSTGIS_DEBUG(2, "calling pgis_asflatgeobuf_transfn");
 
 	/* We need to initialize the internal cache to access it later via postgis_oid() */
 	postgis_initialize_cache();
 
 	if (!AggCheckCallContext(fcinfo, &aggcontext))
-		elog(ERROR, "pgis_asgeobuf_transfn: called in non-aggregate context");
+		elog(ERROR, "pgis_asflatgeobuf_transfn: called in non-aggregate context");
 	oldcontext = MemoryContextSwitchTo(aggcontext);
 
 	if (PG_ARGISNULL(0)) {
-		ctx = palloc(sizeof(*ctx));
-
-		ctx->geom_name = NULL;
 		if (PG_NARGS() > 2 && !PG_ARGISNULL(2))
-			ctx->geom_name = text_to_cstring(PG_GETARG_TEXT_P(2));
-		geobuf_agg_init_context(ctx);
+			create_index = PG_GETARG_BOOL(2);
+		if (PG_NARGS() > 3 && !PG_ARGISNULL(3))
+			geom_name = text_to_cstring(PG_GETARG_TEXT_P(3));
+		ctx = flatgeobuf_agg_ctx_init(geom_name, create_index);
 	} else {
-		ctx = (struct geobuf_agg_context *) PG_GETARG_POINTER(0);
+		ctx = (flatgeobuf_agg_ctx *) PG_GETARG_POINTER(0);
 	}
 
 	if (!type_is_rowtype(get_fn_expr_argtype(fcinfo->flinfo, 1)))
-		elog(ERROR, "pgis_asgeobuf_transfn: parameter row cannot be other than a rowtype");
-
-	/* Null input tuple => null result */
-	if (PG_ARGISNULL(1)) {
-		PG_RETURN_NULL();
-	}
-
+		elog(ERROR, "pgis_asflatgeobuf_transfn: parameter row cannot be other than a rowtype");
 	ctx->row = PG_GETARG_HEAPTUPLEHEADER(1);
 
-	geobuf_agg_transfn(ctx);
+	flatgeobuf_agg_transfn(ctx);
 	MemoryContextSwitchTo(oldcontext);
 	PG_RETURN_POINTER(ctx);
-#endif
 }
 
 /**
- * Encode final state to Geobuf
+ * Encode final state to FlatGeobuf
  */
-PG_FUNCTION_INFO_V1(pgis_asgeobuf_finalfn);
-Datum pgis_asgeobuf_finalfn(PG_FUNCTION_ARGS)
+PG_FUNCTION_INFO_V1(pgis_asflatgeobuf_finalfn);
+Datum pgis_asflatgeobuf_finalfn(PG_FUNCTION_ARGS)
 {
-#if !(defined HAVE_LIBPROTOBUF)
-	elog(ERROR, "ST_AsGeobuf: Compiled without protobuf-c support");
-	PG_RETURN_NULL();
-#else
 	uint8_t *buf;
-	struct geobuf_agg_context *ctx;
+	flatgeobuf_agg_ctx *ctx;
 	if (!AggCheckCallContext(fcinfo, NULL))
-		elog(ERROR, "pgis_asmvt_finalfn called in non-aggregate context");
+		elog(ERROR, "pgis_asflatgeobuf_finalfn called in non-aggregate context");
 
 	if (PG_ARGISNULL(0))
 		PG_RETURN_NULL();
 
-	ctx = (struct geobuf_agg_context *) PG_GETARG_POINTER(0);
-	buf = geobuf_agg_finalfn(ctx);
+	ctx = (flatgeobuf_agg_ctx *) PG_GETARG_POINTER(0);
+	buf = flatgeobuf_agg_finalfn(ctx);
 	PG_RETURN_BYTEA_P(buf);
-#endif
 }

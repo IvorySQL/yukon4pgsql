@@ -417,7 +417,6 @@ Datum postgis_index_supportfn(PG_FUNCTION_ARGS)
 					* The comparison expression has to be a pseudo constant,
 					* (not volatile or dependent on the target index table)
 					*/
-
 #if POSTGIS_PGSQL_VERSION >= 140
 					if (!is_pseudo_constant_for_index(req->root, (Node*)expandexpr, req->index))
 #else
@@ -450,7 +449,6 @@ Datum postgis_index_supportfn(PG_FUNCTION_ARGS)
 #else
 					if (!is_pseudo_constant_for_index(rightarg, req->index))
 #endif
-
 						PG_RETURN_POINTER((Node*)NULL);
 
 					/*

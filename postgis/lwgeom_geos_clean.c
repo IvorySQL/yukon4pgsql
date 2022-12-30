@@ -26,6 +26,7 @@
 #include "postgres.h"
 #include "fmgr.h"
 #include "funcapi.h"
+#include "utils/builtins.h"
 
 
 #include "../postgis_config.h"
@@ -48,8 +49,6 @@ Datum ST_MakeValid(PG_FUNCTION_ARGS)
 	in = PG_GETARG_GSERIALIZED_P_COPY(0);
 	lwgeom_in = lwgeom_from_gserialized(in);
 
-	POSTGIS_DEBUG(1, "ST_MakeValid enter");
-
 	switch ( lwgeom_in->type )
 	{
 	case POINTTYPE:
@@ -68,7 +67,14 @@ Datum ST_MakeValid(PG_FUNCTION_ARGS)
 		break;
 	}
 
-	lwgeom_out = lwgeom_make_valid(lwgeom_in);
+	if(PG_NARGS() > 1 && ! PG_ARGISNULL(1)) {
+		char *make_valid_params_str = text_to_cstring(PG_GETARG_TEXT_P(1));
+		lwgeom_out = lwgeom_make_valid_params(lwgeom_in, make_valid_params_str);
+	}
+	else {
+		lwgeom_out = lwgeom_make_valid(lwgeom_in);
+	}
+
 	if ( ! lwgeom_out )
 	{
 		PG_FREE_IF_COPY(in, 0);
@@ -76,6 +82,10 @@ Datum ST_MakeValid(PG_FUNCTION_ARGS)
 	}
 
 	out = geometry_serialize(lwgeom_out);
+	if ( lwgeom_out != lwgeom_in ) {
+		lwgeom_free(lwgeom_out);
+	}
+	PG_FREE_IF_COPY(in, 0);
 
 	PG_RETURN_POINTER(out);
 }

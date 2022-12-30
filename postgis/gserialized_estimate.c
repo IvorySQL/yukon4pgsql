@@ -1537,12 +1537,16 @@ compute_gserialized_stats_mode(VacAttrStats *stats, AnalyzeAttrFetchFunc fetchfu
 	/* If there's no useful features, we can't work out stats */
 	if ( ! notnull_cnt )
 	{
+#if POSTGIS_DEBUG_LEVEL > 0
 		Oid relation_oid = stats->attr->attrelid;
 		char *relation_name = get_rel_name(relation_oid);
-		elog(NOTICE,
-		     "PostGIS: Unable to compute statistics for \"%s.%s\": No non-null/empty features",
+		char *namespace = get_namespace_name(get_rel_namespace(relation_oid));
+		elog(DEBUG1,
+		     "PostGIS: Unable to compute statistics for \"%s.%s.%s\": No non-null/empty features",
+		     namespace ? namespace : "(NULL)",
 		     relation_name ? relation_name : "(NULL)",
 		     stats->attr->attname.data);
+#endif /* POSTGIS_DEBUG_LEVEL > 0 */
 		stats->stats_valid = false;
 		return;
 	}
@@ -2240,6 +2244,7 @@ gserialized_sel_internal(PlannerInfo *root, List *args, int varRelid, int mode)
 
 	GBOX search_box;
 	float8 selectivity = 0;
+	Const *otherConst;
 
 	POSTGIS_DEBUGF(2, "%s: entered function", __func__);
 
@@ -2256,7 +2261,15 @@ gserialized_sel_internal(PlannerInfo *root, List *args, int varRelid, int mode)
 		return DEFAULT_ND_SEL;
 	}
 
-	if (!gserialized_datum_get_gbox_p(((Const*)other)->constvalue, &search_box))
+	otherConst = (Const*)other;
+	if ((!otherConst) || otherConst->constisnull)
+	{
+		ReleaseVariableStats(vardata);
+		POSTGIS_DEBUGF(2, "%s: constant argument is NULL", __func__);
+		return DEFAULT_ND_SEL;
+	}
+
+	if (!gserialized_datum_get_gbox_p(otherConst->constvalue, &search_box))
 	{
 		ReleaseVariableStats(vardata);
 		POSTGIS_DEBUGF(2, "%s: search box is EMPTY", __func__);
@@ -2303,7 +2316,7 @@ Datum gserialized_estimated_extent(PG_FUNCTION_ARGS)
 	char *tbl = NULL;
 	text *col = NULL;
 	char *nsp_tbl = NULL;
-	Oid tbl_oid, idx_oid;
+	Oid tbl_oid, idx_oid = 0;
 	ND_STATS *nd_stats;
 	GBOX *gbox = NULL;
 	bool only_parent = false;
@@ -2348,17 +2361,23 @@ Datum gserialized_estimated_extent(PG_FUNCTION_ARGS)
 		PG_RETURN_NULL();
 	}
 
-#if 1
 	/* Read the extent from the head of the spatial index, if there is one */
+#if 1
 	idx_oid = table_get_spatial_index(tbl_oid, col, &key_type);
-	if (!idx_oid)
-		POSTGIS_DEBUGF(2, "index for \"%s.%s\" does not exist", tbl, text_to_cstring(col));
-	gbox = spatial_index_read_extent(idx_oid, key_type);
 #endif
-
-	/* Fall back to reading the stats, if no index answer */
-	if (!gbox)
+	if (idx_oid)
 	{
+		/* TODO: how about only_parent ? */
+		gbox = spatial_index_read_extent(idx_oid, key_type);
+		POSTGIS_DEBUGF(2, "index for \"%s.%s\" exists, reading gbox from there", tbl, text_to_cstring(col));
+		if ( ! gbox ) PG_RETURN_NULL();
+	}
+	else
+	{
+		POSTGIS_DEBUGF(2, "index for \"%s.%s\" does not exist", tbl, text_to_cstring(col));
+
+		/* Fall back to reading the stats, if no index is found */
+
 		/* Estimated extent only returns 2D bounds, so use mode 2 */
 		nd_stats = pg_get_nd_stats_by_name(tbl_oid, col, 2, only_parent);
 
@@ -2575,6 +2594,9 @@ Datum _postgis_gserialized_index_extent(PG_FUNCTION_ARGS)
 	Oid tbl_oid = PG_GETARG_DATUM(0);
 	text *col = PG_GETARG_TEXT_P(1);
 	Oid idx_oid;
+
+	if(!tbl_oid)
+		PG_RETURN_NULL();
 
 	/* We need to initialize the internal cache to access it later via postgis_oid() */
 	postgis_initialize_cache();

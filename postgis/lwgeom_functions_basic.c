@@ -118,7 +118,12 @@ Datum ST_CollectionHomogenize(PG_FUNCTION_ARGS);
 Datum ST_IsCollection(PG_FUNCTION_ARGS);
 Datum ST_QuantizeCoordinates(PG_FUNCTION_ARGS);
 Datum ST_WrapX(PG_FUNCTION_ARGS);
+Datum ST_Scroll(PG_FUNCTION_ARGS);
 Datum LWGEOM_FilterByM(PG_FUNCTION_ARGS);
+Datum ST_Point(PG_FUNCTION_ARGS);
+Datum ST_PointZ(PG_FUNCTION_ARGS);
+Datum ST_PointM(PG_FUNCTION_ARGS);
+Datum ST_PointZM(PG_FUNCTION_ARGS);
 
 /*------------------------------------------------------------------*/
 
@@ -288,6 +293,9 @@ Datum ST_AreaParam(PG_FUNCTION_ARGS)
 	GSERIALIZED *geom = PG_GETARG_GSERIALIZED_P(0);
 	LWGEOM *lwgeom = lwgeom_from_gserialized(geom);
 	double area = 0.0;
+	LWCURVEPOLY *curvepoly = NULL;
+	LWGEOM *tmp = NULL;
+	POINT2D pntAnchar = {0, 0};
 
 	if (lwgeom->type != CURVEPOLYTYPE)
 	{
@@ -301,9 +309,9 @@ Datum ST_AreaParam(PG_FUNCTION_ARGS)
 		lwgeom_free(lwgeom);
 		return 0.0;
 	}
-	LWCURVEPOLY *curvepoly = (LWCURVEPOLY *)lwgeom;
-	LWGEOM *tmp;
-	POINT2D pntAnchar = {0, 0};
+	curvepoly = (LWCURVEPOLY *)lwgeom;
+	
+	
 	for (uint32_t i = 0; i < curvepoly->nrings; i++)
 	{
 		tmp = curvepoly->rings[i];
@@ -356,7 +364,7 @@ Datum ST_AreaParam(PG_FUNCTION_ARGS)
 		else
 		{
 			lwerror("Invalid ring type found in CurvePoly.");
-			return NULL;
+			PG_RETURN_NULL();
 		}
 	}
 
@@ -822,6 +830,11 @@ Datum LWGEOM_dwithin(PG_FUNCTION_ARGS)
 
 	gserialized_error_if_srid_mismatch(geom1, geom2, __func__);
 
+	if (lwgeom_is_empty(lwgeom1) || lwgeom_is_empty(lwgeom2))
+	{
+		PG_RETURN_BOOL(false);
+	}
+
 	mindist = lwgeom_mindistance2d_tolerance(lwgeom1, lwgeom2, tolerance);
 
 	PG_FREE_IF_COPY(geom1, 0);
@@ -1182,6 +1195,57 @@ Datum ST_WrapX(PG_FUNCTION_ARGS)
 	PG_FREE_IF_COPY(geom_in, 0);
 
 	PG_RETURN_POINTER(geom_out);
+}
+
+PG_FUNCTION_INFO_V1(ST_Scroll);
+Datum ST_Scroll(PG_FUNCTION_ARGS)
+{
+	Datum datum_line, datum_point;
+	GSERIALIZED *ser_line, *ser_point;
+	LWGEOM *lwgeom_line, *lwgeom_point;
+	LWLINE *line;
+	LWPOINT *point;
+	POINT4D p;
+	GSERIALIZED *ser_out;
+	int rv;
+
+	POSTGIS_DEBUG(2, "ST_Scroll called.");
+
+	datum_line = PG_GETARG_DATUM(0);
+	datum_point = PG_GETARG_DATUM(1);
+
+	ser_line = ((GSERIALIZED *)PG_DETOAST_DATUM(datum_line));
+	lwgeom_line = lwgeom_from_gserialized(ser_line);
+	line = lwgeom_as_lwline(lwgeom_line);
+	if ( ! line ) {
+		lwpgerror("First argument must be a line");
+		PG_RETURN_NULL();
+	}
+
+	ser_point = ((GSERIALIZED *)PG_DETOAST_DATUM(datum_point));
+	lwgeom_point = lwgeom_from_gserialized(ser_point);
+	point = lwgeom_as_lwpoint(lwgeom_point);
+	if ( ! point ) {
+		lwpgerror("Second argument must be a point");
+		PG_RETURN_NULL();
+	}
+	if ( ! lwpoint_getPoint4d_p(point, &p) ) {
+		lwpgerror("Second argument must be a non-empty point");
+		PG_RETURN_NULL();
+	}
+
+	rv = ptarray_scroll_in_place(line->points, &p);
+	if ( LW_FAILURE == rv ) {
+		PG_RETURN_NULL();
+	}
+
+	ser_out = geometry_serialize(lwgeom_line);
+
+	lwgeom_free(lwgeom_point);
+	PG_FREE_IF_COPY(ser_line, 0);
+	PG_FREE_IF_COPY(ser_point, 0);
+
+	PG_RETURN_POINTER(ser_out);
 }
 
 PG_FUNCTION_INFO_V1(LWGEOM_inside_circle_point);
@@ -2255,6 +2319,55 @@ Datum LWGEOM_makepoint(PG_FUNCTION_ARGS)
 	PG_RETURN_POINTER(result);
 }
 
+PG_FUNCTION_INFO_V1(ST_Point);
+Datum ST_Point(PG_FUNCTION_ARGS)
+{
+	double x = PG_GETARG_FLOAT8(0);
+	double y = PG_GETARG_FLOAT8(1);
+	int srid = PG_GETARG_INT32(2);
+	LWPOINT *point = lwpoint_make2d(srid, x, y);
+	GSERIALIZED *result = geometry_serialize((LWGEOM *)point);
+	PG_RETURN_POINTER(result);
+}
+
+PG_FUNCTION_INFO_V1(ST_PointZ);
+Datum ST_PointZ(PG_FUNCTION_ARGS)
+{
+	double x = PG_GETARG_FLOAT8(0);
+	double y = PG_GETARG_FLOAT8(1);
+	double z = PG_GETARG_FLOAT8(2);
+	int srid = PG_GETARG_INT32(3);
+	LWPOINT *point = lwpoint_make3dz(srid, x, y, z);
+	GSERIALIZED *result = geometry_serialize((LWGEOM *)point);
+	PG_RETURN_POINTER(result);
+}
+
+PG_FUNCTION_INFO_V1(ST_PointM);
+Datum ST_PointM(PG_FUNCTION_ARGS)
+{
+	double x = PG_GETARG_FLOAT8(0);
+	double y = PG_GETARG_FLOAT8(1);
+	double m = PG_GETARG_FLOAT8(2);
+	int srid = PG_GETARG_INT32(3);
+	LWPOINT *point = lwpoint_make3dm(srid, x, y, m);
+	GSERIALIZED *result = geometry_serialize((LWGEOM *)point);
+	PG_RETURN_POINTER(result);
+}
+
+PG_FUNCTION_INFO_V1(ST_PointZM);
+Datum ST_PointZM(PG_FUNCTION_ARGS)
+{
+	double x = PG_GETARG_FLOAT8(0);
+	double y = PG_GETARG_FLOAT8(1);
+	double z = PG_GETARG_FLOAT8(2);
+	double m = PG_GETARG_FLOAT8(3);
+	int srid = PG_GETARG_INT32(4);
+	LWPOINT *point = lwpoint_make4d(srid, x, y, z, m);
+	GSERIALIZED *result = geometry_serialize((LWGEOM *)point);
+	PG_RETURN_POINTER(result);
+}
+
+
 PG_FUNCTION_INFO_V1(LWGEOM_makepoint3dm);
 Datum LWGEOM_makepoint3dm(PG_FUNCTION_ARGS)
 {
@@ -2421,6 +2534,10 @@ Datum LWGEOM_setpoint_linestring(PG_FUNCTION_ARGS)
 	if (!line)
 	{
 		elog(ERROR, "First argument must be a LINESTRING");
+		PG_RETURN_NULL();
+	}
+	if ( line->points->npoints < 1 ) 	{
+		elog(ERROR, "Line has no points");
 		PG_RETURN_NULL();
 	}
 	if (which < 0)
@@ -3259,11 +3376,29 @@ Datum LWGEOM_FilterByM(PG_FUNCTION_ARGS)
 	PG_RETURN_POINTER(geom_out);
 }
 
-
-PG_FUNCTION_INFO_V1(LWGEOM_SupportPO);
-Datum LWGEOM_SupportPO(PG_FUNCTION_ARGS)
+PG_FUNCTION_INFO_V1(boundary);
+Datum boundary(PG_FUNCTION_ARGS)
 {
-	char *t=palloc0(100);
-	memcpy(t,"ELLIPSE",sizeof("ELLIPSE"));
-	PG_RETURN_CSTRING(t);
+	GSERIALIZED *geom1;
+	GSERIALIZED *result;
+	LWGEOM *lwgeom, *lwresult;
+
+	geom1 = PG_GETARG_GSERIALIZED_P(0);
+
+	/* Empty.Boundary() == Empty, but of other dimension, so can't shortcut */
+
+	lwgeom = lwgeom_from_gserialized(geom1);
+	lwresult = lwgeom_boundary(lwgeom);
+	if (!lwresult)
+	{
+		lwgeom_free(lwgeom);
+		PG_RETURN_NULL();
+	}
+
+	result = geometry_serialize(lwresult);
+
+	lwgeom_free(lwgeom);
+	lwgeom_free(lwresult);
+
+	PG_RETURN_POINTER(result);
 }

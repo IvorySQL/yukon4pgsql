@@ -72,8 +72,8 @@ Datum make_geomodelshell(PG_FUNCTION_ARGS);
 #include "gmserialized.h"
 #include "geomodel_util.h"
 
-#define YUKON_VERSION "1.0.0"
-#define YUKON_LIB_VERSION "1.0.0_lib"
+#define YUKON_VERSION "1.0.1(Community Edition)"
+#define YUKON_LIB_VERSION "1.0.1_lib"
 
 using namespace Yk;
 

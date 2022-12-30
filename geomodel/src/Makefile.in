@@ -8,7 +8,7 @@ GIT_REVISION = $(shell git show -s --pretty=format:%h)
 
 EXTENSION = yukon_geomodel        # the extensions name
 MODULE_big=yukon_geomodel-$(GEOMODEL_MAJRO_VERSION).$(GEOMODEL_MINOR_VERSION)
-DATA = yukon_geomodel--1.0.sql  # script files to install
+DATA = yukon_geomodel--1.0.1.sql  yukon_geomodel--1.0--1.0.1.sql # script files to install
 
 GEOMODEL_OBJS= \
     geomodel.o  \

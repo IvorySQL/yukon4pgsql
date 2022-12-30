@@ -1,5 +1,5 @@
 --complain if script is sourced in psql, rather than via CREATE EXTENSION
-\echo Use "CREATE EXTENSION get_sum" to load this file. \quit
+\echo Use "CREATE EXTENSION yukon_geomodel" to load this file. \quit
 
 
 CREATE OR REPLACE FUNCTION geomodel_typmod_srid(integer)
@@ -86,11 +86,11 @@ BEGIN
 			RETURN false;
 		END IF;
 	ELSE
-		RAISE EXCEPTION 'invalid SRID: % can not be a negative', new_srid;
+		new_srid = 0;
 	END IF;
 	
     EXECUTE 'ALTER TABLE ' || quote_ident(real_schema) || '.' || quote_ident(table_name) ||
-        ' ALTER COLUMN ' || quote_ident(column_name) || ' TYPE  geomodel(' || gtype ||',' ||new_srid::text || ')' ;
+        ' ALTER COLUMN ' || quote_ident(column_name) || ' TYPE  geomodel(' || gtype ||',' ||new_srid::text || ') USING ST_SetSRID(' || quote_ident(column_name) || ',' || new_srid::text || ');';
 
 	RETURN real_schema || '.' || table_name || '.' || column_name ||' SRID changed to ' || new_srid::text;
 

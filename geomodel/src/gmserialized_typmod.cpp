@@ -2,7 +2,7 @@
  *
  * gmserialized_typmpd.c
  *
- * Copyright (C) 2021 SuperMap Software Co., Ltd.
+ * Copyright (C)  SuperMap Software Co., Ltd.
  *
  * Yukon is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -231,7 +231,7 @@ gmserialized_typmod_in(ArrayType *arr)
 			(errcode(ERRCODE_NULL_VALUE_NOT_ALLOWED), errmsg("typmod array must not contain nulls")));
 
 	/**
-	 * @brief 函数原型如下，具体的参数，可以通过 select * from pg_type 查看
+	 * @brief 函数原型如下，具体的参数，可以通过 selece * from pg_type 查看
 	 * void deconstruct_array(ArrayType* array, Oid elmtype, int elmlen,
 	 *                              bool elmbyval, char elmalign, Datum** elemsp,
 	 *                              bool** nullsp, int* nelemsp)

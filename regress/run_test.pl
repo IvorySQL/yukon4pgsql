@@ -1493,6 +1493,14 @@ sub prepare_spatial_extensions
         fail "Error encountered creating extension yukon_geogridcoder", $REGRESS_LOG;
         die;
     }
+	
+	$sql = "create extension yukon_vector_pyramid";
+    $cmd = "psql $psql_opts -c \"". $sql . "\" $DB >> $REGRESS_LOG 2>&1";
+    my $rv = system($cmd);
+    if ( $rv ) {
+        fail "Error encountered creating extension yukon_vector_pyramid", $REGRESS_LOG;
+        die;
+    }
 
  	return 1;
 }

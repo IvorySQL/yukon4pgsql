@@ -10,9 +10,8 @@ Yukon（禹贡），基于 PostgreSQL 数据库扩展地理空间数据的存储
 3. postgis_sfcgal：与 PostgreSQL 适配的 PostGIS 三维算法相关模块；
 4. yukon_geomodel：Yukon 的三维模型数据模块；
 5. yukon_geogridcoder：Yukon 的网格编码模块。
+6. yukon_vector_pyramid：Yukon 的矢量金字塔模块。
 
-模块之间的依赖关系如图：
 
-![模块依赖图](doc/html/images/yukon_model_info.png "Yukon模块依赖图.png")
 
 帮助文档参见 [Yukon在线文档](https://yukon.supermap.io/)。

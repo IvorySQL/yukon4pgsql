@@ -143,6 +143,7 @@ lwellipse_get_spatialdata(LWELLIPSE *geom, unsigned int segment)
 		//创建 POINTARRAY
 		POINTARRAY *parr = ptarray_construct_copy_data(FLAGS_GET_Z(geom->flags), FLAGS_GET_M(geom->flags), len, (uint8_t *)poarr);
 		lwgeom = lwline_construct(4326, NULL, parr);
+		free(poarr);
 	}
 	return lwgeom;
 }

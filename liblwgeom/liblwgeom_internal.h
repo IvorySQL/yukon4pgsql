@@ -118,7 +118,7 @@
 #define WKB_TIN_TYPE 16
 #define WKB_TRIANGLE_TYPE 17
 #define WKB_ELLIPSE_TYPE 18
-
+#define WKB_BEZIER_TYPE 19
 
 /**
 * Macro that returns:
@@ -201,6 +201,7 @@ uint32_t lwline_count_vertices(LWLINE *line);
 uint32_t lwpoly_count_vertices(LWPOLY *poly);
 uint32_t lwcollection_count_vertices(LWCOLLECTION *col);
 uint32_t lwellipse_count_vertices(LWELLIPSE *ellipse);
+uint32_t lwbezier_count_vertices(LWBEZIER *bezier);
 
 /*
 * DP simplification
@@ -270,7 +271,9 @@ double lwsector_elliptic_arc_area(const LWELLIPSE* pGeoSub, POINT2D pntAnchar);
  * 参数化对象拟合函数
  * 
  */
-LWLINE* lwellipse_get_spatialdata(LWELLIPSE* ellipse,unsigned int);
+LWLINE* lwellipse_get_spatialdata(LWELLIPSE* ellipse, unsigned int);
+LWLINE* lwbezier_linearize(LWBEZIER * bezier, unsigned int);
+double lwbezier_area(const LWBEZIER *bezier, const POINT2D *pt);
 
 /**
 * Pull a #GBOX from the header of a #GSERIALIZED, if one is available. If
@@ -306,7 +309,7 @@ double lwcurvepoly_perimeter(const LWCURVEPOLY *poly);
 double lwcurvepoly_perimeter_2d(const LWCURVEPOLY *poly);
 double lwtriangle_perimeter(const LWTRIANGLE *triangle);
 double lwtriangle_perimeter_2d(const LWTRIANGLE *triangle);
-
+double lwbezier_length_2d(const LWBEZIER *bezier);
 /*
 * Segmentization
 */
@@ -422,7 +425,7 @@ int lwcompound_is_closed(const LWCOMPOUND *curve);
 int lwpsurface_is_closed(const LWPSURFACE *psurface);
 int lwtin_is_closed(const LWTIN *tin);
 int lwellipse_is_closed(const LWELLIPSE *ellipse);
-
+int lwbezier_is_closed(const LWBEZIER *beizer);
 /**
 * Snap to grid
 */

@@ -203,4 +203,5 @@ ifeq (@HAVE_PROTOBUF@,yes)
 endif
 	TESTS += \
 	$(topsrcdir)/regress/core/geomodel \
-	$(topsrcdir)/regress/core/geosotgrid
+	$(topsrcdir)/regress/core/geosotgrid \
+    $(topsrcdir)/regress/core/vector_pyramid

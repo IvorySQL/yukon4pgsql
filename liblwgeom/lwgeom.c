@@ -1186,6 +1186,9 @@ void lwgeom_free(LWGEOM *lwgeom)
 	case ELLIPSETYPE:
 		lwellipse_free((LWELLIPSE*)lwgeom);
 		break;
+	case BEZIERTYPE:
+		lwbezier_free((LWBEZIER *)lwgeom);
+		break;
 	case CURVEPOLYTYPE:
 	case COMPOUNDTYPE:
 	case MULTICURVETYPE:
@@ -1269,6 +1272,9 @@ uint32_t lwgeom_count_vertices(const LWGEOM *geom)
 		break;
 	case ELLIPSETYPE:
 		result = lwellipse_count_vertices((LWELLIPSE*)geom);
+		break;
+	case BEZIERTYPE:
+		result = lwbezier_count_vertices((LWBEZIER*)geom);
 		break;
 	case COMPOUNDTYPE:
 	case CURVEPOLYTYPE:
@@ -1983,6 +1989,8 @@ double lwgeom_length_2d(const LWGEOM *geom)
 		return lwcircstring_length_2d((LWCIRCSTRING*)geom);
 	else if ( type == COMPOUNDTYPE )
 		return lwcompound_length_2d((LWCOMPOUND*)geom);
+	else if ( type == BEZIERTYPE )
+		return lwbezier_length_2d((LWBEZIER*)geom);
 	else if ( lwgeom_is_collection(geom) )
 	{
 		double length = 0.0;

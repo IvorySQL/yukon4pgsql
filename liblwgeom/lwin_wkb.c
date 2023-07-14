@@ -249,6 +249,9 @@ static void lwtype_from_wkb_state(wkb_parse_state *s, uint32_t wkb_type)
 		case WKB_ELLIPSE_TYPE:
 			s->lwtype = ELLIPSETYPE;
 			break;
+		case WKB_BEZIER_TYPE:
+			s->lwtype = BEZIERTYPE;
+			break;
 
 		default: /* Error! */
 			lwerror("Unknown WKB type (%d)! Full WKB type number was (%d).", wkb_simple_type, wkb_type);
@@ -709,6 +712,34 @@ static LWELLIPSE * lwellipse_from_wkb_state(wkb_parse_state *s)
 	res->flags = res->data->points->flags;
 	return res;
 }
+
+/**
+ * BEZIER
+ */
+static LWBEZIER *
+lwbezier_from_wkb_state(wkb_parse_state *s)
+{
+	LWBEZIER *res;
+
+	/* TODO: 计算合理的数据长度 */
+	// wkb_parse_state_check(s, sizeof(ELLIPSE));
+	if (s->error)
+		return NULL;
+
+	res = lwalloc(sizeof(LWBEZIER));
+	if (res == NULL)
+	{
+		return NULL;
+	}
+	res->type = BEZIERTYPE;
+	res->srid = s->srid;
+	res->bbox = NULL;
+	res->data = lwalloc(sizeof(BEZIER));
+	res->data->points = ptarray_from_wkb_state(s);
+	res->flags = res->data->points->flags;
+	return res;
+}
+
 /**
 * POLYHEDRALSURFACETYPE
 */
@@ -836,6 +867,9 @@ LWGEOM* lwgeom_from_wkb_state(wkb_parse_state *s)
 			break;
 		case ELLIPSETYPE:
 			return (LWGEOM *)lwellipse_from_wkb_state(s);
+			break;
+		case BEZIERTYPE:
+			return (LWGEOM *)lwbezier_from_wkb_state(s);
 			break;
 		case MULTIPOINTTYPE:
 		case MULTILINETYPE:

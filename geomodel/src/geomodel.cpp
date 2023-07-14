@@ -2,7 +2,7 @@
  *
  * geomodel.c
  *
- * Copyright (C) 2021 SuperMap Software Co., Ltd.
+ * Copyright (C)  SuperMap Software Co., Ltd.
  *
  * Yukon is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -72,8 +72,8 @@ Datum make_geomodelshell(PG_FUNCTION_ARGS);
 #include "gmserialized.h"
 #include "geomodel_util.h"
 
-#define YUKON_VERSION "1.0.1(Community Edition)"
-#define YUKON_LIB_VERSION "1.0.1_lib"
+#define YUKON_VERSION "2.0(Community Edition)"
+#define YUKON_LIB_VERSION "2.0_lib"
 
 using namespace Yk;
 
@@ -417,7 +417,17 @@ Datum make_skeleton_from_tin(PG_FUNCTION_ARGS)
 	YkIndexPackage *pIndexData = new YkIndexPackage();
 
 	LWCOLLECTION *col = lwgeom_as_lwcollection(geom);
+	if (col == nullptr)
+	{
+		elog(ERROR, "TIN is not valid!");
+		PG_RETURN_NULL();
+	}
 	LWCOLLECTION *g1 = lwgeom_as_lwcollection(col->geoms[0]);
+	if (g1 == nullptr)
+	{
+		elog(ERROR, "TIN is not valid!");
+		PG_RETURN_NULL();
+	}
 	LWTIN *item = lwgeom_as_lwtin(g1->geoms[0]);
 
 	//数据填充

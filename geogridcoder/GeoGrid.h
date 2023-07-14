@@ -2,7 +2,7 @@
  *
  * GeoGrid.h
  *
- * Copyright (C) 2021 SuperMap Software Co., Ltd.
+ * Copyright (C) 2023 SuperMap Software Co., Ltd.
  *
  * Yukon is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,15 +22,21 @@
 #define GEOGRID_H_
 
 extern "C" {
-#include "../libpgcommon/lwgeom_pg.h"
-#include "../liblwgeom/liblwgeom.h"
 #include "postgres.h"
 #include "fmgr.h"
 #include "rtpostgis.h"
+#include "access/genam.h"
+#include "access/table.h"
+#include "access/htup_details.h"
 #include "utils/array.h"
 #include "utils/syscache.h"
+#include "utils/fmgroids.h"
+#include "utils/regproc.h"
 #include "catalog/pg_type.h"
 #include "catalog/pg_namespace_d.h"
+#include "catalog/pg_extension.h"
+#include "catalog/indexing.h"
+#include "commands/extension.h"
 }
 
 #include <cmath>

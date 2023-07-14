@@ -1012,6 +1012,8 @@ else
 	GEOMODEL_MAKEFILE_LIST=""
 fi
 
+PYRAMID_MAKEFILE_LIST="pyramid/Makefile"
+
 dnl ===========================================================================
 dnl Detect if protobuf-c installed
 dnl ===========================================================================
@@ -1747,7 +1749,8 @@ AC_OUTPUT([GNUmakefile
    $RT_MAKEFILE_LIST
    $GEOGRIDCODER_MAKEFILE_LIST
    $GEOMODEL_MAKEFILE_LIST
-   $DEPS_MAKEFILE_LIST])
+   $DEPS_MAKEFILE_LIST
+   $PYRAMID_MAKEFILE_LIST])
 
 dnl ===========================================================================
 dnl Display the configuration status information

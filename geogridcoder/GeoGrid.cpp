@@ -2,7 +2,7 @@
  *
  * GeoGrid.cpp
  *
- * Copyright (C) 2021 SuperMap Software Co., Ltd.
+ * Copyright (C) 2023 SuperMap Software Co., Ltd.
  *
  * Yukon is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -477,8 +477,36 @@ Datum gsg_geosotgridagg(PG_FUNCTION_ARGS)
 		result_array_data[i] = Datum(val);
 	}
 
-	Oid namespaceId = GetSysCacheOid1(NAMESPACENAME, Anum_pg_namespace_oid, CStringGetDatum("public"));
-	Oid typ_ID = GetSysCacheOid2(TYPENAMENSP, Anum_pg_type_oid, PointerGetDatum("geosotgrid"), ObjectIdGetDatum(namespaceId));
+	SysScanDesc scandesc;
+    HeapTuple   tuple;
+	ScanKeyData entry[1];
+	Oid nsp_oid = InvalidOid;
+	Oid ext_oid = get_extension_oid("yukon_geogridcoder", true);
+	if (ext_oid != InvalidOid)
+	{
+		Relation rel = table_open(ExtensionRelationId, AccessShareLock);
+		ScanKeyInit(&entry[0], Anum_pg_extension_oid, BTEqualStrategyNumber, F_OIDEQ, ObjectIdGetDatum(ext_oid));
+		scandesc = systable_beginscan(rel, ExtensionOidIndexId, true,
+									  NULL, 1, entry);
+		tuple = systable_getnext(scandesc);
+		if (HeapTupleIsValid(tuple))
+			nsp_oid = ((Form_pg_extension)GETSTRUCT(tuple))->extnamespace;
+		else
+			nsp_oid = InvalidOid;
+
+		systable_endscan(scandesc);
+		table_close(rel, AccessShareLock);
+	}
+	else
+	{
+		const char* proname = "gsg_geosotgrid";
+		List* names = stringToQualifiedNameList(proname);
+		FuncCandidateList clist = FuncnameGetCandidates(names, -1, NIL, false, false, false);
+		if (!clist)
+			nsp_oid = InvalidOid;
+		nsp_oid = get_func_namespace(clist->oid);
+	}
+    Oid typ_ID = GetSysCacheOid2(TYPENAMENSP, Anum_pg_type_oid, PointerGetDatum("geosotgrid"), ObjectIdGetDatum(nsp_oid));
 
 	int16 elmlen;
 	bool elmbyval;
@@ -617,8 +645,36 @@ Datum gsg_geosotgrid(PG_FUNCTION_ARGS)
 	}
 	lwgeom_free(geom);
 
-	Oid namespaceId = GetSysCacheOid1(NAMESPACENAME, Anum_pg_namespace_oid, CStringGetDatum("public"));
-	Oid typ_ID = GetSysCacheOid2(TYPENAMENSP, Anum_pg_type_oid, PointerGetDatum("geosotgrid"), ObjectIdGetDatum(namespaceId));
+	SysScanDesc scandesc;
+    HeapTuple   tuple;
+	ScanKeyData entry[1];
+	Oid nsp_oid = InvalidOid;
+	Oid ext_oid = get_extension_oid("yukon_geogridcoder", true);
+	if (ext_oid != InvalidOid)
+	{
+		Relation rel = table_open(ExtensionRelationId, AccessShareLock);
+		ScanKeyInit(&entry[0], Anum_pg_extension_oid, BTEqualStrategyNumber, F_OIDEQ, ObjectIdGetDatum(ext_oid));
+		scandesc = systable_beginscan(rel, ExtensionOidIndexId, true,
+									  NULL, 1, entry);
+		tuple = systable_getnext(scandesc);
+		if (HeapTupleIsValid(tuple))
+			nsp_oid = ((Form_pg_extension)GETSTRUCT(tuple))->extnamespace;
+		else
+			nsp_oid = InvalidOid;
+
+		systable_endscan(scandesc);
+		table_close(rel, AccessShareLock);
+	}
+	else
+	{
+		const char* proname = "gsg_geosotgrid";
+		List* names = stringToQualifiedNameList(proname);
+		FuncCandidateList clist = FuncnameGetCandidates(names, -1, NIL, false, false, false);
+		if (!clist)
+			nsp_oid = InvalidOid;
+		nsp_oid = get_func_namespace(clist->oid);
+	}
+    Oid typ_ID = GetSysCacheOid2(TYPENAMENSP, Anum_pg_type_oid, PointerGetDatum("geosotgrid"), ObjectIdGetDatum(nsp_oid));
 
 	int16 elmlen;
 	bool elmbyval;
@@ -1178,8 +1234,37 @@ Datum gsg_geom_from_geosotgrid_array(PG_FUNCTION_ARGS)
 	int16 elmlen;
 	bool elmbyval;
 	char elmalign;
-	Oid namespaceId = GetSysCacheOid1(NAMESPACENAME, Anum_pg_namespace_oid, CStringGetDatum("public"));
-	Oid typ_ID = GetSysCacheOid2(TYPENAMENSP, Anum_pg_type_oid, PointerGetDatum("geometry"), ObjectIdGetDatum(namespaceId));
+
+	SysScanDesc scandesc;
+    HeapTuple   tuple;
+	ScanKeyData entry[1];
+	Oid nsp_oid = InvalidOid;
+	Oid ext_oid = get_extension_oid("postgis", true);
+	if (ext_oid != InvalidOid)
+	{
+		Relation rel = table_open(ExtensionRelationId, AccessShareLock);
+		ScanKeyInit(&entry[0], Anum_pg_extension_oid, BTEqualStrategyNumber, F_OIDEQ, ObjectIdGetDatum(ext_oid));
+		scandesc = systable_beginscan(rel, ExtensionOidIndexId, true,
+									  NULL, 1, entry);
+		tuple = systable_getnext(scandesc);
+		if (HeapTupleIsValid(tuple))
+			nsp_oid = ((Form_pg_extension)GETSTRUCT(tuple))->extnamespace;
+		else
+			nsp_oid = InvalidOid;
+
+		systable_endscan(scandesc);
+		table_close(rel, AccessShareLock);
+	}
+	else
+	{
+		const char* proname = "postgis_full_version";
+		List* names = stringToQualifiedNameList(proname);
+		FuncCandidateList clist = FuncnameGetCandidates(names, -1, NIL, false, false, false);
+		if (!clist)
+			nsp_oid = InvalidOid;
+		nsp_oid = get_func_namespace(clist->oid);
+	}
+    Oid typ_ID = GetSysCacheOid2(TYPENAMENSP, Anum_pg_type_oid, PointerGetDatum("geometry"), ObjectIdGetDatum(nsp_oid));
 
 	get_typlenbyvalalign(typ_ID, &elmlen, &elmbyval, &elmalign);
 	ArrayType *result = construct_array(result_array_data, nelems, typ_ID, elmlen, elmbyval, elmalign);
@@ -1423,8 +1508,37 @@ Datum gsg_aggregate_array(PG_FUNCTION_ARGS)
 	bool elmbyval;
 	char elmalign;
 
-	Oid namespaceId = GetSysCacheOid1(NAMESPACENAME, Anum_pg_namespace_oid, CStringGetDatum("public"));
-	Oid typ_ID = GetSysCacheOid2(TYPENAMENSP, Anum_pg_type_oid, PointerGetDatum("geosotgrid"), ObjectIdGetDatum(namespaceId));
+	SysScanDesc scandesc;
+    HeapTuple   tuple;
+	ScanKeyData entry[1];
+	Oid nsp_oid = InvalidOid;
+	Oid ext_oid = get_extension_oid("yukon_geogridcoder", true);
+	if (ext_oid != InvalidOid)
+	{
+		Relation rel = table_open(ExtensionRelationId, AccessShareLock);
+		ScanKeyInit(&entry[0], Anum_pg_extension_oid, BTEqualStrategyNumber, F_OIDEQ, ObjectIdGetDatum(ext_oid));
+		scandesc = systable_beginscan(rel, ExtensionOidIndexId, true,
+									  NULL, 1, entry);
+		tuple = systable_getnext(scandesc);
+		if (HeapTupleIsValid(tuple))
+			nsp_oid = ((Form_pg_extension)GETSTRUCT(tuple))->extnamespace;
+		else
+			nsp_oid = InvalidOid;
+
+		systable_endscan(scandesc);
+		table_close(rel, AccessShareLock);
+	}
+	else
+	{
+		const char* proname = "gsg_geosotgrid";
+		List* names = stringToQualifiedNameList(proname);
+		FuncCandidateList clist = FuncnameGetCandidates(names, -1, NIL, false, false, false);
+		if (!clist)
+			nsp_oid = InvalidOid;
+		nsp_oid = get_func_namespace(clist->oid);
+	}
+    Oid typ_ID = GetSysCacheOid2(TYPENAMENSP, Anum_pg_type_oid, PointerGetDatum("geosotgrid"), ObjectIdGetDatum(nsp_oid));
+
 	get_typlenbyvalalign(typ_ID, &elmlen, &elmbyval, &elmalign);
 	ArrayType *result = construct_array(result_array_data, nelems, typ_ID, data_size, elmbyval, elmalign);
 	if (GEOSOTGRIDSIZE == data_size)

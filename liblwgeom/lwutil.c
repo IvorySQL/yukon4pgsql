@@ -75,7 +75,8 @@ static char *lwgeomTypeName[] =
 	"PolyhedralSurface",
 	"Triangle",
 	"Tin",
-	"EllipticalString"
+	"EllipticalString",
+	"Bezier3Curve"
 };
 
 /*
@@ -216,7 +217,7 @@ lwdebug(int level, const char *fmt, ...)
 const char*
 lwtype_name(uint8_t type)
 {
-	if ( type > 16 )
+	if ( type > 17 )
 	{
 		/* assert(0); */
 		return "Invalid type";
@@ -370,6 +371,11 @@ struct geomtype_struct
 
 struct geomtype_struct geomtype_struct_array[] =
 {
+	{ "BEZIER3CURVEZM", BEZIERTYPE, 1, 1 },
+	{ "BEZIER3CURVEZ", BEZIERTYPE, 1, 0 },
+	{ "BEZIER3CURVEM", BEZIERTYPE, 0, 1 },
+	{ "BEZIER3CURVE", BEZIERTYPE, 0, 0 },
+
 	{ "ELLIPTICALSTRINGZM", ELLIPSETYPE, 1, 1 },
 	{ "ELLIPTICALSTRINGZ", ELLIPSETYPE, 1, 0 },
 	{ "ELLIPTICALSTRINGM", ELLIPSETYPE, 0, 1 },

@@ -295,7 +295,11 @@ Datum ST_AreaParam(PG_FUNCTION_ARGS)
 	double area = 0.0;
 	LWCURVEPOLY *curvepoly = NULL;
 	LWGEOM *tmp = NULL;
-	POINT2D pntAnchar = {0, 0};
+	POINT2D pntAnchar;
+	GBOX box;
+	lwgeom_calculate_gbox(lwgeom, &box);
+	pntAnchar.x = box.xmin;
+	pntAnchar.y = box.ymin;
 
 	if (lwgeom->type != CURVEPOLYTYPE)
 	{
@@ -354,6 +358,11 @@ Datum ST_AreaParam(PG_FUNCTION_ARGS)
 				else if (comptmp->type == ELLIPSETYPE)
 				{
 					area += lwsector_elliptic_arc_area((LWELLIPSE *)comptmp, pntAnchar);
+				}
+				else if (comptmp->type == BEZIERTYPE)
+				{
+					const LWBEZIER *ber = (const LWBEZIER *)comptmp;
+					area -= lwbezier_area(ber, &pntAnchar);
 				}
 			}
 		}

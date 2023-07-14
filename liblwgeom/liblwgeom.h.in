@@ -129,7 +129,8 @@ const char* lwgeom_version(void);
 #define TRIANGLETYPE            14
 #define TINTYPE                 15
 #define ELLIPSETYPE				16
-#define NUMTYPES                17
+#define BEZIERTYPE				17	
+#define NUMTYPES                18
 
 /**
 * Flags applied in EWKB to indicate Z/M dimensions and
@@ -689,7 +690,7 @@ typedef struct
 }
 LWTIN;
 
-/* TINTYPE */
+/* ELLIPSE TYPE */
 typedef struct
 {
 	GBOX *bbox;
@@ -700,6 +701,22 @@ typedef struct
 	char pad[1]; /* Padding to 24 bytes (unused) */
 }
 LWELLIPSE;
+
+/* BEZIER TYPE */
+typedef struct 
+{
+	POINTARRAY *points;
+} BEZIER;
+
+typedef struct 
+{
+	GBOX *bbox;
+	BEZIER *data;
+	int32_t srid;
+	lwflags_t flags;
+	uint8_t type; /* BEZIERTYPE */
+	char pad[1];  /* Padding to 24 bytes (unused) */
+} LWBEZIER;
 
 /* Casts LWGEOM->LW* (return NULL if cast is illegal) */
 extern LWMPOLY *lwgeom_as_lwmpoly(const LWGEOM *lwgeom);
@@ -1289,6 +1306,7 @@ extern void lwcollection_free(LWCOLLECTION *col);
 extern void lwcircstring_free(LWCIRCSTRING *curve);
 extern void lwgeom_free(LWGEOM *geom);
 extern void lwellipse_free(LWELLIPSE* e);
+extern void lwbezier_free(LWBEZIER* e);
 
 /*
 * The *_release family of functions frees the LWGEOM structures
